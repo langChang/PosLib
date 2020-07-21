@@ -1,0 +1,3 @@
+rootProject.name='PosLib'
+include ':app'
+include ':poslib'
