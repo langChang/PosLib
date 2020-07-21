@@ -52,6 +52,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RelatCardDao.createTable(db, ifNotExists);
         TableMd5EntityDao.createTable(db, ifNotExists);
         PointOrderDetialDao.createTable(db, ifNotExists);
+        InventoryDao.createTable(db, ifNotExists);
         BranchGroupDao.createTable(db, ifNotExists);
         MeasureUnitItemDao.createTable(db, ifNotExists);
         FmPosOrderDao.createTable(db, ifNotExists);
@@ -125,7 +126,6 @@ public class DaoMaster extends AbstractDaoMaster {
         ManagementTemplateDetailDao.createTable(db, ifNotExists);
         VipCRMLevelDao.createTable(db, ifNotExists);
         YunServiceDaysDao.createTable(db, ifNotExists);
-        InventoryDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -161,6 +161,7 @@ public class DaoMaster extends AbstractDaoMaster {
         RelatCardDao.dropTable(db, ifExists);
         TableMd5EntityDao.dropTable(db, ifExists);
         PointOrderDetialDao.dropTable(db, ifExists);
+        InventoryDao.dropTable(db, ifExists);
         BranchGroupDao.dropTable(db, ifExists);
         MeasureUnitItemDao.dropTable(db, ifExists);
         FmPosOrderDao.dropTable(db, ifExists);
@@ -234,7 +235,6 @@ public class DaoMaster extends AbstractDaoMaster {
         ManagementTemplateDetailDao.dropTable(db, ifExists);
         VipCRMLevelDao.dropTable(db, ifExists);
         YunServiceDaysDao.dropTable(db, ifExists);
-        InventoryDao.dropTable(db, ifExists);
     }
 
     /**
@@ -284,6 +284,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RelatCardDao.class);
         registerDaoClass(TableMd5EntityDao.class);
         registerDaoClass(PointOrderDetialDao.class);
+        registerDaoClass(InventoryDao.class);
         registerDaoClass(BranchGroupDao.class);
         registerDaoClass(MeasureUnitItemDao.class);
         registerDaoClass(FmPosOrderDao.class);
@@ -357,7 +358,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ManagementTemplateDetailDao.class);
         registerDaoClass(VipCRMLevelDao.class);
         registerDaoClass(YunServiceDaysDao.class);
-        registerDaoClass(InventoryDao.class);
     }
 
     public DaoSession newSession() {
