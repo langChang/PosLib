@@ -1,6 +1,7 @@
 package com.nhsoft.poslib.service;
 
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.TableMd5;
