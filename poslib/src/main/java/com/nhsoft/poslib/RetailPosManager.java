@@ -82,15 +82,19 @@ public class RetailPosManager {
 
 
     public static Context               sContext;
-    public        SystemConnectCallback mConnectCallBack;
+    public SystemConnectCallback mConnectCallBack;
 
-    public static PosTypeEnum sPosType = PosTypeEnum.RETAIL; //pos类型
+    public static PosTypeEnum sPosType = PosTypeEnum.AMA_POS; //pos类型
 
     private RetailPosManager() {
     }
 
     private static RetailPosManager instance;
 
+    /**
+     * 获取管理类的实例对象
+     * @return
+     */
     public static RetailPosManager getInstance() {
         if (instance == null) {
             instance = new RetailPosManager();
@@ -100,7 +104,6 @@ public class RetailPosManager {
 
     /**
      * 初始化整个sdk
-     *
      * @param context
      * @return
      */

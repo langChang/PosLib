@@ -1,0 +1,16 @@
+com.nhsoft.poslib
+com.nhsoft.poslib.dao
+com.nhsoft.poslib.db
+com.nhsoft.poslib.entity
+com.nhsoft.poslib.entity.new_nong_mao
+com.nhsoft.poslib.entity.nongmao
+com.nhsoft.poslib.entity.order
+com.nhsoft.poslib.entity.shift
+com.nhsoft.poslib.libconfig
+com.nhsoft.poslib.model
+com.nhsoft.poslib.normal.callback
+com.nhsoft.poslib.normal.impl
+com.nhsoft.poslib.service
+com.nhsoft.poslib.service.greendao
+com.nhsoft.poslib.service.nongmaoService
+com.nhsoft.poslib.utils

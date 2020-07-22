@@ -2,18 +2,23 @@ package com.nhsoft.poslib;
 
 /**
  * Created by Iverson on 2019-11-25 11:52
- * 此类用于：
+ * 此类用于：pos模式枚举
  */
 public enum PosTypeEnum {
 
     /**
-     * "零售"
+     * "零售Pos"
      */
-    RETAIL,
+    AMA_POS,
 
     /**
-     * "农贸"
+     * "移动Pos"
      */
-    AGRICULTURAL_TRADE
+    MOBILE_POS,
+
+    /**
+     * "自助购Pos"
+     */
+    CUSTOMER_POS
 
 }
