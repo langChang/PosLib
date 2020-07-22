@@ -1,6 +1,5 @@
 package com.nhsoft.poslib.normal.callback;
 
-import com.nhsoft.poslib.entity.FmPosOrder;
 import com.nhsoft.poslib.entity.VipUserInfo;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
@@ -21,8 +20,6 @@ public interface OrderOperationCallback {
     PosOrder copayPosOrder(PosOrder posOrder);
 
     PosOrderDetail copayPosOrderDetail(PosOrderDetail posOrderDetail);
-
-    FmPosOrder copayFmPosOrder(FmPosOrder posOrder);
 
     void sortPosOrderDetail(List<PosOrderDetail> posOrderDetails);
 

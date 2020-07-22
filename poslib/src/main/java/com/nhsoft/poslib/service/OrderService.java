@@ -79,22 +79,8 @@ public class OrderService {
                 deletePayment(posOrder.getOrderNo(), paymentDao);
                 List<Payment> payments = posOrder.getPayments();
                 if (payments != null && payments.size() > 0) {
-                    if (LoginService.getInstance().isNongMao()){
-                        for (int i = 0; i <payments.size() ; i++) {
-                            payments.get(i).setOrderNo(posOrder.getOrderNo());
-                            payments.get(i).setSystemBookCode(posOrder.getSystemBookCode());
-                            payments.get(i).setBranchNum(posOrder.getBranchNum());
-                            payments.get(i).setShiftTableBizday(posOrder.getShiftTableBizday());
-                            payments.get(i).setShiftTableNum(posOrder.getShiftTableNum());
-                            paymentDao.insertOrReplaceInTx(payments.get(i));
-                            paymentDao.detachAll();
-                        }
-                    }else {
-                        paymentDao.insertOrReplaceInTx(payments);
-                        paymentDao.detachAll();
-                    }
-
-
+                    paymentDao.insertOrReplaceInTx(payments);
+                    paymentDao.detachAll();
                 }
                 deletePosOrderDetail(posOrder.getOrderNo(), posOrderDetailDao, posOrderKitDetailDao);
                 List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
@@ -103,15 +89,6 @@ public class OrderService {
                         posOrderKitDetailDao.insertOrReplaceInTx(posOrderDetail.getPosOrderKitDetails());
                         posOrderKitDetailDao.detachAll();
                     }
-                    if (LoginService.getInstance().isNongMao()) {
-                        if (posOrderDetail.getSystemBookCode() == null) {
-                            posOrderDetail.setSystemBookCode(posOrder.getSystemBookCode());
-                        }
-                        if (posOrderDetail.getBranchNum() == null) {
-                            posOrderDetail.setBranchNum(posOrder.getBranchNum());
-                        }
-                    }
-
                     posOrderDetailDao.insertOrReplaceInTx(posOrderDetail);
                     posOrderDetailDao.detachAll();
                 }
@@ -119,21 +96,21 @@ public class OrderService {
         });
     }
 
-    public void updateOrderMemo(PosOrder posOrder){
+    public void updateOrderMemo(PosOrder posOrder) {
         PosOrderDao mPosOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         PosOrder loadOrder = mPosOrderDao.load(posOrder.getOrderNo());
-        if(loadOrder != null){
+        if (loadOrder != null) {
             String orderMemo = loadOrder.getOrderMemo();
-            if(orderMemo == null){
+            if (orderMemo == null) {
                 orderMemo = "";
             }
-            loadOrder.setOrderMemo(orderMemo+"由收银员重新确认为支付成功");
+            loadOrder.setOrderMemo(orderMemo + "由收银员重新确认为支付成功");
             mPosOrderDao.insertOrReplace(loadOrder);
         }
 
     }
 
-    public boolean insertPosOrderDetail(final List<PosOrderDetail> posOrderDetails){
+    public boolean insertPosOrderDetail(final List<PosOrderDetail> posOrderDetails) {
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
         return MatterUtils.doMatter(posOrderDetailDao, new Runnable() {
             @Override
@@ -143,8 +120,8 @@ public class OrderService {
         });
     }
 
-    public void checkAgainOrderStatus(String orderNo){
-        if(TextUtils.isEmpty(orderNo))return;
+    public void checkAgainOrderStatus(String orderNo) {
+        if (TextUtils.isEmpty(orderNo)) return;
         PosOrderDao mPosOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         PosOrder posOrder = mPosOrderDao.load(orderNo);
         final PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
@@ -169,10 +146,10 @@ public class OrderService {
         }
 
         List<PosOrderDetail> couponsDetailList = getCouponsDetailList(orderNo);
-        Log.e("测试check","3");
-        if(isPaymentOk && (couponsDetailList == null || couponsDetailList.size() == 0)){
+        Log.e("测试check", "3");
+        if (isPaymentOk && (couponsDetailList == null || couponsDetailList.size() == 0)) {
             updatePosOrderStatus(posOrder);
-            Log.e("测试check","4");
+            Log.e("测试check", "4");
         }
 
         mPosOrderDao.detachAll();
@@ -463,15 +440,16 @@ public class OrderService {
 
     /**
      * 订单内是否使用了 消费券
+     *
      * @param orderNo
      * @return
      */
-    public boolean isContinesCoupons(String orderNo){
+    public boolean isContinesCoupons(String orderNo) {
         PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
         List<PosOrderDetail> list = posOrderDetailDao.queryBuilder()
-                .where( PosOrderDetailDao.Properties.OrderNo.eq(orderNo)).list();
+                .where(PosOrderDetailDao.Properties.OrderNo.eq(orderNo)).list();
         for (PosOrderDetail posOrderDetail : list) {
-            if (posOrderDetail.getOrderDetailType().equals(LibConfig.C_ORDER_DETAIL_TYPE_COUPON)){
+            if (posOrderDetail.getOrderDetailType().equals(LibConfig.C_ORDER_DETAIL_TYPE_COUPON)) {
                 return true;
             }
         }
@@ -616,7 +594,7 @@ public class OrderService {
         }
 
         String fromIndex = String.valueOf(page * 10);//跳过xx条
-        List<String> strings  = null;
+        List<String> strings = null;
         List<PosOrder> posOrder = null;
         if (!TextUtils.isEmpty(orderNo)) {//订单号
 
@@ -629,7 +607,7 @@ public class OrderService {
                         if (!TextUtils.isEmpty(appUserName)) {//收银员
                             strings = Arrays.asList(systemBookCode, String.valueOf(branchNum), orderNo, startTime, endTime, payType, appUserName, fromIndex);
                         } else {
-                            strings =  Arrays.asList(systemBookCode, String.valueOf(branchNum), orderNo, startTime, endTime, payType, fromIndex);
+                            strings = Arrays.asList(systemBookCode, String.valueOf(branchNum), orderNo, startTime, endTime, payType, fromIndex);
                         }
                     } else {
 
@@ -878,14 +856,14 @@ public class OrderService {
             List<Payment> payments = paymentDao._queryPosOrder_Payments(posOrder.getOrderNo());
             for (PosOrderDetail detail : posOrderDetails) {
                 PosItem posItem = PosItemService.getInstance().getPosItemByKey(detail.getItemNum());
-                if(!TextUtils.isEmpty(detail.getKitAmountStr())){
+                if (!TextUtils.isEmpty(detail.getKitAmountStr())) {
                     posItem.setPosItemKits((List<PosItemKit>) new Gson().fromJson(detail.getKitAmountStr(), new TypeToken<ArrayList<PosItemKit>>() {
                     }.getType()));
                 }
 
                 detail.setPosItem(posItem);
-                if(detail.getItemGradeNum() != 0){
-                    PosItemGrade posItemGrade = PosItemService.getInstance().getPosItemGradeByKey(detail.getItemGradeNum(),detail.getItemNum());
+                if (detail.getItemGradeNum() != 0) {
+                    PosItemGrade posItemGrade = PosItemService.getInstance().getPosItemGradeByKey(detail.getItemGradeNum(), detail.getItemNum());
                     detail.setPosItemGrade(posItemGrade);
                 }
             }
@@ -1595,7 +1573,7 @@ public class OrderService {
         }
 
         //+CRM 开卡
-        final CustomerRegisterDao customerRegisterDao= DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
+        final CustomerRegisterDao customerRegisterDao = DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
         List<CustomerRegister> customerRegisterList = customerRegisterDao.queryBuilder().where(
                 CustomerRegisterDao.Properties.System_book_code.eq(systemBookCode),
                 CustomerRegisterDao.Properties.Branch_num.eq(branchNum),
@@ -1617,7 +1595,7 @@ public class OrderService {
             if (!iscontinuse) {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(customerRegister.getVip_card_user_payment());
-                amountPay.setAmountMoney(customerRegister.getVip_card_user_money() );
+                amountPay.setAmountMoney(customerRegister.getVip_card_user_money());
                 amountPays.add(amountPay);
             }
 
@@ -1682,7 +1660,7 @@ public class OrderService {
                 amountPay.setName(cursor.getString(0));
                 amountPay.setAmountMoney(Float.parseFloat(cursor.getString(1)));
                 amountPays.add(amountPay);
-                posPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                posPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
         } catch (Exception e) {
             EvtLog.d("getListPaymentByPayType:=" + e.toString());
@@ -1723,7 +1701,7 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(cardDeposit.getDeposit_payment_type_name());
                 amountPay.setAmountMoney((float) cardDeposit.getDeposit_cash());
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
             if (!iscontinuse) {
@@ -1770,7 +1748,7 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(relatCard.getRelat_card_payment_type_name());
                 amountPay.setAmountMoney(Float.parseFloat(String.valueOf(relatCard.getRelat_card_money())));
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
             if (!iscontinuse) {
@@ -1814,7 +1792,7 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(replaceCard.getReplace_card_payment_type_name());
                 amountPay.setAmountMoney(Float.parseFloat(String.valueOf(replaceCard.getReplace_card_money())));
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
             if (!iscontinuse) {
@@ -1827,7 +1805,7 @@ public class OrderService {
         }
 
         //+CRM 开卡
-        final CustomerRegisterDao customerRegisterDao= DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
+        final CustomerRegisterDao customerRegisterDao = DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
         List<CustomerRegister> customerRegisterList = customerRegisterDao.queryBuilder().where(
                 CustomerRegisterDao.Properties.System_book_code.eq(systemBookCode),
                 CustomerRegisterDao.Properties.Branch_num.eq(branchNum),
@@ -1851,7 +1829,7 @@ public class OrderService {
             loop2:
             for (AmountPay amountPay : cardPays) {
                 if (customerRegister.getVip_card_user_payment().equals(amountPay.getName())) {
-                    amountPay.setAmountMoney(customerRegister.getVip_card_user_money()  + amountPay.getAmountMoney());
+                    amountPay.setAmountMoney(customerRegister.getVip_card_user_money() + amountPay.getAmountMoney());
                     iscontinuse2 = true;
                     break loop2;
                 }
@@ -1859,14 +1837,14 @@ public class OrderService {
             if (!iscontinuse2) {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(customerRegister.getVip_card_user_payment());
-                amountPay.setAmountMoney(customerRegister.getVip_card_user_money() );
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                amountPay.setAmountMoney(customerRegister.getVip_card_user_money());
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
             if (!iscontinuse) {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(customerRegister.getVip_card_user_payment());
-                amountPay.setAmountMoney(customerRegister.getVip_card_user_money() );
+                amountPay.setAmountMoney(customerRegister.getVip_card_user_money());
                 amountPays.add(amountPay);
             }
 
@@ -2049,7 +2027,7 @@ public class OrderService {
                 amountPay.setName(cursor.getString(0));
                 amountPay.setAmountMoney(Float.parseFloat(cursor.getString(1)));
                 amountPays.add(amountPay);
-                posPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                posPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
         } catch (Exception e) {
             EvtLog.d("getListPaymentByPayType:=" + e.toString());
@@ -2095,7 +2073,7 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(cardDeposit.getDeposit_payment_type_name());
                 amountPay.setAmountMoney((float) cardDeposit.getDeposit_cash());
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
         }
@@ -2138,7 +2116,7 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(relatCard.getRelat_card_payment_type_name());
                 amountPay.setAmountMoney(Float.parseFloat(String.valueOf(relatCard.getRelat_card_money())));
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
         }
         //+换卡
@@ -2181,14 +2159,14 @@ public class OrderService {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(replaceCard.getReplace_card_payment_type_name());
                 amountPay.setAmountMoney(Float.parseFloat(String.valueOf(replaceCard.getReplace_card_money())));
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
         }
 
 
         //+CRM 开卡
-        final CustomerRegisterDao customerRegisterDao= DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
+        final CustomerRegisterDao customerRegisterDao = DaoManager.getInstance().getDaoSession().getCustomerRegisterDao();
         List<CustomerRegister> customerRegisterList = customerRegisterDao.queryBuilder().where(
                 CustomerRegisterDao.Properties.System_book_code.eq(systemBookCode),
                 CustomerRegisterDao.Properties.Branch_num.eq(branchNum),
@@ -2211,7 +2189,7 @@ public class OrderService {
             loop2:
             for (AmountPay amountPay : cardPays) {
                 if (customerRegister.getVip_card_user_payment().equals(amountPay.getName())) {
-                    amountPay.setAmountMoney(customerRegister.getVip_card_user_money()  + amountPay.getAmountMoney());
+                    amountPay.setAmountMoney(customerRegister.getVip_card_user_money() + amountPay.getAmountMoney());
                     iscontinuse2 = true;
                     break loop2;
                 }
@@ -2219,14 +2197,14 @@ public class OrderService {
             if (!iscontinuse2) {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(customerRegister.getVip_card_user_payment());
-                amountPay.setAmountMoney(customerRegister.getVip_card_user_money() );
-                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay),AmountPay.class));
+                amountPay.setAmountMoney(customerRegister.getVip_card_user_money());
+                cardPays.add(new Gson().fromJson(new Gson().toJson(amountPay), AmountPay.class));
             }
 
             if (!iscontinuse) {
                 AmountPay amountPay = new AmountPay();
                 amountPay.setName(customerRegister.getVip_card_user_payment());
-                amountPay.setAmountMoney(customerRegister.getVip_card_user_money() );
+                amountPay.setAmountMoney(customerRegister.getVip_card_user_money());
                 amountPays.add(amountPay);
             }
 
@@ -2267,7 +2245,6 @@ public class OrderService {
 
         return amountPays;
     }
-
 
 
     /**

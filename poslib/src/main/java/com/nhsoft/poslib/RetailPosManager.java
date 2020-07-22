@@ -10,7 +10,6 @@ import com.nhsoft.poslib.entity.AmountPay;
 import com.nhsoft.poslib.entity.AppUser;
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.CardTypeParam;
-import com.nhsoft.poslib.entity.FmPosOrder;
 import com.nhsoft.poslib.entity.Inventory;
 import com.nhsoft.poslib.entity.ItemCategory;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
@@ -335,11 +334,6 @@ public class RetailPosManager {
         return orderOperation.copayPosOrderDetail(posOrderdetail);
     }
 
-
-    public FmPosOrder copyPosOrder(FmPosOrder posOrder) {
-        OrderOperationImpl orderOperation = new OrderOperationImpl();
-        return orderOperation.copayFmPosOrder(posOrder);
-    }
 
     /**
      * 创建一个payment

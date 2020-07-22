@@ -12,9 +12,7 @@ import com.nhsoft.poslib.entity.ManagementTemplateDetail;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosItemKit;
-import com.nhsoft.poslib.entity.nongmao.StallMatrix;
 import com.nhsoft.poslib.libconfig.LibConfig;
-import com.nhsoft.poslib.model.GoodsGradeBean;
 import com.nhsoft.poslib.model.ItemSequenceBean;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.ItemBarDao;
@@ -22,7 +20,6 @@ import com.nhsoft.poslib.service.greendao.ManagementTemplateDetailDao;
 import com.nhsoft.poslib.service.greendao.PosItemDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeDao;
 import com.nhsoft.poslib.service.greendao.PosItemKitDao;
-import com.nhsoft.poslib.service.nongmaoService.StallMatrixService;
 import com.nhsoft.poslib.utils.MatterUtils;
 import com.nhsoft.poslib.utils.TimeUtil;
 
@@ -290,22 +287,6 @@ public class PosItemService {
                     continue;
             }
 
-
-            StallMatrix priceByItemNum = StallMatrixService.getInstance().getPriceByItemNum(posItem.getItem_num(), LibConfig.activeShiftTable.getStallNum(), LibConfig.activeShiftTable.getMerchantNum());
-            if (priceByItemNum != null) {
-                if(priceByItemNum.getStall_matrix_regular_price() == 0){
-
-                    float detailShowPrice = 0;
-                    if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
-                        detailShowPrice = posItem.getBranch_regular_price();
-                    }else {
-                        detailShowPrice = posItem.getItem_regular_price();
-                    }
-                    priceByItemNum.setStall_matrix_regular_price(detailShowPrice);
-                }
-                posItem.setStall_regular_price(priceByItemNum.getStall_matrix_regular_price());
-                posItem.setStall_vip_price(priceByItemNum.getStall_matrix_level2_price());
-            }
             if (posItem.getItem_type() == 10) {
                 List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
                 if (posItemGrades == null || posItemGrades.size() == 0) continue;
@@ -356,20 +337,7 @@ public class PosItemService {
                 if (managementTemplateDetailDao.queryBuilder().where(ManagementTemplateDetailDao.Properties.Item_num.eq(posItem.getItem_num())).build().list().size() == 0)
                     continue;
             }
-            StallMatrix priceByItemNum = StallMatrixService.getInstance().getPriceByItemNum(posItem.getItem_num(), LibConfig.activeShiftTable.getStallNum(), LibConfig.activeShiftTable.getMerchantNum());
-            if (priceByItemNum != null) {
-                if(priceByItemNum.getStall_matrix_regular_price() == 0){
-                    float detailShowPrice = 0;
-                    if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
-                        detailShowPrice = posItem.getBranch_regular_price();
-                    }else {
-                        detailShowPrice = posItem.getItem_regular_price();
-                    }
-                    priceByItemNum.setStall_matrix_regular_price(detailShowPrice);
-                }
-                posItem.setStall_regular_price(priceByItemNum.getStall_matrix_regular_price());
-                posItem.setStall_vip_price(priceByItemNum.getStall_matrix_level2_price());
-            }
+
             if (posItem.getItem_type() == 10) {
                 List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? ", String.valueOf(posItem.getItem_num()));
                 if (posItemGrades == null || posItemGrades.size() == 0) continue;
@@ -538,22 +506,6 @@ public class PosItemService {
         queryBuilder.join(ItemBar.class, ItemBarDao.Properties.Item_num)
                 .where(ItemBarDao.Properties.Item_bar_code.eq(itemBarCode));
 
-        if(LoginService.getInstance().isNongMao()){
-            posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false),PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
-            if(LibConfig.activityShowGoods  != null && LibConfig.activityShowGoods.size() > 0){
-                List<PosItem> newPosItems = new ArrayList<>();
-                for (PosItem posItem : posItems){
-                    for (GoodsGradeBean goodsGradeBean : LibConfig.activityShowGoods ){
-                        if(posItem.getItem_category_code().equals( goodsGradeBean.getCategory_code())){
-                            newPosItems.add(posItem);
-                            break;
-                        }
-                    }
-                }
-                pos_itemDao.detachAll();
-                return newPosItems;
-            }
-        }else {
             if(LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived()){
                 posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
             }else {
@@ -568,7 +520,7 @@ public class PosItemService {
 //                    }
 //                }
             }
-        }
+
 
 //
 //        ItemBar itemBar=itemBarDao.queryBuilder().where(ItemBarDao.Properties.Item_bar_code.eq(itemBarCode)).limit(1).offset(0).unique();
@@ -645,23 +597,6 @@ public class PosItemService {
                     copyPosItem.setShowPosItemGrade(posItemGrade);
                     posItems.add(copyPosItem);
                 }
-            }
-        }
-
-
-        if(LoginService.getInstance().isNongMao()){
-            if(LibConfig.activityShowGoods  != null && LibConfig.activityShowGoods.size() > 0){
-                List<PosItem> newPosItems = new ArrayList<>();
-                for (PosItem posItem : posItems){
-                    for (GoodsGradeBean goodsGradeBean : LibConfig.activityShowGoods ){
-                        if(posItem.getItem_category_code().equals( goodsGradeBean.getCategory_code())){
-                            newPosItems.add(posItem);
-                            break;
-                        }
-                    }
-                }
-                pos_itemDao.detachAll();
-                return newPosItems;
             }
         }
         return posItems;

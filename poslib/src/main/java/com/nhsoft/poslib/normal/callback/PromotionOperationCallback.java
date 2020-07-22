@@ -15,5 +15,4 @@ public interface PromotionOperationCallback {
 
     void getPolicyDiscount(PosOrder mPosOrder);
 
-    void getNongMaoPolicyDiscount(PosOrder mPosOrder);
 }

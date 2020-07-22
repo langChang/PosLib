@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.BuildConfig;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.libconfig.LibConfig;
-import com.nhsoft.poslib.service.LoginService;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -128,20 +127,16 @@ public class EventStatisticalUtil {
      * @param event 埋点事件名
      */
     public static void onEventStacal(String event) {
-        if (!LoginService.getInstance().isNongMao()) {
-            MobclickAgent.onEvent(RetailPosManager.sContext, event);
-        }
+        MobclickAgent.onEvent(RetailPosManager.sContext, event);
     }
 
 
     public static void onEventStacalBranchName(String bookName,String branchName,String book_code){
-        if (!LoginService.getInstance().isNongMao()) {
             Map<String, String> brach = new HashMap<String, String>();
             brach.put("book_code", ""+bookName+"_"+book_code+"_"+(TextUtils.isEmpty(branchName)? bookName : branchName)+"_"+LibConfig.activePosMachine.getPos_machine_name());
 //            brach.put("brach_name", branchName);
             brach.put("version_name", BuildConfig.VERSION_NAME);
 //            brach.put("pos_name",""+ LibConfig.activePosMachine.getPos_machine_name());
             MobclickAgent.onEvent(RetailPosManager.sContext, STATISTICAL_BRANCH, brach);
-        }
     }
 }

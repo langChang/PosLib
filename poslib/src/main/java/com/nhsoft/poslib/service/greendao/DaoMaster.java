@@ -52,18 +52,15 @@ public class DaoMaster extends AbstractDaoMaster {
         RelatCardDao.createTable(db, ifNotExists);
         TableMd5EntityDao.createTable(db, ifNotExists);
         PointOrderDetialDao.createTable(db, ifNotExists);
+        InventoryDao.createTable(db, ifNotExists);
         BranchGroupDao.createTable(db, ifNotExists);
         MeasureUnitItemDao.createTable(db, ifNotExists);
-        FmPosOrderDao.createTable(db, ifNotExists);
         RolePrivilegeNewDao.createTable(db, ifNotExists);
         AmountPayDao.createTable(db, ifNotExists);
         PointPolicyDetailDao.createTable(db, ifNotExists);
         ReplaceCardDao.createTable(db, ifNotExists);
-        FmPosOrderDetailDao.createTable(db, ifNotExists);
         MarketActionDao.createTable(db, ifNotExists);
         PolicyPromotionDetailDao.createTable(db, ifNotExists);
-        PosItemNewNongMaoDao.createTable(db, ifNotExists);
-        BranchMerchantDao.createTable(db, ifNotExists);
         PolicyPresentDao.createTable(db, ifNotExists);
         CardChangeDao.createTable(db, ifNotExists);
         PosItemGradeDao.createTable(db, ifNotExists);
@@ -93,14 +90,6 @@ public class DaoMaster extends AbstractDaoMaster {
         VipStrangeSuccessSendMoneyDao.createTable(db, ifNotExists);
         OtherRevenueDao.createTable(db, ifNotExists);
         VipConsumeDao.createTable(db, ifNotExists);
-        StallDiscountDao.createTable(db, ifNotExists);
-        StallDiscountDetailDao.createTable(db, ifNotExists);
-        StallDao.createTable(db, ifNotExists);
-        StallPromotionDao.createTable(db, ifNotExists);
-        StallPromotionDetailDao.createTable(db, ifNotExists);
-        MerchantDao.createTable(db, ifNotExists);
-        StallMatrixDao.createTable(db, ifNotExists);
-        CategoryFindDao.createTable(db, ifNotExists);
         VipIcInitDao.createTable(db, ifNotExists);
         SystemRoleDao.createTable(db, ifNotExists);
         CardDepositDao.createTable(db, ifNotExists);
@@ -116,7 +105,6 @@ public class DaoMaster extends AbstractDaoMaster {
         MeasureUnitDao.createTable(db, ifNotExists);
         AttachedScreenDao.createTable(db, ifNotExists);
         SystemBookDao.createTable(db, ifNotExists);
-        FmPaymentDao.createTable(db, ifNotExists);
         PosItemGradeTerminalDao.createTable(db, ifNotExists);
         PolicyMoneyDao.createTable(db, ifNotExists);
         BranchMessageDao.createTable(db, ifNotExists);
@@ -125,7 +113,6 @@ public class DaoMaster extends AbstractDaoMaster {
         ManagementTemplateDetailDao.createTable(db, ifNotExists);
         VipCRMLevelDao.createTable(db, ifNotExists);
         YunServiceDaysDao.createTable(db, ifNotExists);
-        InventoryDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -161,18 +148,15 @@ public class DaoMaster extends AbstractDaoMaster {
         RelatCardDao.dropTable(db, ifExists);
         TableMd5EntityDao.dropTable(db, ifExists);
         PointOrderDetialDao.dropTable(db, ifExists);
+        InventoryDao.dropTable(db, ifExists);
         BranchGroupDao.dropTable(db, ifExists);
         MeasureUnitItemDao.dropTable(db, ifExists);
-        FmPosOrderDao.dropTable(db, ifExists);
         RolePrivilegeNewDao.dropTable(db, ifExists);
         AmountPayDao.dropTable(db, ifExists);
         PointPolicyDetailDao.dropTable(db, ifExists);
         ReplaceCardDao.dropTable(db, ifExists);
-        FmPosOrderDetailDao.dropTable(db, ifExists);
         MarketActionDao.dropTable(db, ifExists);
         PolicyPromotionDetailDao.dropTable(db, ifExists);
-        PosItemNewNongMaoDao.dropTable(db, ifExists);
-        BranchMerchantDao.dropTable(db, ifExists);
         PolicyPresentDao.dropTable(db, ifExists);
         CardChangeDao.dropTable(db, ifExists);
         PosItemGradeDao.dropTable(db, ifExists);
@@ -202,14 +186,6 @@ public class DaoMaster extends AbstractDaoMaster {
         VipStrangeSuccessSendMoneyDao.dropTable(db, ifExists);
         OtherRevenueDao.dropTable(db, ifExists);
         VipConsumeDao.dropTable(db, ifExists);
-        StallDiscountDao.dropTable(db, ifExists);
-        StallDiscountDetailDao.dropTable(db, ifExists);
-        StallDao.dropTable(db, ifExists);
-        StallPromotionDao.dropTable(db, ifExists);
-        StallPromotionDetailDao.dropTable(db, ifExists);
-        MerchantDao.dropTable(db, ifExists);
-        StallMatrixDao.dropTable(db, ifExists);
-        CategoryFindDao.dropTable(db, ifExists);
         VipIcInitDao.dropTable(db, ifExists);
         SystemRoleDao.dropTable(db, ifExists);
         CardDepositDao.dropTable(db, ifExists);
@@ -225,7 +201,6 @@ public class DaoMaster extends AbstractDaoMaster {
         MeasureUnitDao.dropTable(db, ifExists);
         AttachedScreenDao.dropTable(db, ifExists);
         SystemBookDao.dropTable(db, ifExists);
-        FmPaymentDao.dropTable(db, ifExists);
         PosItemGradeTerminalDao.dropTable(db, ifExists);
         PolicyMoneyDao.dropTable(db, ifExists);
         BranchMessageDao.dropTable(db, ifExists);
@@ -234,7 +209,6 @@ public class DaoMaster extends AbstractDaoMaster {
         ManagementTemplateDetailDao.dropTable(db, ifExists);
         VipCRMLevelDao.dropTable(db, ifExists);
         YunServiceDaysDao.dropTable(db, ifExists);
-        InventoryDao.dropTable(db, ifExists);
     }
 
     /**
@@ -284,18 +258,15 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(RelatCardDao.class);
         registerDaoClass(TableMd5EntityDao.class);
         registerDaoClass(PointOrderDetialDao.class);
+        registerDaoClass(InventoryDao.class);
         registerDaoClass(BranchGroupDao.class);
         registerDaoClass(MeasureUnitItemDao.class);
-        registerDaoClass(FmPosOrderDao.class);
         registerDaoClass(RolePrivilegeNewDao.class);
         registerDaoClass(AmountPayDao.class);
         registerDaoClass(PointPolicyDetailDao.class);
         registerDaoClass(ReplaceCardDao.class);
-        registerDaoClass(FmPosOrderDetailDao.class);
         registerDaoClass(MarketActionDao.class);
         registerDaoClass(PolicyPromotionDetailDao.class);
-        registerDaoClass(PosItemNewNongMaoDao.class);
-        registerDaoClass(BranchMerchantDao.class);
         registerDaoClass(PolicyPresentDao.class);
         registerDaoClass(CardChangeDao.class);
         registerDaoClass(PosItemGradeDao.class);
@@ -325,14 +296,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(VipStrangeSuccessSendMoneyDao.class);
         registerDaoClass(OtherRevenueDao.class);
         registerDaoClass(VipConsumeDao.class);
-        registerDaoClass(StallDiscountDao.class);
-        registerDaoClass(StallDiscountDetailDao.class);
-        registerDaoClass(StallDao.class);
-        registerDaoClass(StallPromotionDao.class);
-        registerDaoClass(StallPromotionDetailDao.class);
-        registerDaoClass(MerchantDao.class);
-        registerDaoClass(StallMatrixDao.class);
-        registerDaoClass(CategoryFindDao.class);
         registerDaoClass(VipIcInitDao.class);
         registerDaoClass(SystemRoleDao.class);
         registerDaoClass(CardDepositDao.class);
@@ -348,7 +311,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(MeasureUnitDao.class);
         registerDaoClass(AttachedScreenDao.class);
         registerDaoClass(SystemBookDao.class);
-        registerDaoClass(FmPaymentDao.class);
         registerDaoClass(PosItemGradeTerminalDao.class);
         registerDaoClass(PolicyMoneyDao.class);
         registerDaoClass(BranchMessageDao.class);
@@ -357,7 +319,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ManagementTemplateDetailDao.class);
         registerDaoClass(VipCRMLevelDao.class);
         registerDaoClass(YunServiceDaysDao.class);
-        registerDaoClass(InventoryDao.class);
     }
 
     public DaoSession newSession() {

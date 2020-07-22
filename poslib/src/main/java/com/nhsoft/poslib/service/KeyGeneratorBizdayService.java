@@ -564,13 +564,6 @@ public class KeyGeneratorBizdayService {
 
 
     public String getPayOutId(String systemCode, int branchNum) {
-        if(LoginService.getInstance().isNongMao()){
-            if(LoginService.getInstance().isNewNM()){
-                return getSystemCodeChar(systemCode) + getBranchNumLongChar(String.valueOf(branchNum)) + getMerchatNumLongChar(String.valueOf(LibConfig.activeLoginBean.getMerchant_num()));
-            }
-            return getSystemCodeChar(systemCode) + getBranchNumLongChar(String.valueOf(branchNum)) + getMerchatNumLongChar(String.valueOf(LibConfig.activeShiftTable.getMerchantNum()));
-        }else {
-            return getSystemCodeChar(systemCode) + getBranchNumLongChar(String.valueOf(branchNum));
-        }
+        return getSystemCodeChar(systemCode) + getBranchNumLongChar(String.valueOf(branchNum));
     }
 }

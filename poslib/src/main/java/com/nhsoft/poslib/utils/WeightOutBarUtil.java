@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
-import com.nhsoft.poslib.service.LoginService;
 import com.nhsoft.poslib.service.PosItemService;
 
 import java.util.LinkedList;
@@ -65,21 +64,13 @@ public class WeightOutBarUtil {
                     goodsPaymentMoney = Float.parseFloat(barcode.substring(barcode.length() - Integer.parseInt(LibConfig.saleParamsBean.getLengthOfMoney())-1,barcode.length() -1));
                     float bitMoney = (float) Math.pow(10, Double.parseDouble(LibConfig.saleParamsBean.getPrecisionOfMoney()));
                     float suttle = goodsPaymentMoney/bitMoney/stdPrice;
-                    if(LoginService.getInstance().isNongMao()){
-                        posOrderDetail = ConversionUtil.getNongMaoPosOrderDetail(null, posItem, null, suttle,posOrderDetails,"",false);
-                    }else {
                         posOrderDetail = ConversionUtil.getPosOrderDetail(LibConfig.activeVipMember,null, posItem, null, suttle,posOrderDetails,"",false,false);
-                    }
                     break;
                 case 2:
                     //标识号 + PLU号 + 重量
                     goodsWeight = Float.parseFloat(barcode.substring(barcode.length() - Integer.parseInt(LibConfig.saleParamsBean.getLengthOfWeight())-1,barcode.length() -1));
                     float bitWeight = (float) Math.pow(10, Double.parseDouble(LibConfig.saleParamsBean.getPrecisionOfWeight()));
-                    if(LoginService.getInstance().isNongMao()){
-                        posOrderDetail = ConversionUtil.getNongMaoPosOrderDetail(null, posItem, null, goodsWeight/bitWeight,posOrderDetails,"",false);
-                    }else {
-                        posOrderDetail = ConversionUtil.getPosOrderDetail(LibConfig.activeVipMember,null, posItem, null, goodsWeight/bitWeight,posOrderDetails,"",false,false);
-                    }
+                    posOrderDetail = ConversionUtil.getPosOrderDetail(LibConfig.activeVipMember,null, posItem, null, goodsWeight/bitWeight,posOrderDetails,"",false,false);
                     break;
                 case 3:
                     goodsWeight = Float.parseFloat(barcode.substring(barcode.length() - Integer.parseInt(LibConfig.saleParamsBean.getLengthOfWeight())-1,barcode.length() -1));

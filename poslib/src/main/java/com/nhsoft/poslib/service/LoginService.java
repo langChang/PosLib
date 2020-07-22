@@ -1,7 +1,5 @@
 package com.nhsoft.poslib.service;
 
-import android.text.TextUtils;
-
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.Login;
 import com.nhsoft.poslib.service.greendao.DaoSession;
@@ -57,38 +55,6 @@ public class LoginService {
     public List<Login> queryByObj(String where, String... params) {
         return mDaoSession.getLoginDao()
                 .queryRaw(where, params);
-    }
-
-    /**
-     * 判断是否是农贸，true代表 是农贸，false表示不是
-     * @return
-     */
-    public boolean isNongMao(){
-        Login mLogin=getLogin();
-        if (mLogin.getBranch_product().equals("喜临门农贸市场管理系统(V2018)")){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    /**
-     * 判断是否是新农贸，true代表 是农贸，false表示不是
-     * @return
-     */
-    public boolean isNewNM(){
-
-        //特殊判断不能删除。
-        String book_code = getLogin().getSystem_book_code();
-        if(book_code != null && (book_code.equals("2093") || book_code.equals("61161") || book_code.equals("61162"))){
-            return true;
-        }
-
-        if (isNongMao()&& !TextUtils.isEmpty(getLogin().getBranch_module()) && getLogin().getBranch_module().contains("农贸2019")){
-            return true;
-        }else {
-            return false;
-        }
     }
 
 }

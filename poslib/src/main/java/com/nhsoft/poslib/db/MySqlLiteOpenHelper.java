@@ -11,7 +11,6 @@ import com.nhsoft.poslib.service.greendao.BookResourceDao;
 import com.nhsoft.poslib.service.greendao.BottomMenuDao;
 import com.nhsoft.poslib.service.greendao.BranchDao;
 import com.nhsoft.poslib.service.greendao.BranchGroupDao;
-import com.nhsoft.poslib.service.greendao.BranchMerchantDao;
 import com.nhsoft.poslib.service.greendao.BranchMessageDao;
 import com.nhsoft.poslib.service.greendao.BranchRegionDao;
 import com.nhsoft.poslib.service.greendao.BranchsBeanDao;
@@ -19,16 +18,12 @@ import com.nhsoft.poslib.service.greendao.CardChangeDao;
 import com.nhsoft.poslib.service.greendao.CardDepositDao;
 import com.nhsoft.poslib.service.greendao.CardDepositFailedDao;
 import com.nhsoft.poslib.service.greendao.CardTypeParamDao;
-import com.nhsoft.poslib.service.greendao.CategoryFindDao;
 import com.nhsoft.poslib.service.greendao.ChangeGoodsMenuDao;
 import com.nhsoft.poslib.service.greendao.ClientPointDao;
 import com.nhsoft.poslib.service.greendao.CustomerRegisterDao;
 import com.nhsoft.poslib.service.greendao.DaoMaster;
 import com.nhsoft.poslib.service.greendao.DemoEntityDao;
 import com.nhsoft.poslib.service.greendao.EmployeeDao;
-import com.nhsoft.poslib.service.greendao.FmPaymentDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDetailDao;
 import com.nhsoft.poslib.service.greendao.InventoryDao;
 import com.nhsoft.poslib.service.greendao.ItemBarDao;
 import com.nhsoft.poslib.service.greendao.ItemCategoryDao;
@@ -40,7 +35,6 @@ import com.nhsoft.poslib.service.greendao.MarketActionDao;
 import com.nhsoft.poslib.service.greendao.MarketActionDetailDao;
 import com.nhsoft.poslib.service.greendao.MeasureUnitDao;
 import com.nhsoft.poslib.service.greendao.MeasureUnitItemDao;
-import com.nhsoft.poslib.service.greendao.MerchantDao;
 import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PointOrderDao;
 import com.nhsoft.poslib.service.greendao.PointOrderDetialDao;
@@ -60,7 +54,6 @@ import com.nhsoft.poslib.service.greendao.PosItemDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeTerminalDao;
 import com.nhsoft.poslib.service.greendao.PosItemKitDao;
-import com.nhsoft.poslib.service.greendao.PosItemNewNongMaoDao;
 import com.nhsoft.poslib.service.greendao.PosItemTerminalDao;
 import com.nhsoft.poslib.service.greendao.PosMachineDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
@@ -73,12 +66,6 @@ import com.nhsoft.poslib.service.greendao.ReplaceCardDao;
 import com.nhsoft.poslib.service.greendao.RolePrivilegeNewDao;
 import com.nhsoft.poslib.service.greendao.ShiftTableDao;
 import com.nhsoft.poslib.service.greendao.ShiftTablePaymentDao;
-import com.nhsoft.poslib.service.greendao.StallDao;
-import com.nhsoft.poslib.service.greendao.StallDiscountDao;
-import com.nhsoft.poslib.service.greendao.StallDiscountDetailDao;
-import com.nhsoft.poslib.service.greendao.StallMatrixDao;
-import com.nhsoft.poslib.service.greendao.StallPromotionDao;
-import com.nhsoft.poslib.service.greendao.StallPromotionDetailDao;
 import com.nhsoft.poslib.service.greendao.StoreHouseDao;
 import com.nhsoft.poslib.service.greendao.SystemBookDao;
 import com.nhsoft.poslib.service.greendao.SystemImageQrcodeDao;
@@ -127,12 +114,12 @@ public class MySqlLiteOpenHelper extends DaoMaster.OpenHelper {
                 ShiftTableDao.class, StoreHouseDao.class, SystemRoleDao.class, SystemBookDao.class, TableMd5Dao.class, TicketSendDetailDao.class, UserRoleDao.class,
                 VipConsumeDao.class, VipSendCardDao.class, VipStrangeSuccessSendMoneyDao.class, SystemPrintDao.class, SystemImageQrcodeDao.class, PointOrderDao.class, PointOrderDetialDao.class,
                 ShiftTablePaymentDao.class, PolicyDiscountDao.class, PolicyDiscountDetailDao.class, PolicyQuantityDao.class, PolicyQuantityDetailDao.class, PolicyMoneyDao.class, PolicyMoneyDetailDao.class,
-                PolicyPresentDao.class, PolicyPresentDetailDao.class, CardChangeDao.class, YunServiceDaysDao.class, CategoryFindDao.class
-                , MerchantDao.class, StallDao.class, StallDiscountDao.class, StallDiscountDetailDao.class,
-                StallMatrixDao.class, StallPromotionDao.class, StallPromotionDetailDao.class, PosItemTerminalDao.class, PosItemGradeTerminalDao.class, BottomMenuDao.class, PrintOrderUsingDao.class,
-                PosItemNewNongMaoDao.class,CustomerRegisterDao.class,FmPosOrderDao.class,FmPosOrderDetailDao.class,FmPaymentDao.class, VipIcInitDao.class, VipCrmPointRateDao.class, VipCRMLevelDetailDao.class,
-                BranchMerchantDao.class,ChangeGoodsMenuDao.class, CardTypeParamDao.class, PointRuleDao.class,PointRuleDao.class, VipCrmAmaLevelDao.class, VipLevelPointRuleDao.class, VipCRMLevelDao.class, VipCrmFeeDao.class
-                , BranchMessageDao.class, BranchsBeanDao.class, InventoryDao.class);
+                PolicyPresentDao.class, PolicyPresentDetailDao.class, CardChangeDao.class, YunServiceDaysDao.class,
+                PosItemTerminalDao.class, PosItemGradeTerminalDao.class, BottomMenuDao.class, PrintOrderUsingDao.class,
+                CustomerRegisterDao.class, VipIcInitDao.class, VipCrmPointRateDao.class,
+                VipCRMLevelDetailDao.class, ChangeGoodsMenuDao.class, CardTypeParamDao.class, PointRuleDao.class,
+                PointRuleDao.class, VipCrmAmaLevelDao.class, VipLevelPointRuleDao.class, VipCRMLevelDao.class,
+                VipCrmFeeDao.class, BranchMessageDao.class, BranchsBeanDao.class, InventoryDao.class);
     }
 
 }

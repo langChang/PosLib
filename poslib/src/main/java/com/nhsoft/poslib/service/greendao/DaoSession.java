@@ -39,18 +39,15 @@ import com.nhsoft.poslib.entity.VipSendCard;
 import com.nhsoft.poslib.entity.RelatCard;
 import com.nhsoft.poslib.entity.TableMd5Entity;
 import com.nhsoft.poslib.entity.PointOrderDetial;
+import com.nhsoft.poslib.entity.Inventory;
 import com.nhsoft.poslib.entity.BranchGroup;
 import com.nhsoft.poslib.entity.MeasureUnitItem;
-import com.nhsoft.poslib.entity.FmPosOrder;
 import com.nhsoft.poslib.entity.RolePrivilegeNew;
 import com.nhsoft.poslib.entity.AmountPay;
 import com.nhsoft.poslib.entity.PointPolicyDetail;
 import com.nhsoft.poslib.entity.ReplaceCard;
-import com.nhsoft.poslib.entity.FmPosOrderDetail;
 import com.nhsoft.poslib.entity.MarketAction;
 import com.nhsoft.poslib.entity.PolicyPromotionDetail;
-import com.nhsoft.poslib.entity.new_nong_mao.PosItemNewNongMao;
-import com.nhsoft.poslib.entity.new_nong_mao.BranchMerchant;
 import com.nhsoft.poslib.entity.PolicyPresent;
 import com.nhsoft.poslib.entity.CardChange;
 import com.nhsoft.poslib.entity.PosItemGrade;
@@ -80,14 +77,6 @@ import com.nhsoft.poslib.entity.CustomerRegister;
 import com.nhsoft.poslib.entity.VipStrangeSuccessSendMoney;
 import com.nhsoft.poslib.entity.OtherRevenue;
 import com.nhsoft.poslib.entity.VipConsume;
-import com.nhsoft.poslib.entity.nongmao.StallDiscount;
-import com.nhsoft.poslib.entity.nongmao.StallDiscountDetail;
-import com.nhsoft.poslib.entity.nongmao.Stall;
-import com.nhsoft.poslib.entity.nongmao.StallPromotion;
-import com.nhsoft.poslib.entity.nongmao.StallPromotionDetail;
-import com.nhsoft.poslib.entity.nongmao.Merchant;
-import com.nhsoft.poslib.entity.nongmao.StallMatrix;
-import com.nhsoft.poslib.entity.nongmao.CategoryFind;
 import com.nhsoft.poslib.entity.VipIcInit;
 import com.nhsoft.poslib.entity.SystemRole;
 import com.nhsoft.poslib.entity.CardDeposit;
@@ -103,7 +92,6 @@ import com.nhsoft.poslib.entity.PolicyMoneyDetail;
 import com.nhsoft.poslib.entity.MeasureUnit;
 import com.nhsoft.poslib.entity.AttachedScreen;
 import com.nhsoft.poslib.entity.SystemBook;
-import com.nhsoft.poslib.entity.FmPayment;
 import com.nhsoft.poslib.entity.PosItemGradeTerminal;
 import com.nhsoft.poslib.entity.PolicyMoney;
 import com.nhsoft.poslib.entity.BranchMessage;
@@ -112,7 +100,6 @@ import com.nhsoft.poslib.entity.VipCrmFee;
 import com.nhsoft.poslib.entity.ManagementTemplateDetail;
 import com.nhsoft.poslib.entity.VipCRMLevel;
 import com.nhsoft.poslib.model.YunServiceDays;
-import com.nhsoft.poslib.entity.Inventory;
 
 import com.nhsoft.poslib.service.greendao.ShiftTablePaymentDao;
 import com.nhsoft.poslib.service.greendao.PolicyPromotionDao;
@@ -145,18 +132,15 @@ import com.nhsoft.poslib.service.greendao.VipSendCardDao;
 import com.nhsoft.poslib.service.greendao.RelatCardDao;
 import com.nhsoft.poslib.service.greendao.TableMd5EntityDao;
 import com.nhsoft.poslib.service.greendao.PointOrderDetialDao;
+import com.nhsoft.poslib.service.greendao.InventoryDao;
 import com.nhsoft.poslib.service.greendao.BranchGroupDao;
 import com.nhsoft.poslib.service.greendao.MeasureUnitItemDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDao;
 import com.nhsoft.poslib.service.greendao.RolePrivilegeNewDao;
 import com.nhsoft.poslib.service.greendao.AmountPayDao;
 import com.nhsoft.poslib.service.greendao.PointPolicyDetailDao;
 import com.nhsoft.poslib.service.greendao.ReplaceCardDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDetailDao;
 import com.nhsoft.poslib.service.greendao.MarketActionDao;
 import com.nhsoft.poslib.service.greendao.PolicyPromotionDetailDao;
-import com.nhsoft.poslib.service.greendao.PosItemNewNongMaoDao;
-import com.nhsoft.poslib.service.greendao.BranchMerchantDao;
 import com.nhsoft.poslib.service.greendao.PolicyPresentDao;
 import com.nhsoft.poslib.service.greendao.CardChangeDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeDao;
@@ -186,14 +170,6 @@ import com.nhsoft.poslib.service.greendao.CustomerRegisterDao;
 import com.nhsoft.poslib.service.greendao.VipStrangeSuccessSendMoneyDao;
 import com.nhsoft.poslib.service.greendao.OtherRevenueDao;
 import com.nhsoft.poslib.service.greendao.VipConsumeDao;
-import com.nhsoft.poslib.service.greendao.StallDiscountDao;
-import com.nhsoft.poslib.service.greendao.StallDiscountDetailDao;
-import com.nhsoft.poslib.service.greendao.StallDao;
-import com.nhsoft.poslib.service.greendao.StallPromotionDao;
-import com.nhsoft.poslib.service.greendao.StallPromotionDetailDao;
-import com.nhsoft.poslib.service.greendao.MerchantDao;
-import com.nhsoft.poslib.service.greendao.StallMatrixDao;
-import com.nhsoft.poslib.service.greendao.CategoryFindDao;
 import com.nhsoft.poslib.service.greendao.VipIcInitDao;
 import com.nhsoft.poslib.service.greendao.SystemRoleDao;
 import com.nhsoft.poslib.service.greendao.CardDepositDao;
@@ -209,7 +185,6 @@ import com.nhsoft.poslib.service.greendao.PolicyMoneyDetailDao;
 import com.nhsoft.poslib.service.greendao.MeasureUnitDao;
 import com.nhsoft.poslib.service.greendao.AttachedScreenDao;
 import com.nhsoft.poslib.service.greendao.SystemBookDao;
-import com.nhsoft.poslib.service.greendao.FmPaymentDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeTerminalDao;
 import com.nhsoft.poslib.service.greendao.PolicyMoneyDao;
 import com.nhsoft.poslib.service.greendao.BranchMessageDao;
@@ -218,7 +193,6 @@ import com.nhsoft.poslib.service.greendao.VipCrmFeeDao;
 import com.nhsoft.poslib.service.greendao.ManagementTemplateDetailDao;
 import com.nhsoft.poslib.service.greendao.VipCRMLevelDao;
 import com.nhsoft.poslib.service.greendao.YunServiceDaysDao;
-import com.nhsoft.poslib.service.greendao.InventoryDao;
 
 // THIS CODE IS GENERATED BY greenDAO, DO NOT EDIT.
 
@@ -260,18 +234,15 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig relatCardDaoConfig;
     private final DaoConfig tableMd5EntityDaoConfig;
     private final DaoConfig pointOrderDetialDaoConfig;
+    private final DaoConfig inventoryDaoConfig;
     private final DaoConfig branchGroupDaoConfig;
     private final DaoConfig measureUnitItemDaoConfig;
-    private final DaoConfig fmPosOrderDaoConfig;
     private final DaoConfig rolePrivilegeNewDaoConfig;
     private final DaoConfig amountPayDaoConfig;
     private final DaoConfig pointPolicyDetailDaoConfig;
     private final DaoConfig replaceCardDaoConfig;
-    private final DaoConfig fmPosOrderDetailDaoConfig;
     private final DaoConfig marketActionDaoConfig;
     private final DaoConfig policyPromotionDetailDaoConfig;
-    private final DaoConfig posItemNewNongMaoDaoConfig;
-    private final DaoConfig branchMerchantDaoConfig;
     private final DaoConfig policyPresentDaoConfig;
     private final DaoConfig cardChangeDaoConfig;
     private final DaoConfig posItemGradeDaoConfig;
@@ -301,14 +272,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig vipStrangeSuccessSendMoneyDaoConfig;
     private final DaoConfig otherRevenueDaoConfig;
     private final DaoConfig vipConsumeDaoConfig;
-    private final DaoConfig stallDiscountDaoConfig;
-    private final DaoConfig stallDiscountDetailDaoConfig;
-    private final DaoConfig stallDaoConfig;
-    private final DaoConfig stallPromotionDaoConfig;
-    private final DaoConfig stallPromotionDetailDaoConfig;
-    private final DaoConfig merchantDaoConfig;
-    private final DaoConfig stallMatrixDaoConfig;
-    private final DaoConfig categoryFindDaoConfig;
     private final DaoConfig vipIcInitDaoConfig;
     private final DaoConfig systemRoleDaoConfig;
     private final DaoConfig cardDepositDaoConfig;
@@ -324,7 +287,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig measureUnitDaoConfig;
     private final DaoConfig attachedScreenDaoConfig;
     private final DaoConfig systemBookDaoConfig;
-    private final DaoConfig fmPaymentDaoConfig;
     private final DaoConfig posItemGradeTerminalDaoConfig;
     private final DaoConfig policyMoneyDaoConfig;
     private final DaoConfig branchMessageDaoConfig;
@@ -333,7 +295,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig managementTemplateDetailDaoConfig;
     private final DaoConfig vipCRMLevelDaoConfig;
     private final DaoConfig yunServiceDaysDaoConfig;
-    private final DaoConfig inventoryDaoConfig;
 
     private final ShiftTablePaymentDao shiftTablePaymentDao;
     private final PolicyPromotionDao policyPromotionDao;
@@ -366,18 +327,15 @@ public class DaoSession extends AbstractDaoSession {
     private final RelatCardDao relatCardDao;
     private final TableMd5EntityDao tableMd5EntityDao;
     private final PointOrderDetialDao pointOrderDetialDao;
+    private final InventoryDao inventoryDao;
     private final BranchGroupDao branchGroupDao;
     private final MeasureUnitItemDao measureUnitItemDao;
-    private final FmPosOrderDao fmPosOrderDao;
     private final RolePrivilegeNewDao rolePrivilegeNewDao;
     private final AmountPayDao amountPayDao;
     private final PointPolicyDetailDao pointPolicyDetailDao;
     private final ReplaceCardDao replaceCardDao;
-    private final FmPosOrderDetailDao fmPosOrderDetailDao;
     private final MarketActionDao marketActionDao;
     private final PolicyPromotionDetailDao policyPromotionDetailDao;
-    private final PosItemNewNongMaoDao posItemNewNongMaoDao;
-    private final BranchMerchantDao branchMerchantDao;
     private final PolicyPresentDao policyPresentDao;
     private final CardChangeDao cardChangeDao;
     private final PosItemGradeDao posItemGradeDao;
@@ -407,14 +365,6 @@ public class DaoSession extends AbstractDaoSession {
     private final VipStrangeSuccessSendMoneyDao vipStrangeSuccessSendMoneyDao;
     private final OtherRevenueDao otherRevenueDao;
     private final VipConsumeDao vipConsumeDao;
-    private final StallDiscountDao stallDiscountDao;
-    private final StallDiscountDetailDao stallDiscountDetailDao;
-    private final StallDao stallDao;
-    private final StallPromotionDao stallPromotionDao;
-    private final StallPromotionDetailDao stallPromotionDetailDao;
-    private final MerchantDao merchantDao;
-    private final StallMatrixDao stallMatrixDao;
-    private final CategoryFindDao categoryFindDao;
     private final VipIcInitDao vipIcInitDao;
     private final SystemRoleDao systemRoleDao;
     private final CardDepositDao cardDepositDao;
@@ -430,7 +380,6 @@ public class DaoSession extends AbstractDaoSession {
     private final MeasureUnitDao measureUnitDao;
     private final AttachedScreenDao attachedScreenDao;
     private final SystemBookDao systemBookDao;
-    private final FmPaymentDao fmPaymentDao;
     private final PosItemGradeTerminalDao posItemGradeTerminalDao;
     private final PolicyMoneyDao policyMoneyDao;
     private final BranchMessageDao branchMessageDao;
@@ -439,7 +388,6 @@ public class DaoSession extends AbstractDaoSession {
     private final ManagementTemplateDetailDao managementTemplateDetailDao;
     private final VipCRMLevelDao vipCRMLevelDao;
     private final YunServiceDaysDao yunServiceDaysDao;
-    private final InventoryDao inventoryDao;
 
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
@@ -538,14 +486,14 @@ public class DaoSession extends AbstractDaoSession {
         pointOrderDetialDaoConfig = daoConfigMap.get(PointOrderDetialDao.class).clone();
         pointOrderDetialDaoConfig.initIdentityScope(type);
 
+        inventoryDaoConfig = daoConfigMap.get(InventoryDao.class).clone();
+        inventoryDaoConfig.initIdentityScope(type);
+
         branchGroupDaoConfig = daoConfigMap.get(BranchGroupDao.class).clone();
         branchGroupDaoConfig.initIdentityScope(type);
 
         measureUnitItemDaoConfig = daoConfigMap.get(MeasureUnitItemDao.class).clone();
         measureUnitItemDaoConfig.initIdentityScope(type);
-
-        fmPosOrderDaoConfig = daoConfigMap.get(FmPosOrderDao.class).clone();
-        fmPosOrderDaoConfig.initIdentityScope(type);
 
         rolePrivilegeNewDaoConfig = daoConfigMap.get(RolePrivilegeNewDao.class).clone();
         rolePrivilegeNewDaoConfig.initIdentityScope(type);
@@ -559,20 +507,11 @@ public class DaoSession extends AbstractDaoSession {
         replaceCardDaoConfig = daoConfigMap.get(ReplaceCardDao.class).clone();
         replaceCardDaoConfig.initIdentityScope(type);
 
-        fmPosOrderDetailDaoConfig = daoConfigMap.get(FmPosOrderDetailDao.class).clone();
-        fmPosOrderDetailDaoConfig.initIdentityScope(type);
-
         marketActionDaoConfig = daoConfigMap.get(MarketActionDao.class).clone();
         marketActionDaoConfig.initIdentityScope(type);
 
         policyPromotionDetailDaoConfig = daoConfigMap.get(PolicyPromotionDetailDao.class).clone();
         policyPromotionDetailDaoConfig.initIdentityScope(type);
-
-        posItemNewNongMaoDaoConfig = daoConfigMap.get(PosItemNewNongMaoDao.class).clone();
-        posItemNewNongMaoDaoConfig.initIdentityScope(type);
-
-        branchMerchantDaoConfig = daoConfigMap.get(BranchMerchantDao.class).clone();
-        branchMerchantDaoConfig.initIdentityScope(type);
 
         policyPresentDaoConfig = daoConfigMap.get(PolicyPresentDao.class).clone();
         policyPresentDaoConfig.initIdentityScope(type);
@@ -661,30 +600,6 @@ public class DaoSession extends AbstractDaoSession {
         vipConsumeDaoConfig = daoConfigMap.get(VipConsumeDao.class).clone();
         vipConsumeDaoConfig.initIdentityScope(type);
 
-        stallDiscountDaoConfig = daoConfigMap.get(StallDiscountDao.class).clone();
-        stallDiscountDaoConfig.initIdentityScope(type);
-
-        stallDiscountDetailDaoConfig = daoConfigMap.get(StallDiscountDetailDao.class).clone();
-        stallDiscountDetailDaoConfig.initIdentityScope(type);
-
-        stallDaoConfig = daoConfigMap.get(StallDao.class).clone();
-        stallDaoConfig.initIdentityScope(type);
-
-        stallPromotionDaoConfig = daoConfigMap.get(StallPromotionDao.class).clone();
-        stallPromotionDaoConfig.initIdentityScope(type);
-
-        stallPromotionDetailDaoConfig = daoConfigMap.get(StallPromotionDetailDao.class).clone();
-        stallPromotionDetailDaoConfig.initIdentityScope(type);
-
-        merchantDaoConfig = daoConfigMap.get(MerchantDao.class).clone();
-        merchantDaoConfig.initIdentityScope(type);
-
-        stallMatrixDaoConfig = daoConfigMap.get(StallMatrixDao.class).clone();
-        stallMatrixDaoConfig.initIdentityScope(type);
-
-        categoryFindDaoConfig = daoConfigMap.get(CategoryFindDao.class).clone();
-        categoryFindDaoConfig.initIdentityScope(type);
-
         vipIcInitDaoConfig = daoConfigMap.get(VipIcInitDao.class).clone();
         vipIcInitDaoConfig.initIdentityScope(type);
 
@@ -730,9 +645,6 @@ public class DaoSession extends AbstractDaoSession {
         systemBookDaoConfig = daoConfigMap.get(SystemBookDao.class).clone();
         systemBookDaoConfig.initIdentityScope(type);
 
-        fmPaymentDaoConfig = daoConfigMap.get(FmPaymentDao.class).clone();
-        fmPaymentDaoConfig.initIdentityScope(type);
-
         posItemGradeTerminalDaoConfig = daoConfigMap.get(PosItemGradeTerminalDao.class).clone();
         posItemGradeTerminalDaoConfig.initIdentityScope(type);
 
@@ -756,9 +668,6 @@ public class DaoSession extends AbstractDaoSession {
 
         yunServiceDaysDaoConfig = daoConfigMap.get(YunServiceDaysDao.class).clone();
         yunServiceDaysDaoConfig.initIdentityScope(type);
-
-        inventoryDaoConfig = daoConfigMap.get(InventoryDao.class).clone();
-        inventoryDaoConfig.initIdentityScope(type);
 
         shiftTablePaymentDao = new ShiftTablePaymentDao(shiftTablePaymentDaoConfig, this);
         policyPromotionDao = new PolicyPromotionDao(policyPromotionDaoConfig, this);
@@ -791,18 +700,15 @@ public class DaoSession extends AbstractDaoSession {
         relatCardDao = new RelatCardDao(relatCardDaoConfig, this);
         tableMd5EntityDao = new TableMd5EntityDao(tableMd5EntityDaoConfig, this);
         pointOrderDetialDao = new PointOrderDetialDao(pointOrderDetialDaoConfig, this);
+        inventoryDao = new InventoryDao(inventoryDaoConfig, this);
         branchGroupDao = new BranchGroupDao(branchGroupDaoConfig, this);
         measureUnitItemDao = new MeasureUnitItemDao(measureUnitItemDaoConfig, this);
-        fmPosOrderDao = new FmPosOrderDao(fmPosOrderDaoConfig, this);
         rolePrivilegeNewDao = new RolePrivilegeNewDao(rolePrivilegeNewDaoConfig, this);
         amountPayDao = new AmountPayDao(amountPayDaoConfig, this);
         pointPolicyDetailDao = new PointPolicyDetailDao(pointPolicyDetailDaoConfig, this);
         replaceCardDao = new ReplaceCardDao(replaceCardDaoConfig, this);
-        fmPosOrderDetailDao = new FmPosOrderDetailDao(fmPosOrderDetailDaoConfig, this);
         marketActionDao = new MarketActionDao(marketActionDaoConfig, this);
         policyPromotionDetailDao = new PolicyPromotionDetailDao(policyPromotionDetailDaoConfig, this);
-        posItemNewNongMaoDao = new PosItemNewNongMaoDao(posItemNewNongMaoDaoConfig, this);
-        branchMerchantDao = new BranchMerchantDao(branchMerchantDaoConfig, this);
         policyPresentDao = new PolicyPresentDao(policyPresentDaoConfig, this);
         cardChangeDao = new CardChangeDao(cardChangeDaoConfig, this);
         posItemGradeDao = new PosItemGradeDao(posItemGradeDaoConfig, this);
@@ -832,14 +738,6 @@ public class DaoSession extends AbstractDaoSession {
         vipStrangeSuccessSendMoneyDao = new VipStrangeSuccessSendMoneyDao(vipStrangeSuccessSendMoneyDaoConfig, this);
         otherRevenueDao = new OtherRevenueDao(otherRevenueDaoConfig, this);
         vipConsumeDao = new VipConsumeDao(vipConsumeDaoConfig, this);
-        stallDiscountDao = new StallDiscountDao(stallDiscountDaoConfig, this);
-        stallDiscountDetailDao = new StallDiscountDetailDao(stallDiscountDetailDaoConfig, this);
-        stallDao = new StallDao(stallDaoConfig, this);
-        stallPromotionDao = new StallPromotionDao(stallPromotionDaoConfig, this);
-        stallPromotionDetailDao = new StallPromotionDetailDao(stallPromotionDetailDaoConfig, this);
-        merchantDao = new MerchantDao(merchantDaoConfig, this);
-        stallMatrixDao = new StallMatrixDao(stallMatrixDaoConfig, this);
-        categoryFindDao = new CategoryFindDao(categoryFindDaoConfig, this);
         vipIcInitDao = new VipIcInitDao(vipIcInitDaoConfig, this);
         systemRoleDao = new SystemRoleDao(systemRoleDaoConfig, this);
         cardDepositDao = new CardDepositDao(cardDepositDaoConfig, this);
@@ -855,7 +753,6 @@ public class DaoSession extends AbstractDaoSession {
         measureUnitDao = new MeasureUnitDao(measureUnitDaoConfig, this);
         attachedScreenDao = new AttachedScreenDao(attachedScreenDaoConfig, this);
         systemBookDao = new SystemBookDao(systemBookDaoConfig, this);
-        fmPaymentDao = new FmPaymentDao(fmPaymentDaoConfig, this);
         posItemGradeTerminalDao = new PosItemGradeTerminalDao(posItemGradeTerminalDaoConfig, this);
         policyMoneyDao = new PolicyMoneyDao(policyMoneyDaoConfig, this);
         branchMessageDao = new BranchMessageDao(branchMessageDaoConfig, this);
@@ -864,7 +761,6 @@ public class DaoSession extends AbstractDaoSession {
         managementTemplateDetailDao = new ManagementTemplateDetailDao(managementTemplateDetailDaoConfig, this);
         vipCRMLevelDao = new VipCRMLevelDao(vipCRMLevelDaoConfig, this);
         yunServiceDaysDao = new YunServiceDaysDao(yunServiceDaysDaoConfig, this);
-        inventoryDao = new InventoryDao(inventoryDaoConfig, this);
 
         registerDao(ShiftTablePayment.class, shiftTablePaymentDao);
         registerDao(PolicyPromotion.class, policyPromotionDao);
@@ -897,18 +793,15 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(RelatCard.class, relatCardDao);
         registerDao(TableMd5Entity.class, tableMd5EntityDao);
         registerDao(PointOrderDetial.class, pointOrderDetialDao);
+        registerDao(Inventory.class, inventoryDao);
         registerDao(BranchGroup.class, branchGroupDao);
         registerDao(MeasureUnitItem.class, measureUnitItemDao);
-        registerDao(FmPosOrder.class, fmPosOrderDao);
         registerDao(RolePrivilegeNew.class, rolePrivilegeNewDao);
         registerDao(AmountPay.class, amountPayDao);
         registerDao(PointPolicyDetail.class, pointPolicyDetailDao);
         registerDao(ReplaceCard.class, replaceCardDao);
-        registerDao(FmPosOrderDetail.class, fmPosOrderDetailDao);
         registerDao(MarketAction.class, marketActionDao);
         registerDao(PolicyPromotionDetail.class, policyPromotionDetailDao);
-        registerDao(PosItemNewNongMao.class, posItemNewNongMaoDao);
-        registerDao(BranchMerchant.class, branchMerchantDao);
         registerDao(PolicyPresent.class, policyPresentDao);
         registerDao(CardChange.class, cardChangeDao);
         registerDao(PosItemGrade.class, posItemGradeDao);
@@ -938,14 +831,6 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(VipStrangeSuccessSendMoney.class, vipStrangeSuccessSendMoneyDao);
         registerDao(OtherRevenue.class, otherRevenueDao);
         registerDao(VipConsume.class, vipConsumeDao);
-        registerDao(StallDiscount.class, stallDiscountDao);
-        registerDao(StallDiscountDetail.class, stallDiscountDetailDao);
-        registerDao(Stall.class, stallDao);
-        registerDao(StallPromotion.class, stallPromotionDao);
-        registerDao(StallPromotionDetail.class, stallPromotionDetailDao);
-        registerDao(Merchant.class, merchantDao);
-        registerDao(StallMatrix.class, stallMatrixDao);
-        registerDao(CategoryFind.class, categoryFindDao);
         registerDao(VipIcInit.class, vipIcInitDao);
         registerDao(SystemRole.class, systemRoleDao);
         registerDao(CardDeposit.class, cardDepositDao);
@@ -961,7 +846,6 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(MeasureUnit.class, measureUnitDao);
         registerDao(AttachedScreen.class, attachedScreenDao);
         registerDao(SystemBook.class, systemBookDao);
-        registerDao(FmPayment.class, fmPaymentDao);
         registerDao(PosItemGradeTerminal.class, posItemGradeTerminalDao);
         registerDao(PolicyMoney.class, policyMoneyDao);
         registerDao(BranchMessage.class, branchMessageDao);
@@ -970,7 +854,6 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(ManagementTemplateDetail.class, managementTemplateDetailDao);
         registerDao(VipCRMLevel.class, vipCRMLevelDao);
         registerDao(YunServiceDays.class, yunServiceDaysDao);
-        registerDao(Inventory.class, inventoryDao);
     }
     
     public void clear() {
@@ -1005,18 +888,15 @@ public class DaoSession extends AbstractDaoSession {
         relatCardDaoConfig.clearIdentityScope();
         tableMd5EntityDaoConfig.clearIdentityScope();
         pointOrderDetialDaoConfig.clearIdentityScope();
+        inventoryDaoConfig.clearIdentityScope();
         branchGroupDaoConfig.clearIdentityScope();
         measureUnitItemDaoConfig.clearIdentityScope();
-        fmPosOrderDaoConfig.clearIdentityScope();
         rolePrivilegeNewDaoConfig.clearIdentityScope();
         amountPayDaoConfig.clearIdentityScope();
         pointPolicyDetailDaoConfig.clearIdentityScope();
         replaceCardDaoConfig.clearIdentityScope();
-        fmPosOrderDetailDaoConfig.clearIdentityScope();
         marketActionDaoConfig.clearIdentityScope();
         policyPromotionDetailDaoConfig.clearIdentityScope();
-        posItemNewNongMaoDaoConfig.clearIdentityScope();
-        branchMerchantDaoConfig.clearIdentityScope();
         policyPresentDaoConfig.clearIdentityScope();
         cardChangeDaoConfig.clearIdentityScope();
         posItemGradeDaoConfig.clearIdentityScope();
@@ -1046,14 +926,6 @@ public class DaoSession extends AbstractDaoSession {
         vipStrangeSuccessSendMoneyDaoConfig.clearIdentityScope();
         otherRevenueDaoConfig.clearIdentityScope();
         vipConsumeDaoConfig.clearIdentityScope();
-        stallDiscountDaoConfig.clearIdentityScope();
-        stallDiscountDetailDaoConfig.clearIdentityScope();
-        stallDaoConfig.clearIdentityScope();
-        stallPromotionDaoConfig.clearIdentityScope();
-        stallPromotionDetailDaoConfig.clearIdentityScope();
-        merchantDaoConfig.clearIdentityScope();
-        stallMatrixDaoConfig.clearIdentityScope();
-        categoryFindDaoConfig.clearIdentityScope();
         vipIcInitDaoConfig.clearIdentityScope();
         systemRoleDaoConfig.clearIdentityScope();
         cardDepositDaoConfig.clearIdentityScope();
@@ -1069,7 +941,6 @@ public class DaoSession extends AbstractDaoSession {
         measureUnitDaoConfig.clearIdentityScope();
         attachedScreenDaoConfig.clearIdentityScope();
         systemBookDaoConfig.clearIdentityScope();
-        fmPaymentDaoConfig.clearIdentityScope();
         posItemGradeTerminalDaoConfig.clearIdentityScope();
         policyMoneyDaoConfig.clearIdentityScope();
         branchMessageDaoConfig.clearIdentityScope();
@@ -1078,7 +949,6 @@ public class DaoSession extends AbstractDaoSession {
         managementTemplateDetailDaoConfig.clearIdentityScope();
         vipCRMLevelDaoConfig.clearIdentityScope();
         yunServiceDaysDaoConfig.clearIdentityScope();
-        inventoryDaoConfig.clearIdentityScope();
     }
 
     public ShiftTablePaymentDao getShiftTablePaymentDao() {
@@ -1205,16 +1075,16 @@ public class DaoSession extends AbstractDaoSession {
         return pointOrderDetialDao;
     }
 
+    public InventoryDao getInventoryDao() {
+        return inventoryDao;
+    }
+
     public BranchGroupDao getBranchGroupDao() {
         return branchGroupDao;
     }
 
     public MeasureUnitItemDao getMeasureUnitItemDao() {
         return measureUnitItemDao;
-    }
-
-    public FmPosOrderDao getFmPosOrderDao() {
-        return fmPosOrderDao;
     }
 
     public RolePrivilegeNewDao getRolePrivilegeNewDao() {
@@ -1233,24 +1103,12 @@ public class DaoSession extends AbstractDaoSession {
         return replaceCardDao;
     }
 
-    public FmPosOrderDetailDao getFmPosOrderDetailDao() {
-        return fmPosOrderDetailDao;
-    }
-
     public MarketActionDao getMarketActionDao() {
         return marketActionDao;
     }
 
     public PolicyPromotionDetailDao getPolicyPromotionDetailDao() {
         return policyPromotionDetailDao;
-    }
-
-    public PosItemNewNongMaoDao getPosItemNewNongMaoDao() {
-        return posItemNewNongMaoDao;
-    }
-
-    public BranchMerchantDao getBranchMerchantDao() {
-        return branchMerchantDao;
     }
 
     public PolicyPresentDao getPolicyPresentDao() {
@@ -1369,38 +1227,6 @@ public class DaoSession extends AbstractDaoSession {
         return vipConsumeDao;
     }
 
-    public StallDiscountDao getStallDiscountDao() {
-        return stallDiscountDao;
-    }
-
-    public StallDiscountDetailDao getStallDiscountDetailDao() {
-        return stallDiscountDetailDao;
-    }
-
-    public StallDao getStallDao() {
-        return stallDao;
-    }
-
-    public StallPromotionDao getStallPromotionDao() {
-        return stallPromotionDao;
-    }
-
-    public StallPromotionDetailDao getStallPromotionDetailDao() {
-        return stallPromotionDetailDao;
-    }
-
-    public MerchantDao getMerchantDao() {
-        return merchantDao;
-    }
-
-    public StallMatrixDao getStallMatrixDao() {
-        return stallMatrixDao;
-    }
-
-    public CategoryFindDao getCategoryFindDao() {
-        return categoryFindDao;
-    }
-
     public VipIcInitDao getVipIcInitDao() {
         return vipIcInitDao;
     }
@@ -1461,10 +1287,6 @@ public class DaoSession extends AbstractDaoSession {
         return systemBookDao;
     }
 
-    public FmPaymentDao getFmPaymentDao() {
-        return fmPaymentDao;
-    }
-
     public PosItemGradeTerminalDao getPosItemGradeTerminalDao() {
         return posItemGradeTerminalDao;
     }
@@ -1495,10 +1317,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public YunServiceDaysDao getYunServiceDaysDao() {
         return yunServiceDaysDao;
-    }
-
-    public InventoryDao getInventoryDao() {
-        return inventoryDao;
     }
 
 }

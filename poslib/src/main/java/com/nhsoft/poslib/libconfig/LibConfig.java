@@ -17,14 +17,10 @@ import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.SystemRole;
 import com.nhsoft.poslib.entity.VipUserInfo;
-import com.nhsoft.poslib.entity.new_nong_mao.PosItemNewNongMao;
-import com.nhsoft.poslib.entity.nongmao.StallDiscount;
-import com.nhsoft.poslib.entity.nongmao.StallPromotion;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
 import com.nhsoft.poslib.model.ClientUserBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
 import com.nhsoft.poslib.model.GoodsGradeBean;
-import com.nhsoft.poslib.model.NmGoodsGradeBean;
 import com.nhsoft.poslib.model.PointRuleXmlModel;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.PromotionResponsBean;
@@ -66,8 +62,6 @@ public class LibConfig {
 
 
     public static List<PosItem>           activityDisplayShowGoods    = new ArrayList<>();
-    public static List<PosItemNewNongMao> activityNewDisplayShowGoods = new ArrayList<>();
-    public static List<NmGoodsGradeBean>  activityNewGoodsShow        = new ArrayList<>();
     public static List<GoodsGradeBean>    activityShowGoods           = new ArrayList<>();
     public static Map<Long, Float>     sInventoryList              = new HashMap<>();
     public static boolean                 isTerminalGoods;//是否是终端商品设置状态
@@ -197,15 +191,12 @@ public class LibConfig {
 
 
     public static List<PolicyPromotion> allPolicyPromotionList        = new ArrayList<>(); //活动
-    public static List<StallPromotion>  allStallPolicyPromotionList   = new ArrayList<>(); //活动
     public static List<PolicyPromotion> allVipOncePolicyPromotionList = new ArrayList<>(); //活动
     public static List<PolicyPromotion> allVipCardPolicyPromotionList = new ArrayList<>(); //
 
     public static List<String>               allPromotionLimit                  = new ArrayList<>(); //有活动限制
     public static List<PromotionResponsBean> allPromotionFoundLimit             = new ArrayList<>(); //有活动限制
-    public static List<StallPromotion>       allVipOnceStallPolicyPromotionList = new ArrayList<>(); //活动
     public static List<PolicyDiscount>       allPolicyDiscountList              = new ArrayList<>(); //活动
-    public static List<StallDiscount>        allStallPolicyDiscountList         = new ArrayList<>(); //活动
     public static List<PolicyQuantity>       allPolicyQuantityList              = new ArrayList<>(); //超量特价活动
     public static List<PolicyMoney>          allPolicyMoneyList                 = new ArrayList<>(); //超额奖励活动
     public static List<PolicyPresent>        allPolicyPresentList               = new ArrayList<>(); //赠品促销活动

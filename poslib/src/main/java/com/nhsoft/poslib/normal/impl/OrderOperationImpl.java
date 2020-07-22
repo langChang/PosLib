@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.BookResource;
-import com.nhsoft.poslib.entity.FmPosOrder;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
@@ -111,24 +110,6 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    @Override
-    public FmPosOrder copayFmPosOrder(FmPosOrder posOrder) {
-        try {
-            String json = new Gson().toJson(posOrder);
-
-            final FmPosOrder nowPosOrder = new Gson().fromJson(json,FmPosOrder.class);
-//            List<PosOrderDetail> localposOrderDetails = new ArrayList<>();
-//            List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
-//            for (PosOrderDetail posOrderDetail : posOrderDetails) {
-//                localposOrderDetails.add((PosOrderDetail) posOrderDetail.clone());
-//            }
-//            nowPosOrder.setPosOrderDetails(localposOrderDetails);
-            return nowPosOrder;
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     @Override
     public Payment createPayment(String orderNo, PosScaleStyleTypeBean styleTypeBean) {

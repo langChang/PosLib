@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.entity.PolicyDiscount;
 import com.nhsoft.poslib.entity.PolicyMoney;
 import com.nhsoft.poslib.entity.PolicyPresent;
-import com.nhsoft.poslib.entity.nongmao.StallDiscount;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
@@ -19,7 +18,6 @@ import com.nhsoft.poslib.utils.PosOrderCalcUtil;
 import com.nhsoft.poslib.utils.PriceDiscountUtils;
 import com.nhsoft.poslib.utils.PricePolicyMoneyUseUtils;
 import com.nhsoft.poslib.utils.PricePolicyPresentUseUtils;
-import com.nhsoft.poslib.utils.PriceStallDiscountUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,71 +175,4 @@ public class PromotionOperationImpl implements PromotionOperationCallback {
 
         }
     }
-
-    @Override
-    public void getNongMaoPolicyDiscount(PosOrder mPosOrder) {
-        Map<StallDiscount, List<PosOrderDetail>>  stallDiscountListMap  = new HashMap<>();
-        if (LibConfig.allStallPolicyDiscountList != null && LibConfig.allStallPolicyDiscountList.size() > 0) {
-            List<PosOrderDetail> posOrderDetails = mPosOrder.getPosOrderDetails();
-            for (PosOrderDetail posOrderDetail : posOrderDetails) {
-                StallDiscount policyDiscount = PriceStallDiscountUtils.getPolicyDiscountPrice(posOrderDetail, LibConfig.allStallPolicyDiscountList);
-                if (policyDiscount == null) continue;
-                List<PosOrderDetail> mapPosOrdelList = stallDiscountListMap.get(policyDiscount);
-                if (mapPosOrdelList == null) {
-                    mapPosOrdelList = new ArrayList<>();
-                    stallDiscountListMap.put(policyDiscount, mapPosOrdelList);
-                }
-                mapPosOrdelList.add(posOrderDetail);
-            }
-
-            for (Map.Entry<StallDiscount, List<PosOrderDetail>> entry : stallDiscountListMap.entrySet()) {
-                StallDiscount policyDiscount = entry.getKey();
-                List<PosOrderDetail> mapPosOrdelList = entry.getValue();
-                float totalPaymentMoney = 0;
-                for (PosOrderDetail posOrderDetail : mapPosOrdelList) {
-                    totalPaymentMoney += posOrderDetail.getOrderDetailPaymentMoney();
-                }
-
-                if (totalPaymentMoney < policyDiscount.getPolicy_discount_bill_money())
-                    continue;
-                float totalDiscountMoney = policyDiscount.getPolicy_discount_discount_money();
-                //自动累加
-                if (policyDiscount.getPolicy_discount_discount_money() != 0) {
-                    int discountNum = (int) (totalPaymentMoney / policyDiscount.getPolicy_discount_bill_money());
-                    if (discountNum > 0) {
-                        totalDiscountMoney *= discountNum;
-                    }
-                }
-                //最高打多少钱
-                if (totalDiscountMoney > policyDiscount.getPolicy_discount_total_discount() &&  policyDiscount.getPolicy_discount_total_discount() != 0) {
-                    totalDiscountMoney = policyDiscount.getPolicy_discount_total_discount();
-                }
-
-                for (int i = 0; i < mapPosOrdelList.size(); i++) {
-                    PosOrderDetail posOrderDetail = mapPosOrdelList.get(i);
-                    float orderDetailPaymentMoney = posOrderDetail.getOrderDetailPaymentMoney();
-                    if (i == mapPosOrdelList.size() - 1) {
-                        float realDiscount = orderDetailPaymentMoney - totalDiscountMoney;
-                        if (realDiscount < 0) realDiscount = 0;
-                        posOrderDetail.setOrderDetailPrice((realDiscount) / posOrderDetail.getOrderDetailAmount());
-                        posOrderDetail.setOrderDetailPolicyFid(policyDiscount.getPolicy_discount_no());
-                        posOrderDetail.setOrderDetailPolicyDiscountFlag(true);
-                        PosOrderCalcUtil.calcPosOrderDetail(posOrderDetail);
-                        break;
-                    }
-                    float discountPaymentMoney = (posOrderDetail.getOrderDetailPaymentMoney() / totalPaymentMoney) * totalDiscountMoney;
-                    float realDiscount = orderDetailPaymentMoney - discountPaymentMoney;
-                    if (realDiscount < 0) realDiscount = 0;
-                    posOrderDetail.setOrderDetailPrice((realDiscount) / posOrderDetail.getOrderDetailAmount());
-                    posOrderDetail.setOrderDetailPolicyFid(policyDiscount.getPolicy_discount_no());
-                    posOrderDetail.setOrderDetailPolicyDiscountFlag(true);
-                    PosOrderCalcUtil.calcPosOrderDetail(posOrderDetail);
-                    totalDiscountMoney -= (orderDetailPaymentMoney - posOrderDetail.getOrderDetailPaymentMoney());
-                }
-            }
-            PosOrderCalcUtil.calcPosOrder(mPosOrder);
-        }
-    }
-
-
 }

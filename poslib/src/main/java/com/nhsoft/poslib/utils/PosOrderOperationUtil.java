@@ -6,17 +6,12 @@ import com.google.gson.Gson;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.CardTypeParam;
-import com.nhsoft.poslib.entity.FmPayment;
-import com.nhsoft.poslib.entity.FmPosOrder;
-import com.nhsoft.poslib.entity.FmPosOrderDetail;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
-import com.nhsoft.poslib.entity.Login;
 import com.nhsoft.poslib.entity.PolicyPromotion;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosItemKit;
 import com.nhsoft.poslib.entity.PosMachine;
-import com.nhsoft.poslib.entity.nongmao.StallPromotion;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
@@ -28,7 +23,6 @@ import com.nhsoft.poslib.model.PosOrderState;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.RedisBean;
 import com.nhsoft.poslib.service.KeyGeneratorBizdayService;
-import com.nhsoft.poslib.service.LoginService;
 import com.nhsoft.poslib.service.OrderService;
 import com.nhsoft.poslib.service.PayStyleService;
 import com.nhsoft.poslib.service.PosCarryLogService;
@@ -154,34 +148,21 @@ public class PosOrderOperationUtil {
                 posOrderDetail.setSystemBookCode(shiftTable.getSystemBookCode());
                 if (!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())) {
                     policyPromotionMoney += posOrderDetail.getOrderDetailDiscount();
-                    if (LoginService.getInstance().isNongMao()) {
-                        for (StallPromotion policyPromotion : LibConfig.allVipOnceStallPolicyPromotionList) {
+                    if (LibConfig.S_ORDER_COMPLETE == orderState) {
+                        for (PolicyPromotion policyPromotion : LibConfig.allVipOncePolicyPromotionList) {
                             if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
+
                                 if (LibConfig.activeVipMember != null) {
-                                    if (TextUtils.isEmpty(LibConfig.activeVipMember.getCustomer_id())) {
-                                        LibConfig.sVipEnjoyStallPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
-                                    } else {
-                                        LibConfig.sVipEnjoyStallPromotion.put(LibConfig.activeVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
-                                    }
+                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.activeVipMember, posOrderDetail.getOrderDetailPolicyFid());
+                                    posOrder.setRedisBean(redisBean);
+                                    LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
                                 }
-                            }
-                        }
-                    } else {
-                        if (LibConfig.S_ORDER_COMPLETE == orderState) {
-                            for (PolicyPromotion policyPromotion : LibConfig.allVipOncePolicyPromotionList) {
-                                if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
 
-                                    if (LibConfig.activeVipMember != null) {
-                                        RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.activeVipMember, posOrderDetail.getOrderDetailPolicyFid());
-                                        posOrder.setRedisBean(redisBean);
-                                        LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
-                                    }
-
-                                    if (LibConfig.discountVipMember != null) {
-                                        RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.discountVipMember, posOrderDetail.getOrderDetailPolicyFid());
-                                        posOrder.setRedisBean(redisBean);
-                                        LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
-                                    }
+                                if (LibConfig.discountVipMember != null) {
+                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.discountVipMember, posOrderDetail.getOrderDetailPolicyFid());
+                                    posOrder.setRedisBean(redisBean);
+                                    LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
+                                }
 
 
 //                                    if (LibConfig.activeVipMember != null) {
@@ -218,10 +199,10 @@ public class PosOrderOperationUtil {
 //                                        }
 //                                    }
 
-                                }
                             }
                         }
                     }
+
                 } else {
                     posOrderDetail.setOrder_detail_merchat_rate(null);
                 }
@@ -417,60 +398,47 @@ public class PosOrderOperationUtil {
                 posOrderDetail.setSystemBookCode(shiftTable.getSystemBookCode());
                 if (!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())) {
                     policyPromotionMoney += posOrderDetail.getOrderDetailDiscount();
-                    if (LoginService.getInstance().isNongMao()) {
-                        for (StallPromotion policyPromotion : LibConfig.allVipOnceStallPolicyPromotionList) {
+                    if (LibConfig.S_ORDER_COMPLETE == orderState) {
+                        for (PolicyPromotion policyPromotion : LibConfig.allVipOncePolicyPromotionList) {
                             if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
                                 if (LibConfig.activeVipMember != null) {
-                                    if (TextUtils.isEmpty(LibConfig.activeVipMember.getCustomer_id())) {
-                                        LibConfig.sVipEnjoyStallPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
+                                    RedisBean redisBean = new RedisBean();
+                                    if (!TextUtils.isEmpty(LibConfig.activeVipMember.getCustomer_id())) {
+                                        LibConfig.sVipEnjoyPromotion.put(LibConfig.activeVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
+                                        redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.activeVipMember.getCustomer_id());
+                                        redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
+                                        redisBean.setRedis_value("YES");
+                                        posOrder.setRedisBean(redisBean);
                                     } else {
-                                        LibConfig.sVipEnjoyStallPromotion.put(LibConfig.activeVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
+                                        LibConfig.sVipEnjoyPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
+                                        redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.activeVipMember.getCard_user_num());
+                                        redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
+                                        redisBean.setRedis_value("YES");
+                                        posOrder.setRedisBean(redisBean);
                                     }
                                 }
-                            }
-                        }
-                    } else {
-                        if (LibConfig.S_ORDER_COMPLETE == orderState) {
-                            for (PolicyPromotion policyPromotion : LibConfig.allVipOncePolicyPromotionList) {
-                                if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
-                                    if (LibConfig.activeVipMember != null) {
-                                        RedisBean redisBean = new RedisBean();
-                                        if (!TextUtils.isEmpty(LibConfig.activeVipMember.getCustomer_id())) {
-                                            LibConfig.sVipEnjoyPromotion.put(LibConfig.activeVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
-                                            redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.activeVipMember.getCustomer_id());
-                                            redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
-                                            redisBean.setRedis_value("YES");
-                                            posOrder.setRedisBean(redisBean);
-                                        } else {
-                                            LibConfig.sVipEnjoyPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
-                                            redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.activeVipMember.getCard_user_num());
-                                            redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
-                                            redisBean.setRedis_value("YES");
-                                            posOrder.setRedisBean(redisBean);
-                                        }
-                                    }
 
-                                    if (LibConfig.discountVipMember != null) {
-                                        RedisBean redisBean = new RedisBean();
-                                        if (!TextUtils.isEmpty(LibConfig.discountVipMember.getCustomer_id())) {
-                                            LibConfig.sVipEnjoyPromotion.put(LibConfig.discountVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
-                                            redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.discountVipMember.getCustomer_id());
-                                            redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
-                                            redisBean.setRedis_value("YES");
-                                            posOrder.setRedisBean(redisBean);
-                                        } else {
-                                            LibConfig.sVipEnjoyPromotion.put(LibConfig.discountVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
-                                            redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.discountVipMember.getCard_user_num());
-                                            redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
-                                            redisBean.setRedis_value("YES");
-                                            posOrder.setRedisBean(redisBean);
-                                        }
+                                if (LibConfig.discountVipMember != null) {
+                                    RedisBean redisBean = new RedisBean();
+                                    if (!TextUtils.isEmpty(LibConfig.discountVipMember.getCustomer_id())) {
+                                        LibConfig.sVipEnjoyPromotion.put(LibConfig.discountVipMember.getCustomer_id(), policyPromotion.getPolicy_promotion_no());
+                                        redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.discountVipMember.getCustomer_id());
+                                        redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
+                                        redisBean.setRedis_value("YES");
+                                        posOrder.setRedisBean(redisBean);
+                                    } else {
+                                        LibConfig.sVipEnjoyPromotion.put(LibConfig.discountVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
+                                        redisBean.setRedis_key("PolicyPromotion_" + policyPromotion.getPolicy_promotion_no() + "_" + LibConfig.discountVipMember.getCard_user_num());
+                                        redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), policyPromotion.getPolicy_promotion_time_to()));
+                                        redisBean.setRedis_value("YES");
+                                        posOrder.setRedisBean(redisBean);
                                     }
-
                                 }
+
                             }
                         }
                     }
+
                 } else {
                     posOrderDetail.setOrder_detail_merchat_rate(null);
                 }
@@ -561,117 +529,6 @@ public class PosOrderOperationUtil {
 
         return false;
     }
-
-
-    /**
-     * 新农贸开始插入订单
-     *
-     * @param keyGenerator
-     */
-    public static boolean operationFmOrder(FmPosOrder posOrder, KeyGeneratorBizday keyGenerator, int orderState) {
-        if (posOrder != null) {
-            ShiftTable shiftTable = LibConfig.activeShiftTable;
-            PosMachine posMachine = LibConfig.activePosMachine;
-            Login login = LibConfig.activeLoginBean;
-            posOrder.setOrderNo(keyGenerator.getKeyGBString());
-            posOrder.setBranchId(Long.parseLong(TextUtils.isEmpty(login.getBranch_id()) ? "0" : login.getBranch_id()));
-            posOrder.setMerchantNum(login.getMerchant_num());
-
-            long currentTimeMillis = System.currentTimeMillis();
-            String stampToDate = TimeUtil.getInstance().stampToDate(currentTimeMillis);
-
-            List<FmPayment> payments = posOrder.getPayments();
-            for (FmPayment payment : payments) {
-                payment.setMerchantNum(posOrder.getMerchantNum());
-                payment.setBranchId(posOrder.getBranchId());
-
-                if (LibConfig.C_PAYMENT_TYPE_CASH_NAME.equals(payment.getPaymentPayBy()) || LibConfig.openDrawPayment.contains(payment.getPaymentPayBy())) {
-                    RetailPosManager.getInstance().openDraw();
-                }
-
-                payment.setOrderNo(posOrder.getOrderNo());
-                payment.setSystemBookCode(shiftTable.getSystemBookCode());
-                payment.setBranchNum(shiftTable.getBranchNum());
-                payment.setShiftTableBizday(shiftTable.getShiftTableBizday());
-                payment.setShiftTableNum(shiftTable.getShiftTableNum());
-                payment.setPaymentTime(stampToDate);
-                payment.setMerchantNum(posOrder.getMerchantNum());
-
-            }
-            List<FmPosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
-
-            float policyPromotionMoney = 0;
-            for (int i = 1; i <= posOrderDetails.size(); i++) {
-                FmPosOrderDetail posOrderDetail = posOrderDetails.get(i - 1);
-                if (posOrder.getMerchantNum() > 0) {
-                    posOrderDetail.setBranchId(posOrder.getBranchId());
-                }
-                posOrderDetail.setId(null);
-                posOrderDetail.setOrderNo(keyGenerator.getKeyGBString());
-                posOrderDetail.setMerchantNum(posOrder.getMerchantNum());
-                posOrderDetail.setBranchNum(shiftTable.getBranchNum());
-                posOrderDetail.setOrderDetailNum(i);
-                posOrderDetail.setSystemBookCode(shiftTable.getSystemBookCode());
-                if (!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())) {
-                    policyPromotionMoney += posOrderDetail.getOrderDetailDiscount();
-                    if (LoginService.getInstance().isNongMao()) {
-                        for (StallPromotion policyPromotion : LibConfig.allVipOnceStallPolicyPromotionList) {
-                            if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
-                                if (LibConfig.activeVipMember != null) {
-                                    LibConfig.sVipEnjoyStallPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
-                                }
-                            }
-                        }
-                    } else {
-                        for (PolicyPromotion policyPromotion : LibConfig.allVipOncePolicyPromotionList) {
-                            if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
-                                if (LibConfig.activeVipMember != null) {
-                                    LibConfig.sVipEnjoyPromotion.put(LibConfig.activeVipMember.getCard_user_num(), policyPromotion.getPolicy_promotion_no());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            posOrder.setOrderPromotionDiscountMoney(policyPromotionMoney);
-            posOrder.setShiftTableBizday(shiftTable.getShiftTableBizday());
-            posOrder.setShiftTableNum(shiftTable.getShiftTableNum());
-            posOrder.setSystemBookCode(shiftTable.getSystemBookCode());
-            posOrder.setBranchNum(shiftTable.getBranchNum());
-
-
-            PosOrderState orderStateBean = PosOrderStateUtil.getOrderState(orderState);
-            if (TextUtils.isEmpty(posOrder.getOrderStateName())) {
-                posOrder.setOrderStateCode(orderStateBean.ORDER_STATE_CODE);
-                posOrder.setOrderStateName(orderStateBean.ORDER_STATE_NAME);
-            } else {
-                String orderStateName = posOrder.getOrderStateName();
-                if (!orderStateName.contains(orderStateBean.ORDER_STATE_NAME)) {
-                    posOrder.setOrderStateCode(posOrder.getOrderStateCode() + orderStateBean.ORDER_STATE_CODE);
-                    posOrder.setOrderStateName(posOrder.getOrderStateName() + "|" + orderStateBean.ORDER_STATE_NAME);
-                }
-            }
-
-            posOrder.setOrderMachine(posMachine.getPos_machine_terminal_id());
-            posOrder.setOrderOperator(shiftTable.getShiftTableUserName());
-            posOrder.setOrderOperateTime(TimeUtil.getInstance().stampToDate(System.currentTimeMillis()));
-
-            posOrder.setOrderMgrDiscountMoney(posOrder.getOrderMgrDiscountMoney());
-
-
-            if (keyGenerator.getSystemBookCode() != null) {
-                KeyGeneratorBizday newKgb = KeyGeneratorBizdayService.getInstance().createPosOrderKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_POS_ORDER_KEY_ITEM, posMachine.getPos_machine_sequence());
-                if (newKgb.getKeyGBString().equals(keyGenerator.getKeyGBString())) {
-                    KeyGeneratorBizdayService.getInstance().saveKeyGeneratorBizday(keyGenerator);
-                }
-            }
-            return true;
-        }
-
-        return false;
-    }
-
 
     /**
      * 创建posorderKit

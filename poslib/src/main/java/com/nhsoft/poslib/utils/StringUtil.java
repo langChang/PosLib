@@ -1,9 +1,8 @@
 package com.nhsoft.poslib.utils;
 
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import androidx.annotation.NonNull;
 
 import com.nhsoft.poslib.dao.SettingDao;
 

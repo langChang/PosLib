@@ -16,7 +16,6 @@ import com.nhsoft.poslib.service.BranchResourceService;
 import com.nhsoft.poslib.service.BranchService;
 import com.nhsoft.poslib.service.IcCardMessageService;
 import com.nhsoft.poslib.service.ItemCategoryService;
-import com.nhsoft.poslib.service.LoginService;
 import com.nhsoft.poslib.service.MarketActionService;
 import com.nhsoft.poslib.service.PointPolicyService;
 import com.nhsoft.poslib.service.PolicyDiscountService;
@@ -28,8 +27,6 @@ import com.nhsoft.poslib.service.PosItemService;
 import com.nhsoft.poslib.service.PrivilegeResourceNewService;
 import com.nhsoft.poslib.service.SystemBookService;
 import com.nhsoft.poslib.service.VipSendCardService;
-import com.nhsoft.poslib.service.nongmaoService.StallDiscountService;
-import com.nhsoft.poslib.service.nongmaoService.StallPromotionService;
 import com.nhsoft.poslib.utils.CouponsParseUtil;
 import com.nhsoft.poslib.utils.PointRuleParseUtil;
 import com.nhsoft.poslib.utils.XmlUtil;
@@ -96,17 +93,13 @@ public class GlobalDataImpl implements GlobalDataCallback {
 
 
         //促销
-        if (LoginService.getInstance().isNongMao()) {
-            LibConfig.allStallPolicyPromotionList = StallPromotionService.getInstance().getNewestStallPolciyPromotion();
-            LibConfig.allStallPolicyDiscountList = StallDiscountService.getInstance().getNewestStallPolciyDiscount();
-        } else {
             LibConfig.allPolicyPromotionList = PolicyPromotionService.getNewestPolciyPromotion();
             LibConfig.allPolicyDiscountList = PolicyDiscountService.getNewestPolciyDiscount();
             LibConfig.allPolicyQuantityList = PolicyQuantityService.getNewestPolciyQuantity();
             LibConfig.allPolicyMoneyList = PolicyMoneyService.getNewestPolciyMoney();
             LibConfig.allPolicyPresentList = PolicyPresentService.getNewestPolciyPresent();
             LibConfig.allPointPolicyList = PointPolicyService.loadAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
-        }
+
         LibConfig.activeBranch = BranchService.getInstance().getBranch(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
         BranchGroupService.initMyBranchGroup(LibConfig.activeLoginBean.getBranch_num());
         return LibConfig.saleParamsBean == null ? false : true;

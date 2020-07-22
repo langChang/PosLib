@@ -1,15 +1,11 @@
 package com.nhsoft.poslib.service;
 
 import com.nhsoft.poslib.db.DaoManager;
-import com.nhsoft.poslib.entity.FmPosOrder;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.order.PosOrderKitDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.service.greendao.FmPaymentDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDao;
-import com.nhsoft.poslib.service.greendao.FmPosOrderDetailDao;
 import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDetailDao;
@@ -156,37 +152,6 @@ public class DataSynchronousService {
         return posOrderList;
     }
 
-    /**
-     * 新农贸 获取该班次号下所有 posOrder
-     * @param systemBookCode
-     * @param branchNum
-     * @param shiftTableNum
-     * @param shiftTableBizday
-     * @param orderUploadState
-     * @return
-     */
-    public List<FmPosOrder> getFmPosOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState){
-        FmPosOrderDao fmPosOrderDao=DaoManager.getInstance().getDaoSession().getFmPosOrderDao();
-        FmPosOrderDetailDao fmPosOrderDetailDao=DaoManager.getInstance().getDaoSession().getFmPosOrderDetailDao();
-        FmPaymentDao fmPaymentDao=DaoManager.getInstance().getDaoSession().getFmPaymentDao();
-
-        List<FmPosOrder> posOrderList = fmPosOrderDao.queryBuilder()
-                .where(
-                        FmPosOrderDao.Properties.OrderUploadState.eq(orderUploadState),
-                        FmPosOrderDao.Properties.SystemBookCode.eq(systemBookCode)
-                        , FmPosOrderDao.Properties.ShiftTableBizday.eq(shiftTableBizday)
-                        , FmPosOrderDao.Properties.ShiftTableNum.eq(shiftTableNum)
-                        , FmPosOrderDao.Properties.BranchNum.eq(branchNum)
-                        , FmPosOrderDao.Properties.OrderStateCode.notEq(1))
-
-                .orderAsc(FmPosOrderDao.Properties.OrderNo)
-                .list();
-        for (FmPosOrder fmPosOrder : posOrderList){
-            fmPosOrder.setPosOrderDetails(fmPosOrderDetailDao._queryFmPosOrder_PosOrderDetails(fmPosOrder.getOrderNo()));
-            fmPosOrder.setPayments(fmPaymentDao._queryFmPosOrder_Payments(fmPosOrder.getOrderNo()));
-        }
-        return posOrderList;
-    }
 
     /**
      * 获取该订单下所有PosOrderDetail
@@ -263,24 +228,6 @@ public class DataSynchronousService {
             @Override
             public void run() {
                 for (PosOrder posOrder:posOrderList){
-                    posOrder.setOrderUploadState(true);
-                    posOrderDao.insertOrReplaceInTx(posOrder);
-                }
-            }
-        });
-    }
-
-    /**
-     * 上传完成后更改上传标记
-     * @param posOrderList
-     * @return
-     */
-    public  boolean setFmPosOrderListToUpload(final List<FmPosOrder> posOrderList){
-        final FmPosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getFmPosOrderDao();
-        return MatterUtils.doMatter(posOrderDao, new Runnable() {
-            @Override
-            public void run() {
-                for (FmPosOrder posOrder:posOrderList){
                     posOrder.setOrderUploadState(true);
                     posOrderDao.insertOrReplaceInTx(posOrder);
                 }
