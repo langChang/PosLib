@@ -1,6 +1,12 @@
 apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langChang'
+greendao {
+    schemaVersion 136
+    daoPackage 'com.nhsoft.poslib.service.greendao'
+    targetGenDir 'src/main/java'
+}
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -22,6 +28,12 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
 }
 
 dependencies {
@@ -30,5 +42,21 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation files('libs/java-json.jar')
+    //数据库处理
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
+    implementation 'org.greenrobot:greendao-generator:3.2.2'
+
+    //Retrfit + Rxjava + okHttp3.0
+    implementation 'io.reactivex.rxjava2:rxjava:2.0.5'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.0.1'
+    implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    api files('libs/java-json.jar')
+    //友盟
+    implementation 'com.umeng.umsdk:analytics:7.5.4'
+    implementation 'com.umeng.umsdk:common:1.5.4'
 }
