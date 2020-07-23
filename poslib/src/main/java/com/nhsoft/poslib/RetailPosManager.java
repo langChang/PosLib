@@ -83,7 +83,7 @@ public class RetailPosManager {
     public static Context               sContext;
     public SystemConnectCallback mConnectCallBack;
 
-    public static PosTypeEnum sPosType = PosTypeEnum.AMA_POS; //pos类型
+    public static int sPosType = PosTypeName.AMA_POS; //pos类型
 
     private RetailPosManager() {
     }
@@ -106,7 +106,7 @@ public class RetailPosManager {
      * @param context
      * @return
      */
-    public static boolean initLib(Context context, PosTypeEnum posTypeEnum) {
+    public static boolean initLib(Context context, int posTypeEnum) {
         sPosType = posTypeEnum;
         boolean flag = true;
         sContext = context;
