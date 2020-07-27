@@ -84,12 +84,11 @@ public class RetailPosManager {
     public SystemConnectCallback mConnectCallBack;
 
     public static PosTypeEnum sPosType = PosTypeEnum.AMA_POS; //pos类型
+    private static RetailPosManager instance;
 
     private RetailPosManager() {
     }
-
-    private static RetailPosManager instance;
-
+    
     /**
      * 获取管理类的实例对象
      * @return
