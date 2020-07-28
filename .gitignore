@@ -602,3 +602,7 @@ poslib/build/intermediates/merged_java_res/debug/out.jar
 poslib/build/intermediates/packaged-classes/debug/classes.jar
 poslib/build/intermediates/packaged-classes/debug/libs/java-json.jar
 poslib/build/outputs/aar/poslib-debug.aar
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
