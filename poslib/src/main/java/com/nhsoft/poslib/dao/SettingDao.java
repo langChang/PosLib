@@ -3,7 +3,7 @@ package com.nhsoft.poslib.dao;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.nhsoft.poslib.model.PayUrlModel;
+import com.nhsoft.poslib.model.SystemBookProxy;
 import com.nhsoft.poslib.utils.SharedPreferenceUtil;
 
 /**
@@ -150,17 +150,17 @@ public class SettingDao {
 
 
     //获取保存支付地址
-    public static void savePayUrlPath(PayUrlModel payUrlModel){
-        if(payUrlModel == null) return;
-        SharedPreferenceUtil.saveValue(USER_SETTING, PAY_URL_PATH,new Gson().toJson(payUrlModel));
+    public static void saveSystemBookProxy(SystemBookProxy systemBookProxy){
+        if(systemBookProxy == null) return;
+        SharedPreferenceUtil.saveValue(USER_SETTING, PAY_URL_PATH,new Gson().toJson(systemBookProxy));
     }
 
-    public static PayUrlModel getPayUrlPath(){
+    public static SystemBookProxy getPayUrlPath(){
         String userInfo = SharedPreferenceUtil.getStringValueByKey(USER_SETTING,PAY_URL_PATH);
         if(TextUtils.isEmpty(userInfo)){
             return null;
         }
-        return new Gson().fromJson(userInfo,PayUrlModel.class);
+        return new Gson().fromJson(userInfo,SystemBookProxy.class);
     }
 
 }

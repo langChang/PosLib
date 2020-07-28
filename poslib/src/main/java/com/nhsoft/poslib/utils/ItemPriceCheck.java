@@ -1,7 +1,7 @@
 package com.nhsoft.poslib.utils;
 
 import com.nhsoft.poslib.entity.PosItem;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 
 /**
  * Created by Iverson on 2020-01-16 09:32

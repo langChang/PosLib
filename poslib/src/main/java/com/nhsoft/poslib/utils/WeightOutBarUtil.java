@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.PosItemService;
 
 import java.util.LinkedList;

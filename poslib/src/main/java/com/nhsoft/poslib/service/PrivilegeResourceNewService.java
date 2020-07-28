@@ -1,6 +1,6 @@
 package com.nhsoft.poslib.service;
 
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.AppUser;
 import com.nhsoft.poslib.entity.PrivilegeResourceNew;

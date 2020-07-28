@@ -1,4 +1,4 @@
-package com.nhsoft.poslib.entity;
+package com.nhsoft.poslib.model;
 
 import java.util.List;
 
@@ -12,19 +12,19 @@ public class VipUserInfoCrm {
 
     private VipUserInfo card_user;
     //全渠道
-    private String default_card;//ama 表明卡号
-    private String customer_id;//crm 卡主建
-    private String sex;//性别
-    private String point_multiple;//积分倍数
-    private String point;//积分
-    private String phone;//手机号
-    private String open_id;//手机号
-    private String name;//会员名
-    private String level_deadline;//等级有效期(yyyy-MM-dd HH:MM:SS)
-    private String level;//等级
-    private String certificate_type;//证件类型
-    private String certificate_id;//证件编号
-    private String create_time;//注册日期(yyyy-MM-dd HH:MM:SS)
+    private String      default_card;//ama 表明卡号
+    private String      customer_id;//crm 卡主建
+    private String      sex;//性别
+    private String      point_multiple;//积分倍数
+    private String      point;//积分
+    private String      phone;//手机号
+    private String      open_id;//手机号
+    private String      name;//会员名
+    private String      level_deadline;//等级有效期(yyyy-MM-dd HH:MM:SS)
+    private String      level;//等级
+    private String      certificate_type;//证件类型
+    private String      certificate_id;//证件编号
+    private String      create_time;//注册日期(yyyy-MM-dd HH:MM:SS)
     private String birth;//会员生日(yyyy-MM-dd HH:MM:SS)
 
     private List<VipUserInfo> card_users;

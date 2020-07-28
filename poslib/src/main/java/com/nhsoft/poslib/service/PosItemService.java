@@ -12,7 +12,7 @@ import com.nhsoft.poslib.entity.ManagementTemplateDetail;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosItemKit;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.ItemSequenceBean;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.ItemBarDao;

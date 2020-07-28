@@ -7,7 +7,7 @@ import com.nhsoft.poslib.entity.ItemCategory;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.SystemRole;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
 import com.nhsoft.poslib.normal.callback.CheckPermissionCallback;

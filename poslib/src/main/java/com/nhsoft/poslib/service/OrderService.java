@@ -23,7 +23,7 @@ import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.order.PosOrderKitDetail;
 import com.nhsoft.poslib.entity.shift.PrintShiftTable;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.CardChangeDao;
 import com.nhsoft.poslib.service.greendao.CardDepositDao;
 import com.nhsoft.poslib.service.greendao.CustomerRegisterDao;

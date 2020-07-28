@@ -2,7 +2,7 @@ package com.nhsoft.poslib.utils;
 
 import android.text.TextUtils;
 
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.ClientParamsBean;
 import com.nhsoft.poslib.model.ItemSequenceBean;
 import com.nhsoft.poslib.model.NewVersionBean;

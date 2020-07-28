@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.nhsoft.poslib.entity.PolicyPromotion;
 import com.nhsoft.poslib.entity.VipStrangeGive;
-import com.nhsoft.poslib.entity.VipUserInfo;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 
 import java.text.SimpleDateFormat;

@@ -5,9 +5,9 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.PolicyPromotion;
 import com.nhsoft.poslib.entity.PolicyPromotionDetail;
-import com.nhsoft.poslib.entity.VipUserInfo;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.PromotionResponsBean;
 import com.nhsoft.poslib.service.PosItemService;
 

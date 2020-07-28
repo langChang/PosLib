@@ -2,7 +2,7 @@ package com.nhsoft.poslib.utils;
 
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 
 /**
  * Created by Iverson on 2019-11-15 10:04

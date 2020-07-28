@@ -3,7 +3,7 @@ package com.nhsoft.poslib.utils;
 import android.text.TextUtils;
 
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.PosCarryLogService;
 
 /**

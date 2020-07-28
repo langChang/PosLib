@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.nhsoft.poslib.BuildConfig;
 import com.nhsoft.poslib.RetailPosManager;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;

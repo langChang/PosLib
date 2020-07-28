@@ -2,7 +2,7 @@ package com.nhsoft.poslib.service;
 
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.VipCrmFee;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.VipCrmFeeDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 import com.nhsoft.poslib.utils.TimeUtil;

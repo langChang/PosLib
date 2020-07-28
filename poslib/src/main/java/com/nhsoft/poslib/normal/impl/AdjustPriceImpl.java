@@ -3,7 +3,7 @@ package com.nhsoft.poslib.normal.impl;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.AdjustPriceOrder;
 import com.nhsoft.poslib.model.AdjustTradePriceOrder;
 import com.nhsoft.poslib.normal.callback.AdjustPriceCallback;

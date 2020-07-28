@@ -4,7 +4,7 @@ import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.PointOrder;
 import com.nhsoft.poslib.entity.PointOrderDetial;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.PointOrderDao;
 import com.nhsoft.poslib.service.greendao.PointOrderDetialDao;
 import com.nhsoft.poslib.utils.MatterUtils;

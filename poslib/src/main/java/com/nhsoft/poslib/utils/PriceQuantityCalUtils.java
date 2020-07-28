@@ -6,7 +6,7 @@ import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PolicyQuantityDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.PosItemService;
 
 import java.text.SimpleDateFormat;

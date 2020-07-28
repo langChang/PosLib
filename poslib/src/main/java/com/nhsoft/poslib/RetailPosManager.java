@@ -17,12 +17,12 @@ import com.nhsoft.poslib.entity.Login;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
-import com.nhsoft.poslib.entity.VipUserInfo;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.AdjustPriceOrder;
 import com.nhsoft.poslib.model.AdjustTradePriceOrder;
 import com.nhsoft.poslib.model.BasePolicyBean;
@@ -1014,7 +1014,16 @@ public class RetailPosManager {
       LibConfig.sInventoryList =  new InventoryImpl().saveGoodsInventoryList(inventories);
     }
 
+
     public ItemCategory getItemCategoryByCode(String itemCategoryCode){
         return ItemCategoryService.findCategoryCode(itemCategoryCode);
+    }
+
+    /**
+     * 合并相同商品相同价格
+     * @param posOrder
+     */
+    public void mergeAllGoods(PosOrder posOrder){
+        OrderOperationImpl.getInstance().mergeAllGoods(posOrder);
     }
 }

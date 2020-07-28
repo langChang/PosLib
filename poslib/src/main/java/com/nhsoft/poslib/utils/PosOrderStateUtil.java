@@ -1,6 +1,6 @@
 package com.nhsoft.poslib.utils;
 
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.model.PosOrderState;
 

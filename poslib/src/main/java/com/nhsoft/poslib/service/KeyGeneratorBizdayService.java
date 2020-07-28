@@ -6,7 +6,7 @@ import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
 import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.KeyGeneratorBizdayDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 import com.nhsoft.poslib.utils.StringUtil;

@@ -111,12 +111,22 @@ public class PosItem implements Cloneable{
     private float            item_level4_price;
     private Boolean          pos_item_selected;//终端商品设置的时候判断该item是否选中默认false
     private String           pos_images_json;
-
+    @Transient
+    private Float selectCount;
 
     @Transient
     private PosItemGrade showPosItemGrade;
     @Transient
     private List<PosItemKit> posItemKits = new ArrayList<>();
+
+    public Float getSelectCount() {
+        return selectCount;
+    }
+
+    public void setSelectCount(Float selectCount) {
+        this.selectCount = selectCount;
+    }
+
 
 
     public List<PosItemKit> getPosItemKits() {

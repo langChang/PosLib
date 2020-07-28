@@ -2,7 +2,7 @@ package com.nhsoft.poslib.service;
 
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.BranchGroup;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.BranchGroupDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 

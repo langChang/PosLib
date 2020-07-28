@@ -3,7 +3,7 @@ package com.nhsoft.poslib.utils;
 
 
 
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

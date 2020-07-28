@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.CustomerRegister;
-import com.nhsoft.poslib.entity.VipUserInfo;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.model.VipUserInfo;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.utils.EvtLog;
 import com.nhsoft.poslib.utils.TimeUtil;

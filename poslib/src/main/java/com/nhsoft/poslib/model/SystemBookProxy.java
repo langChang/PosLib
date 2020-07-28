@@ -1,46 +1,10 @@
 package com.nhsoft.poslib.model;
 
 /**
- * Created by Iverson on 2019-06-05 10:45
+ * Created by Iverson on 2020/3/10 5:21 PM
  * 此类用于：
  */
-public class PayUrlModel {
-
-    /**
-     * centerId : 4344
-     * centerName :
-     * groupId :
-     * bookProxyName : MYSQL51共享服务器
-     * bookProxyPort : 80
-     * bookProxyPath : amazonCenter
-     * bookProxyServer : 10.142.71.77
-     * bookProxyRemoteServer : 116.62.106.114
-     * bookProxyUpdateServer : 120.55.206.155
-     * bookProxyUpdateChannel : AMANorth
-     * bookProxyUpdatePortStart : 29000
-     * bookProxyUpdatePortEnd : 29003
-     * bookProxyRegion : 杭州
-     * bookProxySynchServer : 10.29.112.213
-     * bookProxySynchRemoteServer : 47.98.67.165
-     * bookProxyCardServer : 10.29.112.213
-     * bookProxyCardRemoteServer : 116.62.106.114
-     * bookProxyRdsName :
-     * bookProxyWebServer : erp.nhsoft.cn
-     * bookProxyPayServer : 120.55.30.194
-     * bookProxyTempChannel :
-     * bookProxyTempChannelExpire :
-     * bookProxyReportServer :
-     * bookProxyId : 8a71d0c04cc5da0e014ccfb46eab0006
-     * url : http://10.142.71.77:80/amazonCenter
-     * bookProxyChainFlag :
-     * hasBookDbSource :
-     * hasChangeDbSource :
-     * cardUrl : http://10.29.112.213:80/amazonCenter
-     * serverUrl : server_url=10.142.71.77;server_port80;server_endpoint=amazonCenter;
-     * updateRemoteUrl : 120.55.206.155,29000,29003,,,AMANorth
-     * proxyRemoteUrl : http://116.62.106.114:80/amazonCenter
-     * remoteUrl : http://10.142.71.77:80/amazonCenter/remoting/
-     */
+public class SystemBookProxy {
 
     private int centerId;
     private String centerName;

@@ -1,6 +1,6 @@
 package com.nhsoft.poslib.model;
 
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 
 /**
  * Created by Iverson on 2018/12/15 12:04 PM

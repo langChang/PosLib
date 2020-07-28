@@ -6,7 +6,7 @@ import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.PosCarryLogDao;
 import com.nhsoft.poslib.utils.TimeUtil;
 

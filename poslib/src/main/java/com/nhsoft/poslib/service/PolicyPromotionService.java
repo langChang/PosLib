@@ -3,7 +3,7 @@ package com.nhsoft.poslib.service;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.PolicyPromotion;
 import com.nhsoft.poslib.entity.PolicyPromotionDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.PolicyPromotionDao;
 import com.nhsoft.poslib.service.greendao.PolicyPromotionDetailDao;
 import com.nhsoft.poslib.utils.MatterUtils;

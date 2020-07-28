@@ -15,7 +15,7 @@ import com.nhsoft.poslib.entity.ReplaceCard;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
 import com.nhsoft.poslib.entity.VipCrmPointRate;
 import com.nhsoft.poslib.entity.VipStrangeGive;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.VipCardTypeBean;
 import com.nhsoft.poslib.service.greendao.CardDepositDao;

@@ -1,4 +1,4 @@
-package com.nhsoft.poslib.entity;
+package com.nhsoft.poslib.model;
 
 
 import com.nhsoft.poslib.model.CouponsBean;

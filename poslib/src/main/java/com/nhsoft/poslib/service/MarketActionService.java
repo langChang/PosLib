@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.MarketAction;
 import com.nhsoft.poslib.entity.MarketActionDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.BranchXmlModel;
 import com.nhsoft.poslib.model.MarketActionScopeBean;
 import com.nhsoft.poslib.service.greendao.MarketActionDao;

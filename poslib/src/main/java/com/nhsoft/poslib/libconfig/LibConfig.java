@@ -16,7 +16,7 @@ import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.SystemRole;
-import com.nhsoft.poslib.entity.VipUserInfo;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
 import com.nhsoft.poslib.model.ClientUserBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
@@ -44,7 +44,16 @@ public class LibConfig {
     public static String SYSTEM_BOOK;
     public static String BRANCH_NUM;
 
+    /*****************打印小票************/
+    public final static int PRINT_ORDER_NOMAL     = 1;// 正常打印小票
+    public final static int PRINT_ORDER_REPLENISH = 2;// 补打小票
+    public final static int PRINT_QUIT_ORDER      = 3;// 退货小票
+    public final static int PRINT_QUERY_ORDER     = 4;// 查询订单页面打印
+
+
+
     public static boolean isOpenSettle = false;
+    public static float mScreenWidthScale = 1f;
 
 
     public static ShiftTable       activeShiftTable;//营业日和班次信息

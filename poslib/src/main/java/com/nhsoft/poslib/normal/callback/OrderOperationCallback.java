@@ -1,6 +1,6 @@
 package com.nhsoft.poslib.normal.callback;
 
-import com.nhsoft.poslib.entity.VipUserInfo;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
@@ -36,4 +36,8 @@ public interface OrderOperationCallback {
     PosScaleStyleTypeBean containCashPayment(List<PosScaleStyleTypeBean> posScaleStyleTypeBeans);
 
     PosScaleStyleTypeBean containCardPayment(List<PosScaleStyleTypeBean> posScaleStyleTypeBeans);
+
+    PosOrder mergeAllGoods(PosOrder posOrder);
+
+
 }

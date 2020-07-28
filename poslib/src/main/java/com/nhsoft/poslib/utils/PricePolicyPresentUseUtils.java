@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.PolicyPresent;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

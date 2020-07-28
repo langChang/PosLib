@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.BookResource;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.ItemSequenceBean;
 import com.nhsoft.poslib.model.SaleParamsBean;
 import com.nhsoft.poslib.normal.callback.GlobalDataCallback;

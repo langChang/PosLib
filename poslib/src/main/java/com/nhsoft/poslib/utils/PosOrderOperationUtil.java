@@ -17,7 +17,7 @@ import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.order.PosOrderKitDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.PosOrderState;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
@@ -685,62 +685,4 @@ public class PosOrderOperationUtil {
         return posOrderKitDetails;
     }
 
-
-    /**
-     * 相同商品相同标签合并
-     *
-     * @param posOrder
-     */
-    public static PosOrder mergeAllGoods(PosOrder posOrder) {
-        Map<String, PosOrderDetail> posOrderDetailMap = new LinkedHashMap<>();
-        List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
-        for (PosOrderDetail posOrderDetail : posOrderDetails) {
-            if (LibConfig.C_ORDER_DETAIL_TYPE_COUPON.equals(posOrderDetail.getOrderDetailType()))
-                continue;
-            if (LibConfig.S_ORDER_DETAIL_PRESENT_NAME.equals(posOrderDetail.getOrderDetailStateName())) {
-                posOrderDetailMap.put(UUIDUtils.getUUID32(), posOrderDetail);
-                continue;
-            }
-            //判断有没有手改标记
-            if (posOrderDetail.getOrderDetailMemo() != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_CHANGE_TAG)) {
-                //看看之前有没有一样商品手改过
-                if (posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG) == null) {
-                    //没有就直接设置进去
-                    posOrderDetailMap.put(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG, posOrderDetail);
-                } else {
-                    //有先取出
-                    PosOrderDetail oldPosOrderDetail = posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG);
-                    //如果手改价格一致 放在一起叠加起来
-                    if (oldPosOrderDetail != null && oldPosOrderDetail.getOrderDetailPrice() == posOrderDetail.getOrderDetailPrice()) {
-                        oldPosOrderDetail.setOrderDetailAmount(oldPosOrderDetail.getOrderDetailAmount() + posOrderDetail.getOrderDetailAmount());
-                        oldPosOrderDetail.setOrderDetailPaymentMoney(oldPosOrderDetail.getOrderDetailPaymentMoney() + posOrderDetail.getOrderDetailMoney());
-                        oldPosOrderDetail.setOrderDetailMoney(oldPosOrderDetail.getOrderDetailMoney() + posOrderDetail.getOrderDetailMoney());
-                        oldPosOrderDetail.setOrderDetailDiscount(oldPosOrderDetail.getOrderDetailDiscount() + posOrderDetail.getOrderDetailDiscount());
-                    } else {
-//                        没有直接设置进去
-                        posOrderDetailMap.put(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG, posOrderDetail);
-                    }
-                }
-            } else {
-                //判断是否营销活动一致
-                if (posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + posOrderDetail.getOrderDetailPolicyFid()) == null) {
-                    //不一致直接加进去
-                    posOrderDetailMap.put(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + posOrderDetail.getOrderDetailPolicyFid(), posOrderDetail);
-                } else {
-                    //一致直接叠加
-                    PosOrderDetail oldPosOrderDetail = posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + posOrderDetail.getOrderDetailPolicyFid());
-                    oldPosOrderDetail.setOrderDetailAmount(oldPosOrderDetail.getOrderDetailAmount() + posOrderDetail.getOrderDetailAmount());
-                    oldPosOrderDetail.setOrderDetailPaymentMoney(oldPosOrderDetail.getOrderDetailPaymentMoney() + posOrderDetail.getOrderDetailMoney());
-                    oldPosOrderDetail.setOrderDetailMoney(oldPosOrderDetail.getOrderDetailMoney() + posOrderDetail.getOrderDetailMoney());
-                    oldPosOrderDetail.setOrderDetailDiscount(oldPosOrderDetail.getOrderDetailDiscount() + posOrderDetail.getOrderDetailDiscount());
-                }
-            }
-        }
-        LinkedList<PosOrderDetail> newPosOrderDetails = new LinkedList<>();
-        for (Map.Entry<String, PosOrderDetail> entry : posOrderDetailMap.entrySet()) {
-            newPosOrderDetails.addFirst(entry.getValue());
-        }
-        posOrder.setPosOrderDetails(newPosOrderDetails);
-        return posOrder;
-    }
 }

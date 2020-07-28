@@ -7,7 +7,7 @@ import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.Branch;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.BranchDao;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;

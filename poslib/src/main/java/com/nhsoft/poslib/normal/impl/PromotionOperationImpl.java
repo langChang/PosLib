@@ -7,7 +7,7 @@ import com.nhsoft.poslib.entity.PolicyMoney;
 import com.nhsoft.poslib.entity.PolicyPresent;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.BasePolicyBean;
 import com.nhsoft.poslib.normal.callback.PromotionOperationCallback;
 import com.nhsoft.poslib.service.PolicyMoneyService;

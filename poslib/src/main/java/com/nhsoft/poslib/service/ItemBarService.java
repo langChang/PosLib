@@ -3,7 +3,7 @@ package com.nhsoft.poslib.service;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.ItemBar;
 import com.nhsoft.poslib.entity.PosItem;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.ItemBarDao;
 import com.nhsoft.poslib.utils.NumberUtil;

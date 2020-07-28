@@ -7,7 +7,7 @@ import com.nhsoft.poslib.dao.UserDao;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.OtherPayment;
-import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.VipCardTypeBean;
 import com.nhsoft.poslib.service.greendao.BookResourceDao;
 import com.nhsoft.poslib.utils.MatterUtils;
