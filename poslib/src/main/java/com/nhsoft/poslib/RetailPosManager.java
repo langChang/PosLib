@@ -78,8 +78,7 @@ import java.util.regex.Pattern;
  * 零售管理类
  */
 public class RetailPosManager {
-
-
+    
     public static Context               sContext;
     public SystemConnectCallback mConnectCallBack;
 
