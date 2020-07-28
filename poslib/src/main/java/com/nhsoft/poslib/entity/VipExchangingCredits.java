@@ -36,6 +36,7 @@ public class VipExchangingCredits {
     private String item_name;
     private String consume_point_date;
     private String consume_point_balance;
+    private String customer_id;
 
     public String getConsume_point_date() {
         return consume_point_date;
@@ -147,5 +148,13 @@ public class VipExchangingCredits {
 
     public void setItem_name(String item_name) {
         this.item_name = item_name;
+    }
+
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
     }
 }

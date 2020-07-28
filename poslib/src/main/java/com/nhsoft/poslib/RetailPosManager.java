@@ -88,7 +88,7 @@ public class RetailPosManager {
 
     private RetailPosManager() {
     }
-    
+
     /**
      * 获取管理类的实例对象
      * @return

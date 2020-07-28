@@ -148,7 +148,7 @@ public class ItemCategoryService {
     }
 
     /**
-     * 寻找顶级分类的categoryCode
+     * 寻找本商品的categoryCode
      * @param categoryCode
      * @return
      */
@@ -157,6 +157,24 @@ public class ItemCategoryService {
         ItemCategory loadItemCategory = mItemCategoryDao.load(categoryCode);
         return loadItemCategory;
     }
+
+
+    /**
+     * 寻找本商品的父类categoryCode
+     * @param categoryCode
+     * @return
+     */
+    public static ItemCategory findParentCategoryCode(String categoryCode){
+        if(TextUtils.isEmpty(categoryCode)){
+            return null;
+        }
+        ItemCategoryDao mItemCategoryDao = DaoManager.getInstance().getDaoSession().getItemCategoryDao();
+        ItemCategory loadItemCategory = mItemCategoryDao.load(categoryCode);
+        return loadItemCategory;
+    }
+
+
+
 
     /**
      * 寻找二级分类的categoryCode
