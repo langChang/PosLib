@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class WeightOutBarUtil {
             return null;
         }
 
-        List<PosItem> posItems = PosItemService.getInstance().getPosItemByItemBarCode(LibConfig.activeShiftTable.getBranchNum(), itembarCode);
+        List<PosItem> posItems = PosItemImpl.getInstance().getPosItemByItemBarCode(LibConfig.activeShiftTable.getBranchNum(), itembarCode);
         if(posItems != null && posItems.size() > 0){
             PosItem posItem = posItems.get(0);
             float stdPrice = 1;

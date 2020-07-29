@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.PointOrderDetial;
 import com.nhsoft.poslib.entity.PosItem;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +53,7 @@ public class PointGoodsParseUtil {
 
                     if (isHaveJsonKey("对应商品编号", pointObject, 3)) {
                         pointOrderDetial.setItem_num(Integer.parseInt(pointObject.getString("对应商品编号")));
-                        PosItem posItemByKey = PosItemService.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
+                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
                         if(posItemByKey != null){
                             pointOrderDetial.setPoint_order_detail_item_unit(posItemByKey.getItem_unit());
                         }else {
@@ -80,7 +80,7 @@ public class PointGoodsParseUtil {
 
                     if (isHaveJsonKey("对应商品编号", pointObject, 3)) {
                         pointOrderDetial.setItem_num(Integer.parseInt(pointObject.getString("对应商品编号")));
-                        PosItem posItemByKey = PosItemService.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
+                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
                         pointOrderDetial.setPoint_order_detail_item_unit(posItemByKey.getItem_unit());
                     }else {
                         pointOrderDetial.setPoint_order_detail_item_unit("个");

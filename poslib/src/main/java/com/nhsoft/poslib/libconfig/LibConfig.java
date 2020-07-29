@@ -43,7 +43,8 @@ public class LibConfig {
     public static String BOOK_SCOPE_ID = "";
     public static String SYSTEM_BOOK;
     public static String BRANCH_NUM;
-
+    public static       String  activeLocalMac;//当前pos机ID
+    public static       String  activeLocalMacEth0;//当前pos机 有线网卡的MacID
     /*****************打印小票************/
     public final static int PRINT_ORDER_NOMAL     = 1;// 正常打印小票
     public final static int PRINT_ORDER_REPLENISH = 2;// 补打小票

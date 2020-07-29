@@ -9,7 +9,7 @@ import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.PromotionResponsBean;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +29,7 @@ public class PricePromotionCalUtils {
      * @return
      */
     public static PolicyPromotion getPolicypromotionPrice(PosOrderDetail posOrderDetail, List<PolicyPromotion> policyPromotionList, boolean isSettle) {
-        if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+        if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return null;
 
         for (PolicyPromotion policyPromotion : policyPromotionList) {

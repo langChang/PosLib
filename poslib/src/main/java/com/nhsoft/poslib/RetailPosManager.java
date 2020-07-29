@@ -34,28 +34,28 @@ import com.nhsoft.poslib.model.RedisBean;
 import com.nhsoft.poslib.model.ShiftTableTotal;
 import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.model.VipCardTypeBean;
-import com.nhsoft.poslib.normal.callback.SerachGoodsCallback;
-import com.nhsoft.poslib.normal.callback.SystemConnectCallback;
-import com.nhsoft.poslib.normal.impl.AdjustPriceImpl;
-import com.nhsoft.poslib.normal.impl.CheckPermissionImpl;
-import com.nhsoft.poslib.normal.impl.ClearDataImpl;
-import com.nhsoft.poslib.normal.impl.GlobalDataImpl;
-import com.nhsoft.poslib.normal.impl.GoodsDataImpl;
-import com.nhsoft.poslib.normal.impl.InventoryImpl;
-import com.nhsoft.poslib.normal.impl.OrderOperationImpl;
-import com.nhsoft.poslib.normal.impl.PromotionOperationImpl;
-import com.nhsoft.poslib.service.AppUserService;
-import com.nhsoft.poslib.service.BookResourceService;
-import com.nhsoft.poslib.service.BottomMenuService;
-import com.nhsoft.poslib.service.CardTypeParamService;
-import com.nhsoft.poslib.service.CustomerRegisterSerivce;
-import com.nhsoft.poslib.service.ItemCategoryService;
-import com.nhsoft.poslib.service.LoginService;
-import com.nhsoft.poslib.service.OrderService;
-import com.nhsoft.poslib.service.OtherRevenueService;
-import com.nhsoft.poslib.service.PosItemService;
-import com.nhsoft.poslib.service.ShiftTableService;
-import com.nhsoft.poslib.service.VipCrmAmaLevelService;
+import com.nhsoft.poslib.call.callback.SerachGoodsCallback;
+import com.nhsoft.poslib.call.callback.SystemConnectCallback;
+import com.nhsoft.poslib.call.impl.AdjustPriceImpl;
+import com.nhsoft.poslib.call.impl.CheckPermissionImpl;
+import com.nhsoft.poslib.call.impl.ClearDataImpl;
+import com.nhsoft.poslib.call.impl.GlobalDataImpl;
+import com.nhsoft.poslib.call.impl.GoodsDataImpl;
+import com.nhsoft.poslib.call.impl.InventoryImpl;
+import com.nhsoft.poslib.call.impl.OrderOperationImpl;
+import com.nhsoft.poslib.call.impl.PromotionOperationImpl;
+import com.nhsoft.poslib.call.impl.AppUserImpl;
+import com.nhsoft.poslib.call.impl.BookResourceImpl;
+import com.nhsoft.poslib.call.impl.BottomMenuImpl;
+import com.nhsoft.poslib.call.impl.CardTypeParamImpl;
+import com.nhsoft.poslib.call.impl.CustomerRegisterImpl;
+import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
+import com.nhsoft.poslib.call.impl.LoginImpl;
+import com.nhsoft.poslib.call.impl.OrderImpl;
+import com.nhsoft.poslib.call.impl.OtherRevenueImpl;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
+import com.nhsoft.poslib.call.impl.ShiftTableImpl;
+import com.nhsoft.poslib.call.impl.VipCrmAmaLevelImpl;
 import com.nhsoft.poslib.utils.EvtLog;
 import com.nhsoft.poslib.utils.NumberUtil;
 import com.nhsoft.poslib.utils.TimeUtil;
@@ -203,7 +203,7 @@ public class RetailPosManager {
      */
     public void resetBottomMenuData() {
         if (!UserDao.getDeteleBottomMenu()) {
-            BottomMenuService.getInstance().removeAllBottomMenu();
+            BottomMenuImpl.getInstance().removeAllBottomMenu();
             UserDao.setDeteleBottomMenu(true);
         }
     }
@@ -214,7 +214,7 @@ public class RetailPosManager {
      * @return
      */
     public Login getCurrentLogin() {
-        Login mCurrentLogin = LoginService.getInstance().queryAll().get(0);
+        Login mCurrentLogin = LoginImpl.getInstance().queryAll().get(0);
         LibConfig.activeLoginBean = mCurrentLogin;
         return mCurrentLogin;
     }
@@ -225,8 +225,8 @@ public class RetailPosManager {
      * @return
      */
     public ShiftTable getCurrentShiftTable() {
-        ShiftTable mShiftTable = ShiftTableService.getInstance().getCurrentClosedShiftTable(LibConfig.activeLoginBean.getSystem_book_code(),
-                LibConfig.activeLoginBean.getBranch_num(), ShiftTableService.getInstance().getCurrentBizday(LibConfig.activeLoginBean.getSystem_book_code(),
+        ShiftTable mShiftTable = ShiftTableImpl.getInstance().getCurrentClosedShiftTable(LibConfig.activeLoginBean.getSystem_book_code(),
+                LibConfig.activeLoginBean.getBranch_num(), ShiftTableImpl.getInstance().getCurrentBizday(LibConfig.activeLoginBean.getSystem_book_code(),
                         LibConfig.activeLoginBean.getBranch_num()), LibConfig.activeAppUser.getApp_user_num());
         LibConfig.activeShiftTable = mShiftTable;
         return mShiftTable;
@@ -239,7 +239,7 @@ public class RetailPosManager {
      * @return
      */
     public AppUser getCurrentAppUser(String userCode) {
-        LibConfig.activeAppUser = AppUserService.getInstance().login
+        LibConfig.activeAppUser = AppUserImpl.getInstance().login
                 (LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), userCode);
         return LibConfig.activeAppUser;
 
@@ -538,7 +538,7 @@ public class RetailPosManager {
         List<PosItem> posItems = new ArrayList<>();
         Pattern pattern = Pattern.compile("[a-zA-Z]");
         if (pattern.matcher(searchText).find()) {
-            posItems = PosItemService.getInstance().getPosItemByItemNum(
+            posItems = PosItemImpl.getInstance().getPosItemByItemNum(
                     LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), searchText.toUpperCase());
         } else {
             if (posOrderDetails != null && WeightOutBarUtil.isWeightOutBarGoods(searchText)) {
@@ -553,7 +553,7 @@ public class RetailPosManager {
                     return false;
                 }
             } else {
-                posItems = PosItemService.getInstance().getPosItemByItemBarCode(LibConfig.activeLoginBean.getBranch_num(), searchText.toUpperCase());
+                posItems = PosItemImpl.getInstance().getPosItemByItemBarCode(LibConfig.activeLoginBean.getBranch_num(), searchText.toUpperCase());
             }
         }
 
@@ -568,7 +568,7 @@ public class RetailPosManager {
                 }
 
                 if (posItems.get(0).getItem_type() == 9) {
-                    List<PosItem> posItemByKitList = PosItemService.getInstance().getPosItemByKitNum(posItems.get(0).getItem_num());
+                    List<PosItem> posItemByKitList = PosItemImpl.getInstance().getPosItemByKitNum(posItems.get(0).getItem_num());
                     if (posItemByKitList.size() > 0) {
                         posItems.remove(0);
                         posItems.addAll(posItemByKitList);
@@ -584,7 +584,7 @@ public class RetailPosManager {
                 }
 
                 if (posItems.get(0).getItem_type() == 10) {
-                    List<PosItemGrade> allItemGrade = PosItemService.getInstance().getAllItemGrade(posItems.get(0).getItem_num());
+                    List<PosItemGrade> allItemGrade = PosItemImpl.getInstance().getAllItemGrade(posItems.get(0).getItem_num());
                     if (allItemGrade == null || allItemGrade.size() == 0) {
                         callBack.searchNoUseGoods("该商品没有分级商品可销售!");
                         return false;
@@ -611,7 +611,7 @@ public class RetailPosManager {
                 List<PosItem> newPosItemList = new ArrayList<>();
                 for (PosItem posItem : posItems) {
                     if (posItem.getItem_type() == 10) {
-                        List<PosItemGrade> allItemGrade = PosItemService.getInstance().getAllItemGrade(posItem.getItem_num());
+                        List<PosItemGrade> allItemGrade = PosItemImpl.getInstance().getAllItemGrade(posItem.getItem_num());
                         for (PosItemGrade posItemGrade : allItemGrade) {
                             try {
                                 PosItem clonePosItem = (PosItem) posItem.clone();
@@ -641,7 +641,7 @@ public class RetailPosManager {
     public List<PosItem> getAllGradeList(PosItem posItem) {
         List<PosItem> serachList = new ArrayList<>();
 
-        List<PosItemGrade> posItemGrades = PosItemService.getInstance().getAllGradeByItemNum(posItem.getItem_num());
+        List<PosItemGrade> posItemGrades = PosItemImpl.getInstance().getAllGradeByItemNum(posItem.getItem_num());
         if (posItemGrades == null || posItemGrades.size() == 0) return serachList;
 
         for (PosItemGrade posItemGrade : posItemGrades) {
@@ -682,18 +682,18 @@ public class RetailPosManager {
     }
 
     public static CardTypeParam getCardType(String typeCode) {
-        return CardTypeParamService.getInstance().getCardType(typeCode);
+        return CardTypeParamImpl.getInstance().getCardType(typeCode);
     }
 
     //老式
     public static VipCardTypeBean getVipCardTypeBean(String type_name) {
-        return BookResourceService.getInstance().getVipCardTypeBeanList(LibConfig.activeShiftTable.getSystemBookCode(), LibConfig.S_LOCAL_VIP_TYPE, type_name);
+        return BookResourceImpl.getInstance().getVipCardTypeBeanList(LibConfig.activeShiftTable.getSystemBookCode(), LibConfig.S_LOCAL_VIP_TYPE, type_name);
     }
 
 
     public static VipCardConfig getVipConfig(String systemBookCode) {
         VipCardConfig vipCardConfigBean = null;
-        BookResource bookPosCardType = BookResourceService.getInstance().getBookPosSale(systemBookCode, LibConfig.S_LOCAL_VIP_STYPE);
+        BookResource bookPosCardType = BookResourceImpl.getInstance().getBookPosSale(systemBookCode, LibConfig.S_LOCAL_VIP_STYPE);
         if (bookPosCardType != null) {
             Gson gson = new Gson();
             String s = XmlParser.xml2json(bookPosCardType.getBookResourceParam());
@@ -716,12 +716,12 @@ public class RetailPosManager {
      * @return
      */
     public static boolean isOpenCrm() {
-        return BookResourceService.getInstance().isOpenCrm();
+        return BookResourceImpl.getInstance().isOpenCrm();
     }
 
     public static VipCrmAmaLevel getVipLevel(String id) {
         if (id == null) return null;
-        return VipCrmAmaLevelService.getInstance().getVipCrmAmaLevelById(id);
+        return VipCrmAmaLevelImpl.getInstance().getVipCrmAmaLevelById(id);
     }
 
     /**
@@ -751,7 +751,7 @@ public class RetailPosManager {
      * @return
      */
     public ClientParamsBean getClientParams() {
-        BookResource bookPosSale = BookResourceService.getInstance().getBookPosSale(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.S_LOCAL_CLIENT_STYLE);
+        BookResource bookPosSale = BookResourceImpl.getInstance().getBookPosSale(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.S_LOCAL_CLIENT_STYLE);
         return XmlUtil.getClientParams(bookPosSale.getBookResourceParam());
     }
 
@@ -849,32 +849,32 @@ public class RetailPosManager {
 
         String strBizDay = shiftTable.getShiftTableBizday();
 
-        int strStartCardNum = OrderService.getInstance().getStartCardNum(shiftTable.getSystemBookCode(),
+        int strStartCardNum = OrderImpl.getInstance().getStartCardNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
 
-        String strStrangeSuccessSendNum = OrderService.getInstance().getStrangeSuccessSendNum(shiftTable.getSystemBookCode(),
+        String strStrangeSuccessSendNum = OrderImpl.getInstance().getStrangeSuccessSendNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "") + "";
-        float strStrangeSuccessSendMoney = OrderService.getInstance().getStrangeSuccessSendMoney(shiftTable.getSystemBookCode(),
+        float strStrangeSuccessSendMoney = OrderImpl.getInstance().getStrangeSuccessSendMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
 
-        int strCouponsNum = OrderService.getInstance().getTicketSendDetailNum(shiftTable.getSystemBookCode(),
+        int strCouponsNum = OrderImpl.getInstance().getTicketSendDetailNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        float strCouponsMoney = OrderService.getInstance().getTicketSendMoney(shiftTable.getSystemBookCode(),
+        float strCouponsMoney = OrderImpl.getInstance().getTicketSendMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "", 5);
-        Map map = OrderService.getInstance().getOrderPromotionDiscountMoney(shiftTable.getSystemBookCode(),
+        Map map = OrderImpl.getInstance().getOrderPromotionDiscountMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
         float strCouponsMoney01 = (float) map.get(LibConfig.TICKET_TAG);
 //                OrderService.getInstance().getTicketSendMoney01(shiftTable.getSystemBookCode(),
 //                shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "", 5);
-        float exitMoney = OrderService.getInstance().getExitOrderMoney(shiftTable.getSystemBookCode(),
+        float exitMoney = OrderImpl.getInstance().getExitOrderMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
-        int exitNum = OrderService.getInstance().getExitOrderNum(shiftTable.getSystemBookCode(),
+        int exitNum = OrderImpl.getInstance().getExitOrderNum(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
 
-        int strSingle = OrderService.getInstance().PosOrderNum(shiftTable.getSystemBookCode(),
+        int strSingle = OrderImpl.getInstance().PosOrderNum(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
 
@@ -883,40 +883,40 @@ public class RetailPosManager {
 //                shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
 //                shiftTable.getShiftTableBizday(), 5);
 
-        float strRoundAmount = OrderService.getInstance().getPosOrderRoundMoney(shiftTable.getSystemBookCode(),
+        float strRoundAmount = OrderImpl.getInstance().getPosOrderRoundMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
-        int numShiftTableNum = CustomerRegisterSerivce.getInstance().getNumShiftTableNum(shiftTable.getSystemBookCode(),
+        int numShiftTableNum = CustomerRegisterImpl.getInstance().getNumShiftTableNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        float moneyShiftTableNum = CustomerRegisterSerivce.getInstance().getMoneyShiftTableNum(shiftTable.getSystemBookCode(),
+        float moneyShiftTableNum = CustomerRegisterImpl.getInstance().getMoneyShiftTableNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        float strAmount = OrderService.getInstance().getPosOrderAmount(shiftTable.getSystemBookCode(),
+        float strAmount = OrderImpl.getInstance().getPosOrderAmount(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
 
-        float strAllAmount = OrderService.getInstance().getPosOrderAllAmount(shiftTable.getSystemBookCode(),
+        float strAllAmount = OrderImpl.getInstance().getPosOrderAllAmount(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
 //        strAllAmount=
 
 
-        int StrangeCardNum = OrderService.getInstance().getDepositNum
+        int StrangeCardNum = OrderImpl.getInstance().getDepositNum
                 (shiftTable.getSystemBookCode(), shiftTable.getShiftTableNum() + "",
                         shiftTable.getBranchNum() + "");
-        int ReplaceCardNum = OrderService.getInstance().getReplaceCardNum(shiftTable.getSystemBookCode(),
+        int ReplaceCardNum = OrderImpl.getInstance().getReplaceCardNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", String.valueOf(shiftTable.getBranchNum()));
-        int RenewCardNum = OrderService.getInstance().getStrangeCardNum(shiftTable.getSystemBookCode(),
+        int RenewCardNum = OrderImpl.getInstance().getStrangeCardNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        double StrangeCardMoney = OrderService.getInstance().getDepositMoney(shiftTable.getSystemBookCode(),
+        double StrangeCardMoney = OrderImpl.getInstance().getDepositMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        double ReplaceCardMoney = OrderService.getInstance().getReplaceCardMoney(shiftTable.getSystemBookCode(),
+        double ReplaceCardMoney = OrderImpl.getInstance().getReplaceCardMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        double RenewCardMoney = OrderService.getInstance().getRenewCardMoney(shiftTable.getSystemBookCode(),
+        double RenewCardMoney = OrderImpl.getInstance().getRenewCardMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
 
-        int changeNum = OrderService.getInstance().getChangeNum(shiftTable.getSystemBookCode(),
+        int changeNum = OrderImpl.getInstance().getChangeNum(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
-        double changeMoney = OrderService.getInstance().getChangeMoney(shiftTable.getSystemBookCode(),
+        double changeMoney = OrderImpl.getInstance().getChangeMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getShiftTableNum() + "", shiftTable.getBranchNum() + "");
 
         float vipDiscountMoney = (float) map.get(LibConfig.GOODS_VIP_TAG);
@@ -931,7 +931,7 @@ public class RetailPosManager {
 //        OrderService.getInstance().getOrderPromotionDiscountMoney(shiftTable.getSystemBookCode(),
 //                shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
 //                shiftTable.getShiftTableBizday(), 5);
-        float noDiscountMoney = OrderService.getInstance().getOrderNoDiscountMoney(shiftTable.getSystemBookCode(),
+        float noDiscountMoney = OrderImpl.getInstance().getOrderNoDiscountMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday(), 5);
 
@@ -943,20 +943,20 @@ public class RetailPosManager {
         float sellAllMoney = noDiscountMoney - promotionDiscountMoney - modifyPriceDiscountMoney - strRoundAmount -
                 vipDiscountMoney - strCouponsMoney - strDiscountAmount - feeNum ;
 
-        int othersNum = OtherRevenueService.getInstance().getNum(shiftTable.getSystemBookCode(),
+        int othersNum = OtherRevenueImpl.getInstance().getNum(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday());
-        float othersMoney = OtherRevenueService.getInstance().getMoney(shiftTable.getSystemBookCode(),
+        float othersMoney = OtherRevenueImpl.getInstance().getMoney(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday());
 
-        float collectionMoney = OrderService.getInstance().getAmountOfCollection(shiftTable.getSystemBookCode(),
+        float collectionMoney = OrderImpl.getInstance().getAmountOfCollection(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                 shiftTable.getShiftTableBizday());
         float floatAllReceiveMoney = 0;
 
         try {
-            paymentList = OrderService.getInstance().getListPaymentByPayType(shiftTable.getSystemBookCode(),
+            paymentList = OrderImpl.getInstance().getListPaymentByPayType(shiftTable.getSystemBookCode(),
                     shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
                     shiftTable.getShiftTableBizday());
             if (paymentList != null) {
@@ -1016,7 +1016,7 @@ public class RetailPosManager {
 
 
     public ItemCategory getItemCategoryByCode(String itemCategoryCode){
-        return ItemCategoryService.findCategoryCode(itemCategoryCode);
+        return ItemCategoryImpl.findCategoryCode(itemCategoryCode);
     }
 
     /**

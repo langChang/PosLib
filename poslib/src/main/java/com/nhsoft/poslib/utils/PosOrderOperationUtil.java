@@ -22,18 +22,15 @@ import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.PosOrderState;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.RedisBean;
-import com.nhsoft.poslib.service.KeyGeneratorBizdayService;
-import com.nhsoft.poslib.service.OrderService;
-import com.nhsoft.poslib.service.PayStyleService;
-import com.nhsoft.poslib.service.PosCarryLogService;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
+import com.nhsoft.poslib.call.impl.OrderImpl;
+import com.nhsoft.poslib.call.impl.PayStyleImpl;
+import com.nhsoft.poslib.call.impl.PosCarryLogImpl;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 import com.nhsoft.poslib.service.greendao.PosItemDao;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Iverson on 2018/12/4 3:06 PM
@@ -79,7 +76,7 @@ public class PosOrderOperationUtil {
                 payment.setPaymentTime(stampToDate);
                 payment.setPaymentDate(stampToDate);
                 payment.setMerchantNum(posOrder.getMerchantNum());
-                KeyGeneratorBizday paymentKG = KeyGeneratorBizdayService.getInstance().createPaymentKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_PAYMENT_KEY_ITEM, posMachine.getPos_machine_sequence());
+                KeyGeneratorBizday paymentKG = KeyGeneratorBizdayImpl.getInstance().createPaymentKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_PAYMENT_KEY_ITEM, posMachine.getPos_machine_sequence());
                 payment.setPaymentNo(paymentKG.getKeyGBString());
                 for (PosScaleStyleTypeBean scaleStyleTypeBean : LibConfig.allPosScaleTypeList) {
                     if (payment.getPaymentPayBy().equals(scaleStyleTypeBean.getPaymentTypeName())) {
@@ -89,7 +86,7 @@ public class PosOrderOperationUtil {
                     }
                 }
 
-                String payStyleBankNum = PayStyleService.getInstance().getPayStyleBankNum(payment.getPaymentPayBy());
+                String payStyleBankNum = PayStyleImpl.getInstance().getPayStyleBankNum(payment.getPaymentPayBy());
                 try {
                     int payCode = Integer.parseInt(payStyleBankNum);
                     payment.setAccountBankNum(payCode);
@@ -99,7 +96,7 @@ public class PosOrderOperationUtil {
 
             }
             List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
-            if (!OrderService.getInstance().isHaveCoupons(posOrder)) {
+            if (!OrderImpl.getInstance().isHaveCoupons(posOrder)) {
 
                 List<CouponsBean> totalCouponsList = new ArrayList<>();
                 if (posOrder.getMercuryConponsList() != null) {
@@ -217,14 +214,14 @@ public class PosOrderOperationUtil {
                     }
                 }
                 if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && LibConfig.S_ORDER_DETAIL_PRESENT_NAME.equals(posOrderDetail.getOrderDetailStateName())) {
-                    PosCarryLogService.tryPresentGoods(posOrderDetail);
+                    PosCarryLogImpl.tryPresentGoods(posOrderDetail);
                 }
 
 
             }
 
             if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && posOrder.getOrderMgrDiscountMoney() != 0) {
-                PosCarryLogService.tryOrderMgr(posOrder);
+                PosCarryLogImpl.tryOrderMgr(posOrder);
             }
 
             posOrder.setOrderPromotionDiscountMoney(policyPromotionMoney);
@@ -277,15 +274,15 @@ public class PosOrderOperationUtil {
 
 
             if (keyGenerator.getSystemBookCode() != null) {
-                KeyGeneratorBizday newKgb = KeyGeneratorBizdayService.getInstance().createPosOrderKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_POS_ORDER_KEY_ITEM, posMachine.getPos_machine_sequence());
+                KeyGeneratorBizday newKgb = KeyGeneratorBizdayImpl.getInstance().createPosOrderKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_POS_ORDER_KEY_ITEM, posMachine.getPos_machine_sequence());
                 if (newKgb.getKeyGBString().equals(keyGenerator.getKeyGBString())) {
-                    KeyGeneratorBizdayService.getInstance().saveKeyGeneratorBizday(keyGenerator);
+                    KeyGeneratorBizdayImpl.getInstance().saveKeyGeneratorBizday(keyGenerator);
                 }
             }
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderService.getInstance().doPayment(posOrder);
+                boolean b = OrderImpl.getInstance().doPayment(posOrder);
 
             }
             return true;
@@ -333,7 +330,7 @@ public class PosOrderOperationUtil {
                 payment.setPaymentTime(stampToDate);
                 payment.setPaymentDate(stampToDate);
                 payment.setMerchantNum(posOrder.getMerchantNum());
-                KeyGeneratorBizday paymentKG = KeyGeneratorBizdayService.getInstance().createPaymentKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_PAYMENT_KEY_ITEM, posMachine.getPos_machine_sequence());
+                KeyGeneratorBizday paymentKG = KeyGeneratorBizdayImpl.getInstance().createPaymentKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_PAYMENT_KEY_ITEM, posMachine.getPos_machine_sequence());
                 payment.setPaymentNo(paymentKG.getKeyGBString());
                 for (PosScaleStyleTypeBean scaleStyleTypeBean : LibConfig.allPosScaleTypeList) {
                     if (payment.getPaymentPayBy().equals(scaleStyleTypeBean.getPaymentTypeName())) {
@@ -343,7 +340,7 @@ public class PosOrderOperationUtil {
                     }
                 }
 
-                String payStyleBankNum = PayStyleService.getInstance().getPayStyleBankNum(payment.getPaymentPayBy());
+                String payStyleBankNum = PayStyleImpl.getInstance().getPayStyleBankNum(payment.getPaymentPayBy());
                 try {
                     int payCode = Integer.parseInt(payStyleBankNum);
                     payment.setAccountBankNum(payCode);
@@ -353,7 +350,7 @@ public class PosOrderOperationUtil {
 
             }
             List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
-            if (!OrderService.getInstance().isHaveCoupons(posOrder)) {
+            if (!OrderImpl.getInstance().isHaveCoupons(posOrder)) {
 
                 List<CouponsBean> totalCouponsList = new ArrayList<>();
                 if (posOrder.getMercuryConponsList() != null) {
@@ -453,14 +450,14 @@ public class PosOrderOperationUtil {
                     }
                 }
                 if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && LibConfig.S_ORDER_DETAIL_PRESENT_NAME.equals(posOrderDetail.getOrderDetailStateName())) {
-                    PosCarryLogService.tryPresentGoods(posOrderDetail);
+                    PosCarryLogImpl.tryPresentGoods(posOrderDetail);
                 }
 
 
             }
 
             if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && posOrder.getOrderMgrDiscountMoney() != 0) {
-                PosCarryLogService.tryOrderMgr(posOrder);
+                PosCarryLogImpl.tryOrderMgr(posOrder);
             }
 
             posOrder.setOrderPromotionDiscountMoney(policyPromotionMoney);
@@ -513,15 +510,15 @@ public class PosOrderOperationUtil {
 
 
             if (keyGenerator.getSystemBookCode() != null) {
-                KeyGeneratorBizday newKgb = KeyGeneratorBizdayService.getInstance().createPosOrderKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_POS_ORDER_KEY_ITEM, posMachine.getPos_machine_sequence());
+                KeyGeneratorBizday newKgb = KeyGeneratorBizdayImpl.getInstance().createPosOrderKG(shiftTable.getSystemBookCode(), shiftTable.getBranchNum(), shiftTable.getShiftTableBizday(), LibConfig.S_POS_ORDER_KEY_ITEM, posMachine.getPos_machine_sequence());
                 if (newKgb.getKeyGBString().equals(keyGenerator.getKeyGBString())) {
-                    KeyGeneratorBizdayService.getInstance().saveKeyGeneratorBizday(keyGenerator);
+                    KeyGeneratorBizdayImpl.getInstance().saveKeyGeneratorBizday(keyGenerator);
                 }
             }
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderService.getInstance().doPayment(posOrder);
+                boolean b = OrderImpl.getInstance().doPayment(posOrder);
 
             }
             return true;
@@ -547,7 +544,7 @@ public class PosOrderOperationUtil {
 
         List<PosOrderKitDetail> posOrderKitDetails = new ArrayList<>();
         PosItemDao posItemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
-        List<PosItemKit> groupPosKits = PosItemService.getInstance().getGroupPosItemByItemNum(posOrderDetail.getItemNum());
+        List<PosItemKit> groupPosKits = PosItemImpl.getInstance().getGroupPosItemByItemNum(posOrderDetail.getItemNum());
         int order_num = 1;
         if (groupPosKits != null && groupPosKits.size() > 0) {
             for (PosItemKit posItemKit : groupPosKits) {
@@ -557,7 +554,7 @@ public class PosOrderOperationUtil {
                 if (posItem != null && posItem.getItem_type() != 11 && !posItem.getItem_eliminative_flag()) {
                     PosItemGrade posItemGrade = null;
                     if (posItem.getItem_type() == 10) {
-                        List<PosItemGrade> allItemGrade = PosItemService.getInstance().getAllItemGrade(posItem.getItem_num());
+                        List<PosItemGrade> allItemGrade = PosItemImpl.getInstance().getAllItemGrade(posItem.getItem_num());
                         for (PosItemGrade itemPosItemGrade : allItemGrade) {
                             if (posItemGrade == null) {
                                 posItemGrade = itemPosItemGrade;

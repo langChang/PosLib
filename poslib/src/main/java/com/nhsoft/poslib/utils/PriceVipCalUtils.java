@@ -10,9 +10,9 @@ import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.VipCardTypeBean;
-import com.nhsoft.poslib.service.BookResourceService;
-import com.nhsoft.poslib.service.PolicyPromotionService;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.BookResourceImpl;
+import com.nhsoft.poslib.call.impl.PolicyPromotionImpl;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -78,10 +78,10 @@ public class PriceVipCalUtils {
      * @return
      */
     public static Float getVipMemberPrice(PosOrderDetail posOrderDetail, VipUserInfo vipUserInfo) {
-        if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+        if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
 
-        if (!PolicyPromotionService.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
 
         //消费折扣
         if (RetailPosManager.isOpenCrm()) {
@@ -102,7 +102,7 @@ public class PriceVipCalUtils {
      * @return
      */
     private static float getCouponsVipPrice(VipUserInfo vipUserInfo, PosOrderDetail posOrderDetail) {
-        VipCardTypeBean vipCardTypeBean  = BookResourceService.getInstance().getVipCardTypeBeanList
+        VipCardTypeBean vipCardTypeBean  = BookResourceImpl.getInstance().getVipCardTypeBeanList
                 (LibConfig.activeShiftTable.getSystemBookCode(), LibConfig.S_LOCAL_VIP_TYPE, vipUserInfo.getCard_user_type_name());
 
         float couponsDiscount = Float.MAX_VALUE;
@@ -241,9 +241,9 @@ public class PriceVipCalUtils {
      * @return
      */
     public static Float getVipMemberPriceBySettle(PosOrderDetail posOrderDetail, VipUserInfo vipUserInfo) {
-        if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+        if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
-        if (!PolicyPromotionService.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
 
         float vipMemberPrice = getVipMemberPrice(posOrderDetail, vipUserInfo);
         if (RetailPosManager.isOpenCrm()) {
@@ -262,9 +262,9 @@ public class PriceVipCalUtils {
      * @return
      */
     public static Float getVipMemberPriceByCheck(PosOrderDetail posOrderDetail, VipUserInfo vipUserInfo) {
-        if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+        if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
-        if (!PolicyPromotionService.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
         if (RetailPosManager.isOpenCrm()) {
             return getCrmPayVipPrice(vipUserInfo, posOrderDetail, Float.MAX_VALUE);
         } else {

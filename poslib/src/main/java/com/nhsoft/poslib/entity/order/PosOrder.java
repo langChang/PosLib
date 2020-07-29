@@ -10,7 +10,7 @@ import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.RedisBean;
-import com.nhsoft.poslib.service.KeyGeneratorBizdayService;
+import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
@@ -350,7 +350,7 @@ public class PosOrder implements Cloneable {
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
         if (TextUtils.isEmpty(getOrderExternalNo())) {
-            setOrderExternalNo(KeyGeneratorBizdayService.getInstance().createOutPosOrderNo(LibConfig.activeShiftTable.getBranchNum(), LibConfig.activeShiftTable.getShiftTableBizday(), LibConfig.activePosMachine.getPos_machine_sequence()));
+            setOrderExternalNo(KeyGeneratorBizdayImpl.getInstance().createOutPosOrderNo(LibConfig.activeShiftTable.getBranchNum(), LibConfig.activeShiftTable.getShiftTableBizday(), LibConfig.activePosMachine.getPos_machine_sequence()));
         }
     }
 

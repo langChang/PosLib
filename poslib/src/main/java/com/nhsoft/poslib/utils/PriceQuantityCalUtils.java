@@ -7,7 +7,7 @@ import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PolicyQuantityDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class PriceQuantityCalUtils {
                 PosOrderDetail posOrderDetail = posOrderDetails.get(j);
 
                 posOrderDetail.setOrderDetailPolicyPromotionQuantityFlagTwo(false);
-                if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+                if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
                     continue;
 
                 if (!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid()) && !posOrderDetail.getOrderDetailPolicyPromotionQuantityFlag())

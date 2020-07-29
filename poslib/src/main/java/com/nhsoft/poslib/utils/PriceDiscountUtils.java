@@ -7,7 +7,7 @@ import com.nhsoft.poslib.entity.PolicyDiscount;
 import com.nhsoft.poslib.entity.PolicyDiscountDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.service.PosItemService;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 public class PriceDiscountUtils {
 
     public static List<PolicyDiscount> getPolicyDiscountPrice(PosOrderDetail posOrderDetail, List<PolicyDiscount> policyDiscounts) {
-        if (!PosItemService.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
+        if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return null;
         if(posOrderDetail.getOrderDetailPolicyPromotionFlag() || posOrderDetail.getOrderDetailPolicyDiscountFlag() || !TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())){
             return null;
