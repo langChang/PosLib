@@ -3501,7 +3501,6 @@ public class OrderService {
 
     public List<Payment> getPaymentList(String OrderNo) {
         PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
-
         return paymentDao.queryBuilder().where(PaymentDao.Properties.OrderNo.eq(OrderNo)).list();
     }
 

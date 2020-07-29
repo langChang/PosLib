@@ -23,6 +23,7 @@ public class PaymentTemporary {
      *                 "payment_online_un_discount": 0.0000
      */
     private String payment_no;
+    private String order_no;
     private String payment_pay_by;
     private String payment_time;
     private String payment_machine;
