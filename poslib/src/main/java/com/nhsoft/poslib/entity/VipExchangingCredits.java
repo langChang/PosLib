@@ -38,6 +38,26 @@ public class VipExchangingCredits {
     private String consume_point_balance;
     private String customer_id;
 
+    private String consume_point_fid;
+    private boolean consume_point_repealed;
+
+    public String getConsume_point_fid() {
+        return consume_point_fid;
+    }
+
+    public void setConsume_point_fid(String consume_point_fid) {
+        this.consume_point_fid = consume_point_fid;
+    }
+
+    public boolean isConsume_point_repealed() {
+        return consume_point_repealed;
+    }
+
+    public void setConsume_point_repealed(boolean consume_point_repealed) {
+        this.consume_point_repealed = consume_point_repealed;
+    }
+
+
     public String getConsume_point_date() {
         return consume_point_date;
     }

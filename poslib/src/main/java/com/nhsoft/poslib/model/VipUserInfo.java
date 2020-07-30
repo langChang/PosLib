@@ -1,7 +1,7 @@
 package com.nhsoft.poslib.model;
 
 
-import com.nhsoft.poslib.model.CouponsBean;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -391,7 +391,7 @@ public class VipUserInfo implements Cloneable{
     }
 
     public String getCard_point() {
-        return card_point;
+        return  TextUtils.isEmpty(card_point) ? "0" : card_point;
     }
 
     public void setCard_point(String card_point) {
