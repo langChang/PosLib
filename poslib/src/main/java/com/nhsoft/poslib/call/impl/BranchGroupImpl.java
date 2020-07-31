@@ -14,7 +14,17 @@ import java.util.List;
  */
 public class BranchGroupImpl {
 
-    public static boolean saveBranchGroup(final List<BranchGroup> dataLis){
+    private static BranchGroupImpl instance;
+    public static BranchGroupImpl getInstance() {
+        if (instance == null) {
+            instance = new BranchGroupImpl();
+        }
+        return instance;
+    }
+
+
+
+    public  boolean saveBranchGroupList(final List<BranchGroup> dataLis){
         final BranchGroupDao mBranchGroupDao = DaoManager.getInstance().getDaoSession().getBranchGroupDao();
         mBranchGroupDao.deleteAll();
         if(dataLis.size() == 0)return true;

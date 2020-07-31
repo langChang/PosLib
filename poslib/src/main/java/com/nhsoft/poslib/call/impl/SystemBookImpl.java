@@ -10,7 +10,18 @@ import com.nhsoft.poslib.utils.MatterUtils;
  * 此类用于：
  */
 public class SystemBookImpl {
-    public static boolean saveSystemBook(final SystemBook dataLis){
+
+
+    private static SystemBookImpl instance;
+    public static SystemBookImpl getInstance(){
+        if (instance==null){
+            instance=new SystemBookImpl();
+        }
+        return instance;
+    }
+
+
+    public boolean saveSystemBook(final SystemBook dataLis){
         final SystemBookDao systemBookDao = DaoManager.getInstance().getDaoSession().getSystemBookDao();
         systemBookDao.deleteAll();
         if(dataLis == null)return false;

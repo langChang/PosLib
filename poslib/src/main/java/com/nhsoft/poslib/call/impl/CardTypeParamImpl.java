@@ -13,8 +13,8 @@ import java.util.List;
  * 此类用于：
  */
 public class CardTypeParamImpl {
-    private static CardTypeParamImpl instance;
 
+    private static CardTypeParamImpl instance;
     public static CardTypeParamImpl getInstance() {
         if (instance == null) {
             instance = new CardTypeParamImpl();

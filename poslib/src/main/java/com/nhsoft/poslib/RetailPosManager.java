@@ -4,25 +4,87 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.nhsoft.poslib.call.callback.SerachGoodsCallback;
+import com.nhsoft.poslib.call.callback.SystemConnectCallback;
+import com.nhsoft.poslib.call.impl.AccountBankImpl;
+import com.nhsoft.poslib.call.impl.AdjustPriceImpl;
+import com.nhsoft.poslib.call.impl.AppUserImpl;
+import com.nhsoft.poslib.call.impl.AttachedScreenImpl;
+import com.nhsoft.poslib.call.impl.BookResourceImpl;
+import com.nhsoft.poslib.call.impl.BottomMenuImpl;
+import com.nhsoft.poslib.call.impl.BranchGroupImpl;
+import com.nhsoft.poslib.call.impl.BranchImpl;
+import com.nhsoft.poslib.call.impl.BranchRegionImpl;
+import com.nhsoft.poslib.call.impl.BranchResourceImpl;
+import com.nhsoft.poslib.call.impl.CardTypeParamImpl;
+import com.nhsoft.poslib.call.impl.CheckPermissionImpl;
+import com.nhsoft.poslib.call.impl.ClearDataImpl;
+import com.nhsoft.poslib.call.impl.ClientPointImpl;
+import com.nhsoft.poslib.call.impl.CustomerRegisterImpl;
+import com.nhsoft.poslib.call.impl.EmployeeImpl;
+import com.nhsoft.poslib.call.impl.GlobalDataImpl;
+import com.nhsoft.poslib.call.impl.GoodsDataImpl;
+import com.nhsoft.poslib.call.impl.InventoryImpl;
+import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
+import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
+import com.nhsoft.poslib.call.impl.LoginImpl;
+import com.nhsoft.poslib.call.impl.MarketActionImpl;
+import com.nhsoft.poslib.call.impl.MeasureUnitImpl;
+import com.nhsoft.poslib.call.impl.OrderImpl;
+import com.nhsoft.poslib.call.impl.OrderOperationImpl;
+import com.nhsoft.poslib.call.impl.OtherRevenueImpl;
+import com.nhsoft.poslib.call.impl.PointOrderImpl;
+import com.nhsoft.poslib.call.impl.PointPolicyImpl;
+import com.nhsoft.poslib.call.impl.PolicyDiscountImpl;
+import com.nhsoft.poslib.call.impl.PolicyMoneyImpl;
+import com.nhsoft.poslib.call.impl.PolicyPresentImpl;
+import com.nhsoft.poslib.call.impl.PolicyPromotionImpl;
+import com.nhsoft.poslib.call.impl.PolicyQuantityImpl;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
+import com.nhsoft.poslib.call.impl.PosMachineImpl;
+import com.nhsoft.poslib.call.impl.PromotionOperationImpl;
+import com.nhsoft.poslib.call.impl.ShiftTableImpl;
+import com.nhsoft.poslib.call.impl.SystemBookImpl;
+import com.nhsoft.poslib.call.impl.TicketSendImpl;
+import com.nhsoft.poslib.call.impl.VipCrmAmaLevelImpl;
 import com.nhsoft.poslib.dao.UserDao;
 import com.nhsoft.poslib.db.DaoManager;
+import com.nhsoft.poslib.entity.AccountBank;
 import com.nhsoft.poslib.entity.AmountPay;
 import com.nhsoft.poslib.entity.AppUser;
+import com.nhsoft.poslib.entity.AttachedScreen;
 import com.nhsoft.poslib.entity.BookResource;
+import com.nhsoft.poslib.entity.Branch;
+import com.nhsoft.poslib.entity.BranchGroup;
+import com.nhsoft.poslib.entity.BranchRegion;
+import com.nhsoft.poslib.entity.BranchResource;
 import com.nhsoft.poslib.entity.CardTypeParam;
+import com.nhsoft.poslib.entity.ClientPoint;
+import com.nhsoft.poslib.entity.Employee;
 import com.nhsoft.poslib.entity.Inventory;
 import com.nhsoft.poslib.entity.ItemCategory;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
 import com.nhsoft.poslib.entity.Login;
+import com.nhsoft.poslib.entity.MarketAction;
+import com.nhsoft.poslib.entity.MeasureUnit;
+import com.nhsoft.poslib.entity.PointOrder;
+import com.nhsoft.poslib.entity.PointPolicy;
+import com.nhsoft.poslib.entity.PolicyDiscount;
+import com.nhsoft.poslib.entity.PolicyMoney;
+import com.nhsoft.poslib.entity.PolicyPresent;
+import com.nhsoft.poslib.entity.PolicyPromotion;
+import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
+import com.nhsoft.poslib.entity.PosMachine;
+import com.nhsoft.poslib.entity.SystemBook;
+import com.nhsoft.poslib.entity.TicketSendDetail;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
-import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.AdjustPriceOrder;
 import com.nhsoft.poslib.model.AdjustTradePriceOrder;
 import com.nhsoft.poslib.model.BasePolicyBean;
@@ -34,37 +96,12 @@ import com.nhsoft.poslib.model.RedisBean;
 import com.nhsoft.poslib.model.ShiftTableTotal;
 import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.model.VipCardTypeBean;
-import com.nhsoft.poslib.call.callback.SerachGoodsCallback;
-import com.nhsoft.poslib.call.callback.SystemConnectCallback;
-import com.nhsoft.poslib.call.impl.AdjustPriceImpl;
-import com.nhsoft.poslib.call.impl.CheckPermissionImpl;
-import com.nhsoft.poslib.call.impl.ClearDataImpl;
-import com.nhsoft.poslib.call.impl.GlobalDataImpl;
-import com.nhsoft.poslib.call.impl.GoodsDataImpl;
-import com.nhsoft.poslib.call.impl.InventoryImpl;
-import com.nhsoft.poslib.call.impl.OrderOperationImpl;
-import com.nhsoft.poslib.call.impl.PromotionOperationImpl;
-import com.nhsoft.poslib.call.impl.AppUserImpl;
-import com.nhsoft.poslib.call.impl.BookResourceImpl;
-import com.nhsoft.poslib.call.impl.BottomMenuImpl;
-import com.nhsoft.poslib.call.impl.CardTypeParamImpl;
-import com.nhsoft.poslib.call.impl.CustomerRegisterImpl;
-import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
-import com.nhsoft.poslib.call.impl.LoginImpl;
-import com.nhsoft.poslib.call.impl.OrderImpl;
-import com.nhsoft.poslib.call.impl.OtherRevenueImpl;
-import com.nhsoft.poslib.call.impl.PosItemImpl;
-import com.nhsoft.poslib.call.impl.ShiftTableImpl;
-import com.nhsoft.poslib.call.impl.VipCrmAmaLevelImpl;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.utils.EvtLog;
 import com.nhsoft.poslib.utils.NumberUtil;
 import com.nhsoft.poslib.utils.TimeUtil;
 import com.nhsoft.poslib.utils.WeightOutBarUtil;
-import com.nhsoft.poslib.utils.XmlParser;
 import com.nhsoft.poslib.utils.XmlUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -691,25 +728,6 @@ public class RetailPosManager {
     }
 
 
-    public static VipCardConfig getVipConfig(String systemBookCode) {
-        VipCardConfig vipCardConfigBean = null;
-        BookResource bookPosCardType = BookResourceImpl.getInstance().getBookPosSale(systemBookCode, LibConfig.S_LOCAL_VIP_STYPE);
-        if (bookPosCardType != null) {
-            Gson gson = new Gson();
-            String s = XmlParser.xml2json(bookPosCardType.getBookResourceParam());
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-                JSONObject object = jsonObject.optJSONObject("消费卡参数");
-                vipCardConfigBean = gson.fromJson(object.toString(), VipCardConfig.class);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return vipCardConfigBean;
-    }
-
-
     /**
      * 是否开启全渠道
      *
@@ -1002,7 +1020,6 @@ public class RetailPosManager {
         printShiftTable.saleAmount = sellAllMoney;
         printShiftTable.receiveAmountMoney = strAmount + strAllAmount + exitMoney + moneyShiftTableNum;
         printShiftTable.paymentList = paymentList;
-
         return printShiftTable;
     }
 
@@ -1026,4 +1043,523 @@ public class RetailPosManager {
     public void mergeAllGoods(PosOrder posOrder){
         OrderOperationImpl.getInstance().mergeAllGoods(posOrder);
     }
+
+
+
+    /********************************新添加Api**************************************/
+
+    /*********************************AccountBankImpl*********************************************/
+    /**
+     * 保存银行账户
+     * @param accountBankList  银行账户集合
+     * @return 是否保存成功
+     */
+    public  boolean saveAccountBankList(final List<AccountBank> accountBankList) {
+        return AccountBankImpl.getInstance().saveAccountBankList(accountBankList);
+    }
+
+    /*********************************AddVipDialogImpl*********************************************/
+
+    /*********************************AdjustPriceImpl*********************************************/
+
+    /*********************************AggregationImpl*********************************************/
+
+    /*********************************AmountPayImpl*********************************************/
+
+    /*********************************AppUserImpl*********************************************/
+
+    /*********************************AttachedScreenImpl*********************************************/
+    /**
+     * 保存副屏图片
+     * @param attachedScreenList 副屏图片集合
+     * @return 是否保存成功
+     */
+    public boolean saveAttachedScreenList(final List<AttachedScreen> attachedScreenList){
+        return AttachedScreenImpl.getInstance().saveAttachedScreenList(attachedScreenList);
+    }
+    /*********************************BookResourceImpl*********************************************/
+
+    /**
+     * 获取全局储值卡配置
+     * @param book_code 帐套号
+     * @return 储值卡配置
+     */
+    public VipCardConfig getVipConfig(String book_code) {
+       return BookResourceImpl.getInstance().getVipCardConfig(book_code);
+    }
+
+    /**
+     * 保存帐套资源
+     * @param bookResourceList 帐套资源集合
+     * @return 是否保存成功
+     */
+    public boolean saveBookResourceList(final List<BookResource> bookResourceList) {
+        return BookResourceImpl.getInstance().saveBookResourceList(bookResourceList);
+    }
+
+
+    /*********************************BottomMenuImpl*********************************************/
+
+    /*********************************BranchGroupImpl*********************************************/
+
+    /**
+     * 保存门店分组信息
+     * @param branchGroupList 门店分组信息集合
+     * @return 是否保存成功
+     */
+    public  boolean saveBranchGroupList(final List<BranchGroup> branchGroupList){
+        return BranchGroupImpl.getInstance().saveBranchGroupList(branchGroupList);
+    }
+    /*********************************BranchImpl*********************************************/
+
+    /**
+     * 保存所有分店的信息
+     * @param branchList
+     * @return 是否保存成功
+     */
+    public boolean saveBranchList(final List<Branch> branchList){
+        return BranchImpl.getInstance().saveBranchList(branchList);
+    }
+    /*********************************BranchMessageImpl*********************************************/
+
+    /*********************************BranchRegionImpl*********************************************/
+
+    /**
+     * 保存所有分店区域
+     * @param branchRegionList 分店区域集合
+     * @return 是否保存成功
+     */
+    public boolean saveBranchRegionList(final List<BranchRegion> branchRegionList) {
+        return BranchRegionImpl.getInstance().saveBranchRegionList(branchRegionList);
+    }
+
+    /*********************************BranchResourceImpl*********************************************/
+    /**
+     *  保存门店资源
+     * @param branchResourceList 门店资源集合
+     * @return 是否保存成功
+     */
+    public boolean saveBranchResourceList(final List<BranchResource> branchResourceList){
+        return BranchResourceImpl.getInstance().saveBranchResourceList(branchResourceList);
+    }
+
+
+    /*********************************CardChangeImpl*********************************************/
+
+    /*********************************CardTypeParamImpl*********************************************/
+
+    /**
+     *  保存卡类型参数
+     * @param cardTypeParamList 卡类型参数集合
+     * @return 是否保存成功
+     */
+    public boolean saveCardTypeParamList(final List<CardTypeParam> cardTypeParamList) {
+        return CardTypeParamImpl.getInstance().saveCardTypeParamList(cardTypeParamList);
+    }
+
+    /*********************************ChangeGoodsMenuImpl*********************************************/
+
+    /*********************************CheckPermissionImpl*********************************************/
+
+    /*********************************ClearDataImpl*********************************************/
+
+    /*********************************ClientPointImpl*********************************************/
+
+
+    /**
+     * 更改积分上传的状态
+     * @param clientPoint 积分对象
+     */
+    public void updateClientPointStatus(final ClientPoint clientPoint) {
+        ClientPointImpl.getInstance().updateClientPointStatus(clientPoint);
+    }
+    /*********************************CurrentUserImpl*********************************************/
+
+    /*********************************CustomerRegisterImpl*********************************************/
+
+    /*********************************DataSynchronousImpl*********************************************/
+
+    /*********************************DeskOperatingParametersImpl*********************************************/
+
+    /*********************************EmployeeImpl*********************************************/
+
+
+    /**
+     *  保存所有的员工
+     * @param employeeList 员工集合
+     * @return 是否保存成功
+     */
+    public boolean saveEmployeeList(final List<Employee> employeeList){
+        return EmployeeImpl.getInstance().saveEmployeeList(employeeList);
+    }
+    /*********************************GlobalDataImpl*********************************************/
+
+    /*********************************GoodsDataImpl*********************************************/
+
+    /*********************************IcCardMessageImpl*********************************************/
+
+    /*********************************InventoryImpl*********************************************/
+
+    /*********************************ItemBarImpl*********************************************/
+
+    /*********************************ItemCategoryImpl*********************************************/
+
+    /**
+     *  保存所有的商品类别
+     * @param itemCategoryList 商品类别集合
+     * @return 是否保存成功
+     */
+    public boolean saveItemCategoryList(final List<ItemCategory> itemCategoryList){
+        return ItemCategoryImpl.getInstance().saveItemCategoryList(itemCategoryList);
+    }
+
+
+    /*********************************KeyGeneratorBizdayImpl*********************************************/
+
+    /**
+     * 保存赠送消费券最大主键
+     * @param system_book 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 流水日
+     * @param max_print_num 最大券的流水号
+     * @return 是否保存成功
+     */
+    public boolean saveMaxCouponsPrintNum(String system_book, int branch_num, String shift_table_bizday, final int max_print_num) {
+        return KeyGeneratorBizdayImpl.getInstance().saveMaxCouponsPrintNum(system_book, branch_num, shift_table_bizday, max_print_num);
+    }
+
+
+    /**
+     * 获取今天的营业日
+     * @return
+     */
+    public String getTodayShiftBizday(){
+        return KeyGeneratorBizdayImpl.getInstance().getTodayShiftBizday();
+    }
+    /**
+     *  保存posorder的最大主键
+     * @param system_book 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 流水日
+     * @param pos_key_value 订单的最大主键
+     * @param payment_key_value 支付的最大主键
+     * @return 是否保存成功
+     */
+    public boolean setMaxPosOrderAndPaymentValue(String system_book, int branch_num, String shift_table_bizday,
+                                                  int pos_key_value, final int payment_key_value) {
+        return KeyGeneratorBizdayImpl.getInstance().setMaxPosOrderAndPaymentValue(system_book, branch_num, shift_table_bizday, pos_key_value, payment_key_value);
+    }
+
+    /**
+     * 保存储值的最大主键
+     * @param system_book 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 流水日
+     * @param deposit_key_value 储值的最大主键
+     * @return
+     */
+    public boolean setMaxDepositValue(String system_book, int branch_num,
+                                      String shift_table_bizday, int deposit_key_value) {
+        return KeyGeneratorBizdayImpl.getInstance().setMaxDepositValue(system_book, branch_num, shift_table_bizday, deposit_key_value);
+    }
+
+    /**
+     * 获取当天的流水日是今年的第几天
+     * @param shift_table_bizday 流水日
+     * @return
+     */
+    public String getYearCurrentDate(String shift_table_bizday) {
+        return KeyGeneratorBizdayImpl.getInstance().getYearCurrentDate(shift_table_bizday);
+    }
+
+    /*********************************LoginImpl*********************************************/
+
+    /**
+     * 获取登录信息
+     * @return 返回登录信息
+     */
+    public Login getLoginData(){
+        return LoginImpl.getInstance().getLogin();
+    }
+    /*********************************ManagementTemplateImpl*********************************************/
+
+    /*********************************MarketActionImpl*********************************************/
+
+    /**
+     * 保存营销活动
+     * @param marketActionList 营销集合
+     * @return 是否保存成功
+     */
+    public boolean saveMarketAction(final List<MarketAction> marketActionList) {
+        return MarketActionImpl.getInstance().saveMarketAction(marketActionList);
+    }
+
+    /*********************************MD5Impl*********************************************/
+
+    /*********************************MeasureUnitImpl*********************************************/
+
+    /**
+     * 保存商品单位集合
+     * @param measureUnitList 商品单位集合
+     * @return 是否保存成功
+     */
+    public boolean saveMeasureUnit(final List<MeasureUnit> measureUnitList) {
+        return MeasureUnitImpl.getInstance().saveMeasureUnitList(measureUnitList);
+    }
+
+    /*********************************OrderImpl*********************************************/
+
+    /**
+     * 订单上传成功后将posorder订单上传状态修改掉
+     * @param order_num 订单的编号
+     */
+    public void changeOrderUploadStatus(String order_num) {
+        OrderImpl.getInstance().changeOrderUploadStatus(order_num);
+    }
+    /**
+     *  获取订单的JSON
+     * @param posOrder 订单
+     * @return 订单JSON
+     */
+    public String getPosOrderToJson(PosOrder posOrder,String branch_name,String system_book_name){
+        VipCardConfig vipCardConfig = getVipConfig(LibConfig.SYSTEM_BOOK);
+        return OrderImpl.getInstance().getPosOrderToJson(posOrder,branch_name,system_book_name,vipCardConfig);
+    }
+
+    /**
+     * 获取一组订单的JSON
+     * @param posOrderList  订单JSON
+     * @return 返回一组订单的JSON
+     */
+    public String getPosOrderListToJson(List<PosOrder> posOrderList){
+        return OrderImpl.getInstance().getPosOrderListToJson(posOrderList);
+    }
+
+    /*********************************OrderOperationImpl*********************************************/
+
+    /*********************************OtherRevenueImpl*********************************************/
+
+    /*********************************PaymentImpl*********************************************/
+
+    /*********************************PayStyleImpl*********************************************/
+
+    /*********************************PayStyleToCashBankImpl*********************************************/
+
+    /*********************************PointOrderImpl*********************************************/
+    /**
+     * 保存积分活动
+     * @param pointOrderList 积分活动集合
+     * @return 是否保存成功
+     */
+
+    public boolean savePointOrderList(final List<PointOrder> pointOrderList){
+        return PointOrderImpl.getInstance().savePointOrderList(pointOrderList);
+    }
+
+    /*********************************PointPolicyImpl*********************************************/
+    /**
+     * 保存积分政策
+     * @param pointPolicyList 积分政策集合
+     * @return 是否保存成功
+     */
+    public boolean savePointPolicyList(final List<PointPolicy> pointPolicyList) {
+        return PointPolicyImpl.getInstance().savePointPolicyList(pointPolicyList);
+    }
+
+    /**
+     *  获取所有积分政策
+     * @param book_code 帐套号
+     * @return 返回全部的积分政策
+     */
+    public List<PointPolicy> getAllPointPolicy(String book_code) {
+        return PointPolicyImpl.getInstance().loadAllPointPolicy(book_code);
+    }
+
+
+    /*********************************PointRuleImpl*********************************************/
+
+    /*********************************PolicyDiscountImpl*********************************************/
+
+    /**
+     * 保存所有的超额折扣
+     * @param policyDiscountList 超额折扣集合
+     * @return 是否保存成功
+     */
+    public boolean savePolicyDiscountList(final List<PolicyDiscount> policyDiscountList){
+        return PolicyDiscountImpl.getInstance().savePolicyDiscountList(policyDiscountList);
+    }
+    /*********************************PolicyMoneyImpl*********************************************/
+
+    /**
+     * 保存所有的超额奖励
+     * @param policyMoneyList 超额奖励集合
+     * @return 是否保存成功
+     */
+    public boolean savePolicyMoneyList(final List<PolicyMoney> policyMoneyList){
+        return PolicyMoneyImpl.getInstance().savePolicyMoneyList(policyMoneyList);
+    }
+
+    /*********************************PolicyPresentImpl*********************************************/
+
+    /**
+     * 保存所有的赠品促销
+     * @param policyPresentList 赠品促销集合
+     * @return 是否保存成功
+     */
+    public boolean savePolicyPresentList(final List<PolicyPresent> policyPresentList){
+        return PolicyPresentImpl.getInstance().savePolicyPresentList(policyPresentList);
+    }
+
+    /*********************************PolicyPromotionImpl*********************************************/
+
+    /**
+     * 保存所有的促销特价
+     * @param policyPromotionList 促销特价集合
+     * @return 是否保存成功
+     */
+    public boolean savePolicyPromotionList(final List<PolicyPromotion> policyPromotionList) {
+        return PolicyPromotionImpl.getInstance().savePolicyPromotionList(policyPromotionList);
+    }
+    /*********************************PolicyQuantityImpl*********************************************/
+
+    /**
+     * 保存所有的超量特价
+     * @param policyDiscountList 超量特价集合
+     * @return 是否保存成功
+     */
+    public boolean savePolicyQuantityList(final List<PolicyQuantity> policyDiscountList){
+        return PolicyQuantityImpl.getInstance().savePolicyQuantityList(policyDiscountList);
+    }
+
+    /*********************************PosCarryLogImpl*********************************************/
+
+    /*********************************PosItemGradeTerminalImpl*********************************************/
+
+    /*********************************PosItemImpl*********************************************/
+
+    /**
+     * 保存PosItem数据
+     * @param posItemList PosItem 集合
+     * @return 是否保存成功
+     */
+    public  boolean savePosItemList(final List<PosItem> posItemList) {
+        return PosItemImpl.getInstance().savePosItemList(posItemList);
+    }
+
+    /*********************************PosItemTerminalImpl*********************************************/
+
+    /*********************************PosMachineImpl*********************************************/
+
+    /**
+     * 保存所有终端机器信息
+     * @param posMachineList 有终端机器信息 集合
+     * @return 是否保存成功
+     */
+    public boolean savePosMachineList(final List<PosMachine> posMachineList){
+        return PosMachineImpl.getInstance().savePosMachineList(posMachineList);
+    }
+    /*********************************PriceImpl*********************************************/
+
+    /*********************************PrintOrderUsingImpl*********************************************/
+
+    /*********************************PrivilegeResourceNewImpl*********************************************/
+
+    /*********************************PromotionOperationImpl*********************************************/
+
+    /*********************************RegisterPosMachineImpl*********************************************/
+
+    /*********************************RoleImpl*********************************************/
+
+    /*********************************ShiftTableImpl*********************************************/
+
+    /**
+     * 获取班次信息JSON
+     * @param shiftTable 班次
+     * @return 班次信息JSON
+     */
+    public String getShiftTableToString(ShiftTable shiftTable){
+        return ShiftTableImpl.getInstance().getShiftTableToString(shiftTable);
+    }
+
+    /**
+     *  班次是否有流水标记状态更改
+     * @param shiftTable 班次
+     */
+    public void changeStateShiftTable(ShiftTable shiftTable){
+        ShiftTableImpl.getInstance().changeStateShiftTable(shiftTable);
+    }
+
+
+    /**
+     *  保存班次信息
+     * @param shiftTable 班次
+     */
+    public void saveShiftTable(ShiftTable shiftTable){
+        ShiftTableImpl.getInstance().saveShiftTable(shiftTable);
+    }
+
+
+
+
+    /*********************************ShiftTablePaymentImpl*********************************************/
+
+    /*********************************StoreHouseImpl*********************************************/
+
+    /*********************************SystemBookImpl*********************************************/
+
+    /**
+     *  保存帐套号信息
+     * @param system_book 帐套号信息
+     * @return 是否保存成功
+     */
+    public boolean saveSystemBook(final SystemBook system_book){
+        return SystemBookImpl.getInstance().saveSystemBook(system_book);
+    }
+    /*********************************SystemImageQrcodeImpl*********************************************/
+
+    /*********************************SystemPrintImpl*********************************************/
+
+    /*********************************TicketSendImpl*********************************************/
+
+    /**
+     * 更改券上传标记
+     * @param ticketSendDetails 一组券
+     */
+    public void updateTicketStatus(List<TicketSendDetail> ticketSendDetails){
+        TicketSendImpl.getInstance().updateTicketsStatus(ticketSendDetails);
+    }
+
+    /*********************************VipCrmAmaLevelImpl*********************************************/
+
+    /*********************************VipCrmFeeImpl*********************************************/
+
+    /*********************************VipCrmLevelImpl*********************************************/
+
+    /*********************************VipCrmPointRateImpl*********************************************/
+
+    /*********************************VipIcInitImpl*********************************************/
+
+    /*********************************VipSendCardImpl*********************************************/
+
+    /*********************************VipSendCardSuccessImpl*********************************************/
+
+    /*********************************VipStrangeSuccessSendMoneyImpl*********************************************/
+
+    /*********************************YunServiceDaysImpl*********************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

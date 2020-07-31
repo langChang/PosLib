@@ -66,7 +66,7 @@ public class ClientPointImpl {
     }
 
 
-    public static void updateClinetPointStatus(final ClientPoint clientPoint) {
+    public void updateClientPointStatus(final ClientPoint clientPoint) {
         final ClientPointDao clientPointDao = DaoManager.getInstance().getDaoSession().getClientPointDao();
         if (clientPoint == null) return;
         MatterUtils.doMatter(clientPointDao, new Runnable() {

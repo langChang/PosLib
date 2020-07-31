@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PolicyDiscountImpl {
+
+
     private static PolicyDiscountImpl instance;
-
     public static PolicyDiscountImpl getInstance(){
-
         if (instance==null){
             instance=new PolicyDiscountImpl();
         }
@@ -22,7 +22,7 @@ public class PolicyDiscountImpl {
     }
 
 
-    public boolean saveBean(final List<PolicyDiscount> policyDiscountList){
+    public boolean savePolicyDiscountList(final List<PolicyDiscount> policyDiscountList){
         final PolicyDiscountDao policyDiscountDao= DaoManager.getInstance().getDaoSession().getPolicyDiscountDao();
         policyDiscountDao.deleteAll();
         final PolicyDiscountDetailDao policyDiscountDetailDao=DaoManager.getInstance().getDaoSession().getPolicyDiscountDetailDao();

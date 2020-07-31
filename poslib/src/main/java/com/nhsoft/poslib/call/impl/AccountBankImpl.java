@@ -28,7 +28,7 @@ public class AccountBankImpl {
      * @param dataLis
      * @return
      */
-    public  boolean saveAccountBank(final List<AccountBank> dataLis) {
+    public  boolean saveAccountBankList(final List<AccountBank> dataLis) {
         final AccountBankDao mAccountBankDao = DaoManager.getInstance().getDaoSession().getAccountBankDao();
         mAccountBankDao.deleteAll();
         if (dataLis.size() == 0) return true;

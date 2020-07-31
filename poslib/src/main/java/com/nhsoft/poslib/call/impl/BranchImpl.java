@@ -20,7 +20,7 @@ public class BranchImpl {
         return instance;
     }
 
-    public static boolean saveBranch(final List<Branch> dataLis){
+    public boolean saveBranchList(final List<Branch> dataLis){
         final BranchDao branchItemDao = DaoManager.getInstance().getDaoSession().getBranchDao();
         if(dataLis.size() == 0)return true;
         branchItemDao.deleteAll();

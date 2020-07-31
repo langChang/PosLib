@@ -24,14 +24,14 @@ public class PosMachineImpl {
     }
 
 
-    public static boolean savePosMachine(final List<PosMachine> dataLis){
+    public boolean savePosMachineList(final List<PosMachine> posMachineList){
         final PosMachineDao posMachineDao = DaoManager.getInstance().getDaoSession().getPosMachineDao();
         posMachineDao.deleteAll();
-        if(dataLis.size() == 0)return true;
+        if(posMachineList.size() == 0)return true;
         boolean isSuccess = MatterUtils.doMatter(posMachineDao, new Runnable() {
             @Override
             public void run() {
-                posMachineDao.insertOrReplaceInTx(dataLis);
+                posMachineDao.insertOrReplaceInTx(posMachineList);
             }
         });
         return isSuccess;

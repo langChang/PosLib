@@ -26,14 +26,21 @@ import java.util.List;
  * 此类用于：用于操作商品的服务操作
  */
 public class MarketActionImpl {
+
+    private static MarketActionImpl instance;
+    public static MarketActionImpl getInstance(){
+        if (instance==null){
+            instance=new MarketActionImpl();
+        }
+        return instance;
+    }
+
     /**
-     * 保存PosItem数据
-     * PosItem 集合
-     *
-     * @param result
-     * @return
+     * 保存营销活动
+     * @param marketActionList 营销集合
+     * @return 是否保存成功
      */
-    public static boolean saveMarketAction(final List<MarketAction> result) {
+    public boolean saveMarketAction(final List<MarketAction> result) {
         final MarketActionDao marketActionDao = DaoManager.getInstance().getDaoSession().getMarketActionDao();
         final MarketActionDetailDao marketActionDetailDao = DaoManager.getInstance().getDaoSession().getMarketActionDetailDao();
 

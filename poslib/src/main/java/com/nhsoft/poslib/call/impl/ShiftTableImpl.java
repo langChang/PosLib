@@ -38,9 +38,12 @@ public class ShiftTableImpl {
         return instance;
     }
 
-    //班次上传
-    private String getShiftTableToString(ShiftTable shiftTable) {
-
+    /**
+     * 获取班次Json
+     * @param shiftTable 班次
+     * @return 班次信息Json
+     */
+    public String getShiftTableToString(ShiftTable shiftTable) {
         String str;
         JSONObject jsonObject = new JSONObject();
         try {
@@ -70,13 +73,10 @@ public class ShiftTableImpl {
                     bankMoney = listPaymentByPayType.get(i).getAmountMoney();
                 }
             }
-
             jsonObject.put("shift_table_actual_money", cashMoney);
             jsonObject.put("shift_table_actual_bank_money", bankMoney);
             jsonObject.put("shift_table_status", shiftTable.getShiftTableStatus());
             jsonObject.put("shift_table_memo", shiftTable.getShiftTableMemo());
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -139,7 +139,7 @@ public class ShiftTableImpl {
         shiftTable.setShiftTableClosed(true);
         shiftTable.setShiftTableEnd(TimeUtil.getInstance().getNowDate());
         shiftTable.setShiftTableLastEditTime(TimeUtil.getInstance().getNowDate());
-        if (insert(shiftTable)) {
+        if (saveShiftTable(shiftTable)) {
             return shiftTable;
         } else {
             return null;
@@ -161,12 +161,12 @@ public class ShiftTableImpl {
         shiftTable.setShiftTableClosed(false);//交班
         shiftTable.setShiftTableUploadTimes(0);
         shiftTable.setShiftTableLastEditTime(TimeUtil.getInstance().getNowDate());
-        insert(shiftTable);
+        saveShiftTable(shiftTable);
         return shiftTable;
     }
 
     //插入
-    public boolean insert(final ShiftTable shiftTable) {
+    public boolean saveShiftTable(final ShiftTable shiftTable) {
         return MatterUtils.doMatter(mDaoSession.getShiftTableDao(), new Runnable() {
             @Override
             public void run() {

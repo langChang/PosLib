@@ -17,7 +17,7 @@ public class AttachedScreenImpl {
         return instance;
     }
 
-    public boolean saveAttachedScreen(final List<AttachedScreen>attachedScreenList){
+    public boolean saveAttachedScreenList(final List<AttachedScreen>attachedScreenList){
         final AttachedScreenDao attachedScreenDao=DaoManager.getInstance().getDaoSession().getAttachedScreenDao();
         attachedScreenDao.deleteAll();
         if(attachedScreenList == null || attachedScreenList.size() == 0)return true;

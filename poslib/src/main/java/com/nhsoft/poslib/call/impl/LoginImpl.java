@@ -43,7 +43,7 @@ public class LoginImpl {
         Login mLogin= mDaoSession.getLoginDao().queryBuilder().unique();
         return null;
     }
-    public static Login getLogin(){
+    public Login getLogin(){
         Login mLogin= DaoManager.getInstance().getDaoSession().getLoginDao().queryBuilder().limit(1).offset(0).unique();
         return mLogin;
     }

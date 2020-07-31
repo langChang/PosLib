@@ -39,10 +39,12 @@ import java.util.Map;
  */
 public class LibConfig {
 
-
     public static String BOOK_SCOPE_ID = "";
     public static String SYSTEM_BOOK;
-    public static String BRANCH_NUM;
+    public static int BRANCH_NUM;
+    public static String BRANCH_NAME;
+    public static String SYSTEM_BOOK_NAME;
+
     public static       String  activeLocalMac;//当前pos机ID
     public static       String  activeLocalMacEth0;//当前pos机 有线网卡的MacID
     /*****************打印小票************/

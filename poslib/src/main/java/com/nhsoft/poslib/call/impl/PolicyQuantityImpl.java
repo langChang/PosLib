@@ -14,14 +14,13 @@ public class PolicyQuantityImpl {
     private static PolicyQuantityImpl instance;
 
     public static PolicyQuantityImpl getInstance(){
-
         if (instance==null){
             instance=new PolicyQuantityImpl();
         }
         return instance;
     }
 
-    public boolean saveBean(final List<PolicyQuantity> policyDiscountList){
+    public boolean savePolicyQuantityList(final List<PolicyQuantity> policyDiscountList){
         final PolicyQuantityDao policyQuentityDao= DaoManager.getInstance().getDaoSession().getPolicyQuantityDao();
         policyQuentityDao.deleteAll();
         final PolicyQuantityDetailDao policyQuentityDetailDao =DaoManager.getInstance().getDaoSession().getPolicyQuantityDetailDao();

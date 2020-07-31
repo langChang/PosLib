@@ -50,7 +50,7 @@ public class PosItemImpl {
      * @param result
      * @return
      */
-    public static boolean savePosItemList(final List<PosItem> result) {
+    public  boolean savePosItemList(final List<PosItem> result) {
         if (result.size() == 0) {
             return true;
         }
