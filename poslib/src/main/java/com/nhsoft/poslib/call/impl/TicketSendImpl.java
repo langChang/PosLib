@@ -21,7 +21,7 @@ public class TicketSendImpl {
         return instance;
     }
 
-    public boolean saveTicketSend(final List<TicketSendDetail> ticketSendList) {
+    public boolean saveTicketSendList(final List<TicketSendDetail> ticketSendList) {
         final TicketSendDetailDao ticketSendDetailDao = DaoManager.getInstance().getDaoSession().getTicketSendDetailDao();
 
         return MatterUtils.doMatter(ticketSendDetailDao, new Runnable() {

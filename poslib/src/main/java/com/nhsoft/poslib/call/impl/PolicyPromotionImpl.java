@@ -78,7 +78,7 @@ public class PolicyPromotionImpl {
     }
 
 
-    public static boolean isEnablePayDiscount() {
+    public boolean isEnablePayDiscount() {
 
         if (LibConfig.allVipCardPolicyPromotionList != null && LibConfig.allVipCardPolicyPromotionList.size() > 0) {
             for (PolicyPromotion policyPromotion : LibConfig.allVipCardPolicyPromotionList) {

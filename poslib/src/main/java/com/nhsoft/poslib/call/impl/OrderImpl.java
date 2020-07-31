@@ -72,7 +72,7 @@ public class OrderImpl {
     /**
      * 订单生成存入订单
      */
-    public boolean doPayment(final PosOrder posOrder) {
+    public boolean savePosOrder(final PosOrder posOrder) {
         final PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         final PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
@@ -4129,4 +4129,48 @@ public class OrderImpl {
         }
         return posOrderList.toString();
     }
+
+
+    public boolean checkPosOrder(PosOrder posOrder){
+        if(posOrder == null || posOrder.getPosOrderDetails()  == null || posOrder.getPosOrderDetails().size() == 0){
+            return false;
+        }
+        List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
+        float orderDiscountMoney = 0;
+        float oderTotalMoney = 0;
+        int policycount = 0;
+        for (PosOrderDetail posOrderDetail : posOrderDetails){
+            if(posOrderDetail.getOrderDetailType().equals(LibConfig.C_ORDER_DETAIL_TYPE_ITEM)){
+                policycount = 0;
+                if(posOrderDetail.getOrderDetailPolicyPromotionFlag())policycount ++;
+                if(posOrderDetail.getOrderDetailPolicyPresentFlag())policycount ++;
+                if(posOrderDetail.getOrderDetailPolicyPromotionQuantityFlag())policycount ++;
+                if(posOrderDetail.getOrderDetailPolicyDiscountFlag())policycount ++;
+                if(policycount > 1)return false;
+
+                if(posOrderDetail.getOrderDetailPaymentMoney() != posOrderDetail.getOrderDetailMoney() + posOrderDetail.getOrderDetailAppendMoney()){
+                    return false;
+                }
+                if(LibConfig.C_ORDER_DETAIL_TYPE_ITEM.equals(posOrderDetail.getOrderDetailType())){
+                    if(posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_RETURN)){
+                        orderDiscountMoney -= posOrderDetail.getOrderDetailDiscount();
+                        oderTotalMoney -= posOrderDetail.getOrderDetailPaymentMoney();
+                    }else if(posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_SALE)){
+                        orderDiscountMoney += posOrderDetail.getOrderDetailDiscount();
+                        oderTotalMoney += posOrderDetail.getOrderDetailPaymentMoney();
+                    }
+                }
+            }
+        }
+        if(orderDiscountMoney != posOrder.getOrderDiscountMoney())return false;
+//
+        if(oderTotalMoney != posOrder.getOrderPaymentMoney() + posOrder.getOrderMgrDiscountMoney() + posOrder.getOrderRound() + posOrder.getQuickZeroMoney() + posOrder.getOrderCouponTotalMoney())return false;
+//
+//        if(posOrder.getOrderPaymentMoney() != NumberUtil.roundMoney(oderTotalMoney - posOrder.getOrderCouponTotalMoney(),LibConfig.saleParamsBean.getRoundType(),LibConfig.saleParamsBean.getRoundTo()))return false;
+//
+//        if(posOrder.getOrderTotalMoney() != posOrder.getOrderPaymentMoney() + posOrder.getOrderCouponTotalMoney()+ posOrder.getOrderRound())return false;
+
+        return true;
+    }
+
 }

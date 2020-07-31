@@ -49,6 +49,8 @@ public class LibConfig {
     public static int SHIFT_TABLE_NUM = 0;
     public static String SHIFT_OPERATOR = "";
     public static String SHIFT_TABLE_BIZDAY = "";
+    public static boolean POLICY_PROMOTION_DISABLE_PAY_DISCOUNT = false;
+    public static int POS_MACHINE_SEQUENCE = 0;
 
 
 

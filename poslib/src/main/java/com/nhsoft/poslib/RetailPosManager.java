@@ -35,6 +35,7 @@ import com.nhsoft.poslib.call.impl.MeasureUnitImpl;
 import com.nhsoft.poslib.call.impl.OrderImpl;
 import com.nhsoft.poslib.call.impl.OrderOperationImpl;
 import com.nhsoft.poslib.call.impl.OtherRevenueImpl;
+import com.nhsoft.poslib.call.impl.PayStyleImpl;
 import com.nhsoft.poslib.call.impl.PointOrderImpl;
 import com.nhsoft.poslib.call.impl.PointPolicyImpl;
 import com.nhsoft.poslib.call.impl.PolicyDiscountImpl;
@@ -111,6 +112,7 @@ import com.nhsoft.poslib.model.VipCardTypeBean;
 import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.utils.EvtLog;
 import com.nhsoft.poslib.utils.NumberUtil;
+import com.nhsoft.poslib.utils.PointCalUtils;
 import com.nhsoft.poslib.utils.TimeUtil;
 import com.nhsoft.poslib.utils.WeightOutBarUtil;
 import com.nhsoft.poslib.utils.XmlUtil;
@@ -739,9 +741,10 @@ public class RetailPosManager {
     }
 
     //老式
-    public static VipCardTypeBean getVipCardTypeBean(String type_name) {
+    public VipCardTypeBean getVipCardTypeBean(String type_name) {
         return BookResourceImpl.getInstance().getVipCardTypeBeanList(LibConfig.activeShiftTable.getSystemBookCode(), LibConfig.S_LOCAL_VIP_TYPE, type_name);
     }
+
 
 
     /**
@@ -1141,6 +1144,17 @@ public class RetailPosManager {
     }
 
 
+    /**
+     *
+     * @param systemCode
+     * @param payScale
+     * @return
+     */
+    public BookResource getBookPosSale(String systemCode, String payScale) {
+        return BookResourceImpl.getInstance().getBookPosSale(systemCode, payScale);
+    }
+
+
     /*********************************BottomMenuImpl*********************************************/
 
     /*********************************BranchGroupImpl*********************************************/
@@ -1254,6 +1268,19 @@ public class RetailPosManager {
      */
     public List<ClientPoint> getClientPointList(String book_code, int branch_num, boolean sycnFlag) {
         return ClientPointImpl.getInstance().getClientPointList(book_code, branch_num, sycnFlag);
+    }
+
+
+    /**
+     * 计算积分
+     * @param posOrder 订单信息
+     * @param vipUserInfo 会员信息
+     * @param storeMoney 储值金额
+     * @param uploadType  积分上传类型
+     * @return
+     */
+    public ClientPoint calcuatePoint(PosOrder posOrder, VipUserInfo vipUserInfo, float storeMoney, String uploadType) {
+        return PointCalUtils.getInstance().calcuatePoint(posOrder, vipUserInfo, storeMoney, uploadType);
     }
 
 
@@ -1378,6 +1405,28 @@ public class RetailPosManager {
         return KeyGeneratorBizdayImpl.getInstance().getCouponsPre(system_book, branch_num, shift_table_bizday, pos_machine_sequence);
     }
 
+
+    /**
+     * 创建一个订单号
+     * @param book_code 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 营业日
+     * @param key_item 订单类型
+     * @param pos_machine_seq 终端的序列号
+     * @return
+     */
+    public KeyGeneratorBizday createPosOrderKG(String book_code,int branch_num,String shift_table_bizday,String key_item,int pos_machine_seq){
+        return KeyGeneratorBizdayImpl.getInstance().createPosOrderKG(book_code, branch_num, shift_table_bizday, key_item,pos_machine_seq);
+    }
+
+    /**
+     * 保存订单的流水号
+     * @param keyGeneratorBizday
+     */
+    public void saveKeyGeneratorBizday(KeyGeneratorBizday keyGeneratorBizday){
+        KeyGeneratorBizdayImpl.getInstance().saveKeyGeneratorBizday(keyGeneratorBizday);
+    }
+
     /*********************************LoginImpl*********************************************/
 
     /**
@@ -1423,6 +1472,57 @@ public class RetailPosManager {
     }
 
 
+    /**
+     *  获取消费赠送的消费券
+     * @param posOrder
+     * @param shiftTable
+     * @param marketActions
+     * @param vipUserInfo
+     * @return
+     */
+    public List<TicketSendDetail> sendTicketByPosOrder(PosOrder posOrder, ShiftTable
+            shiftTable, List<MarketAction> marketActions, VipUserInfo vipUserInfo) {
+        return MarketActionImpl.getInstance().sendCouponsByPosOrder(posOrder, shiftTable, marketActions, vipUserInfo);
+    }
+
+    /**
+     * 获取储值赠送的消费券
+     * @param orderNo
+     * @param shiftTable
+     * @param marketActions
+     * @param vipUserInfo
+     * @param paymentBy
+     * @param paymentMoney
+     * @return
+     */
+    public List<TicketSendDetail> sendCouponsByDeposit(String orderNo, ShiftTable shiftTable, List<MarketAction> marketActions, VipUserInfo vipUserInfo, String paymentBy, float paymentMoney) {
+        return MarketActionImpl.getInstance().sendCouponsByDeposit(orderNo, shiftTable, marketActions, vipUserInfo, paymentBy, paymentMoney);
+    }
+
+    /**
+     * 获取开卡赠送的消费券
+     * @param orderNo
+     * @param shiftTable
+     * @param marketActions
+     * @param vipUserInfo
+     * @return
+     */
+    public List<TicketSendDetail> sendCouponsByOpenCard(String orderNo, ShiftTable shiftTable, List<MarketAction> marketActions, VipUserInfo vipUserInfo) {
+        return  MarketActionImpl.getInstance().sendCouponsByOpenCard(orderNo, shiftTable, marketActions, vipUserInfo);
+    }
+
+    /**
+     * 储值兑换券
+     * @param shiftTable
+     * @param vipUserInfo
+     * @param orderNo
+     * @param paymentmoney
+     * @return
+     */
+    public TicketSendDetail createStrange2TicketModel(ShiftTable shiftTable, VipUserInfo vipUserInfo, String orderNo,
+                                                             float paymentmoney) {
+        return MarketActionImpl.createStrange2TicketModel(shiftTable, vipUserInfo, orderNo, paymentmoney);
+    }
     /*********************************MD5Impl*********************************************/
 
     /*********************************MeasureUnitImpl*********************************************/
@@ -1484,6 +1584,35 @@ public class RetailPosManager {
         return OrderImpl.getInstance().getPosOrderList(book_code, branch_num, shift_table_num, shift_table_bizday, sycn_flag);
     }
 
+
+    /**
+     * 检查订单数据是否正常
+     * @param posOrder 订单信息
+     * @return true 正常
+     */
+    public boolean checkPosOrder(PosOrder posOrder){
+        return OrderImpl.getInstance().checkPosOrder(posOrder);
+    }
+
+
+    /**
+     * 更新订单商品状态
+     * @param posOrderDetail
+     */
+    public void updatePosOrderDetailStatus(PosOrderDetail posOrderDetail) {
+        OrderImpl.getInstance().updatePosOrderDetailStatus(posOrderDetail);
+    }
+
+    /**
+     * 本地数据库保存订单
+     * @param posOrder
+     * @return
+     */
+    public boolean savePosOrder(final PosOrder posOrder) {
+        return OrderImpl.getInstance().savePosOrder(posOrder);
+    }
+
+
     /*********************************OrderOperationImpl*********************************************/
 
     /*********************************OtherRevenueImpl*********************************************/
@@ -1491,6 +1620,40 @@ public class RetailPosManager {
     /*********************************PaymentImpl*********************************************/
 
     /*********************************PayStyleImpl*********************************************/
+
+    /**
+     *  储值赠送金额
+     * @param systemBookCode
+     * @param payMoney
+     * @param branchNum
+     * @param cardType
+     * @param payType
+     * @return
+     */
+    public double strangeGivingMoney(String systemBookCode, String payMoney, String branchNum, String cardType, String payType) {
+        return PayStyleImpl.getInstance().strangeGivingMoney(systemBookCode, payMoney, branchNum, cardType, payType);
+    }
+
+    /**
+     *
+     * @param list
+     * @return
+     */
+    public List<String> getPayTypeNameList(List<PosScaleStyleTypeBean> list) {
+        return PayStyleImpl.getInstance().getPayTypeNameList(list);
+    }
+
+    /**
+     *
+     * @param list
+     * @return
+     */
+    public List<PosScaleStyleTypeBean> getPayTypeList(List<PosScaleStyleTypeBean> list) {
+        return PayStyleImpl.getInstance().getPayTypeList(list);
+    }
+
+
+
 
     /*********************************PayStyleToCashBankImpl*********************************************/
 
@@ -1576,6 +1739,15 @@ public class RetailPosManager {
     public boolean savePolicyPromotionList(final List<PolicyPromotion> policyPromotionList) {
         return PolicyPromotionImpl.getInstance().savePolicyPromotionList(policyPromotionList);
     }
+
+    /**
+     * 是否能用会员支付折扣
+     * @return
+     */
+    public boolean isEnablePayDiscount() {
+        return PolicyPromotionImpl.getInstance().isEnablePayDiscount();
+    }
+
     /*********************************PolicyQuantityImpl*********************************************/
 
     /**
@@ -1914,6 +2086,15 @@ public class RetailPosManager {
      */
     public List<TicketSendDetail> getTicketSendDetailList(String book_code, int branch_num, boolean sycnFlag) {
         return TicketSendImpl.getInstance().getTicketSendDetailList(book_code, branch_num, sycnFlag);
+    }
+
+    /**
+     *
+     * @param ticketSendList
+     * @return
+     */
+    public boolean saveTicketSendList(final List<TicketSendDetail> ticketSendList) {
+        return TicketSendImpl.getInstance().saveTicketSendList(ticketSendList);
     }
 
     /*********************************VipCrmAmaLevelImpl*********************************************/

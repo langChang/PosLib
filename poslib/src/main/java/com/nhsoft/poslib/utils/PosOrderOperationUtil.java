@@ -281,7 +281,7 @@ public class PosOrderOperationUtil {
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderImpl.getInstance().doPayment(posOrder);
+                boolean b = RetailPosManager.getInstance().savePosOrder(posOrder);
 
             }
             return true;
@@ -516,7 +516,7 @@ public class PosOrderOperationUtil {
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderImpl.getInstance().doPayment(posOrder);
+                boolean b = RetailPosManager.getInstance().savePosOrder(posOrder);
 
             }
             return true;
