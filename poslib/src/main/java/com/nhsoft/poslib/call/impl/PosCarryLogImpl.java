@@ -10,6 +10,7 @@ import com.nhsoft.poslib.libconfig.LibConfig ;
 import com.nhsoft.poslib.service.greendao.PosCarryLogDao;
 import com.nhsoft.poslib.utils.TimeUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,14 @@ import java.util.List;
  * 此类用于：用于抓取异常收银操作日志
  */
 public class PosCarryLogImpl {
+
+    private static PosCarryLogImpl instance;
+    public static PosCarryLogImpl getInstance(){
+        if (instance==null){
+            instance=new PosCarryLogImpl();
+        }
+        return instance;
+    }
 
     private static String NAME_BY_OPEN_DRAW = "打开钱箱";
     private static String NAME_BY_COLLECTION_ORDER = "挂单";
@@ -31,7 +40,7 @@ public class PosCarryLogImpl {
     /**
      * 打开钱箱
      */
-    public static void tryOpenDraw(){
+    public void tryOpenDraw(){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -57,7 +66,7 @@ public class PosCarryLogImpl {
     /**
      * 挂单
      */
-    public static void tryCollectionOrder(PosOrder posOrder){
+    public void tryCollectionOrder(PosOrder posOrder){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -92,7 +101,7 @@ public class PosCarryLogImpl {
     /**
      * 撤单
      */
-    public static void tryDeleteOrder(PosOrder posOrder){
+    public void tryDeleteOrder(PosOrder posOrder){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -166,7 +175,7 @@ public class PosCarryLogImpl {
     /**
      * 经理折扣
      */
-    public static void tryOrderMgr(PosOrder posOrder){
+    public void tryOrderMgr(PosOrder posOrder){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -236,7 +245,7 @@ public class PosCarryLogImpl {
     /**
      * 修改商品单价
      */
-    public static void tryChangeGoodsPrice(PosOrderDetail posOrderDetail){
+    public void tryChangeGoodsPrice(PosOrderDetail posOrderDetail){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -331,7 +340,7 @@ public class PosCarryLogImpl {
      * 删除多少天前的操作数据
      * @param date
      */
-    public static void deleteLogData(String date){
+    public void deleteLogData(String date){
         PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
         List<PosCarryLog> list = posCarryLogDao.queryBuilder().where(PosCarryLogDao.Properties.Retail_pos_log_time.le(date)).build().list();
         for (PosCarryLog posCarryLog : list){
@@ -343,7 +352,7 @@ public class PosCarryLogImpl {
      * 更新
      * @param posCarryLogList
      */
-    public static void upDateBean(List<PosCarryLog> posCarryLogList){
+    public void updateCarryLogStatus(List<PosCarryLog> posCarryLogList){
         PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
         for (int i=0;i<posCarryLogList.size();i++){
             PosCarryLog posCarryLog=posCarryLogList.get(i);
@@ -362,7 +371,7 @@ public class PosCarryLogImpl {
      * @param isUpload
      * @return
      */
-    public static List<PosCarryLog> getBeanList(String systemBookCode, int branchNum, int shiftTableNum, boolean isUpload){
+    public List<PosCarryLog> getPosCarryLogList(String systemBookCode, int branchNum, int shiftTableNum, boolean isUpload){
         PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
         return posCarryLogDao.queryBuilder().where(PosCarryLogDao.Properties.System_book_code.eq(systemBookCode),
                 PosCarryLogDao.Properties.Branch_num.eq(branchNum),
@@ -370,6 +379,26 @@ public class PosCarryLogImpl {
                 ).list();
 
 //        PosCarryLogDao.Properties.Retail_pos_log_shift_num.eq(shiftTableNum)
+    }
+
+
+    /**
+     * 上传
+     * @param systemBookCode
+     * @param branchNum
+     * @param isUpload
+     * @return
+     */
+    public List<PosCarryLog> getPosCarryLogList(String systemBookCode, int branchNum,boolean isUpload){
+        PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
+        List<PosCarryLog> list = posCarryLogDao.queryBuilder().where(PosCarryLogDao.Properties.System_book_code.eq(systemBookCode),
+                PosCarryLogDao.Properties.Branch_num.eq(branchNum),
+                PosCarryLogDao.Properties.IsUpload.eq(isUpload)
+        ).list();
+        if(list == null){
+            list = new ArrayList<>();
+        }
+        return list;
     }
 
 

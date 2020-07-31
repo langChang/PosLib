@@ -1,5 +1,6 @@
 package com.nhsoft.poslib.call.impl;
 
+import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.call.callback.ClearDataCallback;
 import com.nhsoft.poslib.utils.TimeUtil;
 
@@ -20,7 +21,7 @@ public  class ClearDataImpl implements ClearDataCallback {
         PayStyleImpl.getInstance().deleteRelatCard(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
         PayStyleImpl.getInstance().deleteReplaceCard(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
         ShiftTableImpl.getInstance().deleteShiftTable(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
-        PosCarryLogImpl.deleteLogData(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
+        RetailPosManager.getInstance().deleteLogData(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
         VipIcInitImpl.getInstance().deleteOverDateBean(TimeUtil.getInstance().getNDaysDate(TimeUtil.getInstance().getNowDateString(), days));
 
     }

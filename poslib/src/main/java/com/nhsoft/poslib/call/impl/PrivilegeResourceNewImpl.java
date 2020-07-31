@@ -30,7 +30,7 @@ public class PrivilegeResourceNewImpl {
     }
 
 
-    public static boolean savePrivilege(final List<PrivilegeResourceNew> dataLis) {
+    public boolean savePrivilegeList(final List<PrivilegeResourceNew> dataLis) {
         final PrivilegeResourceNewDao mPrivilegeDao = DaoManager.getInstance().getDaoSession().getPrivilegeResourceNewDao();
         mPrivilegeDao.deleteAll();
         if (dataLis.size() == 0) return true;

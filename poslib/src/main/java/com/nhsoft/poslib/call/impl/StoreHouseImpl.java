@@ -12,6 +12,7 @@ import java.util.List;
  * 此类用于：
  */
 public class StoreHouseImpl {
+
     private static StoreHouseImpl instance;
     public static StoreHouseImpl getInstance(){
         if (instance==null){
@@ -20,7 +21,7 @@ public class StoreHouseImpl {
         return instance;
     }
 
-    public static boolean saveStoreHouse(final List<StoreHouse> dataLis){
+    public boolean saveStoreHouseList(final List<StoreHouse> dataLis){
         final StoreHouseDao storeHouseDao = DaoManager.getInstance().getDaoSession().getStoreHouseDao();
         storeHouseDao.deleteAll();
         if(dataLis.size() == 0)return true;

@@ -14,7 +14,7 @@ public class AggregationImpl {
         return instance;
     }
 
-    public boolean save(final Aggregation aggregation){
+    public boolean saveAggregation(final Aggregation aggregation){
         final AggregationDao aggregationDao=DaoManager.getInstance().getDaoSession().getAggregationDao();
         aggregationDao.deleteAll();
         return MatterUtils.doMatter(aggregationDao, new Runnable() {

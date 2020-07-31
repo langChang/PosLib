@@ -54,4 +54,11 @@ public class BranchImpl {
 
         return branch;
     }
+
+
+    public Long getBranchTempleteNum(long branchNum){
+        final BranchDao branchDao = DaoManager.getInstance().getDaoSession().getBranchDao();
+        Branch branch = branchDao.load(branchNum);
+        return branch.getManagement_template_num();
+    }
 }

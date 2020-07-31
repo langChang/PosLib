@@ -5,6 +5,7 @@ import com.nhsoft.poslib.entity.ClientPoint;
 import com.nhsoft.poslib.service.greendao.ClientPointDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +54,39 @@ public class ClientPointImpl {
     }
 
 
+    public void updateClinetPointStatus(final List<ClientPoint> clientPoints) {
+        final ClientPointDao clientPointDao = DaoManager.getInstance().getDaoSession().getClientPointDao();
+        if (clientPoints == null) return;
+        MatterUtils.doMatter(clientPointDao, new Runnable() {
+            @Override
+            public void run() {
+                for (ClientPoint clientPoint : clientPoints){
+                    clientPoint.setClient_point_sync(true);
+                    clientPointDao.insertOrReplaceInTx(clientPoint);
+                }
+
+            }
+        });
+    }
+
+    public List<ClientPoint> getClientPointList(String systemBookCode, int branchNum, boolean clientPointSync) {
+        final ClientPointDao clientPointDao = DaoManager.getInstance().getDaoSession().getClientPointDao();
+        List<ClientPoint> list = clientPointDao.queryBuilder().where(
+                ClientPointDao.Properties.System_book_code.eq(systemBookCode),
+//                ClientPointDao.Properties.Shift_table_num.eq(shiftTableNum),
+                ClientPointDao.Properties.Client_point_sync.eq(clientPointSync),
+                ClientPointDao.Properties.Branch_num.eq(branchNum)
+        ).list();
+        if(list == null){
+            list = new ArrayList<>();
+        }
+
+        return list;
+    }
+
+
+
+
     /**
      *
      * @param date
@@ -77,13 +111,19 @@ public class ClientPointImpl {
         });
     }
 
-    public List<ClientPoint> getClientPointList(String systemBookCode, int branchNum, boolean clientPointSync) {
+
+    public void updateClientPointStatus(final List<ClientPoint> clientPoints) {
         final ClientPointDao clientPointDao = DaoManager.getInstance().getDaoSession().getClientPointDao();
-        return clientPointDao.queryBuilder().where(
-                ClientPointDao.Properties.System_book_code.eq(systemBookCode),
-//                ClientPointDao.Properties.Shift_table_num.eq(shiftTableNum),
-                ClientPointDao.Properties.Client_point_sync.eq(clientPointSync),
-                ClientPointDao.Properties.Branch_num.eq(branchNum)
-        ).list();
+        if (clientPoints == null) return;
+        MatterUtils.doMatter(clientPointDao, new Runnable() {
+            @Override
+            public void run() {
+                for (ClientPoint clientPoint : clientPoints){
+                    clientPoint.setClient_point_sync(true);
+                    clientPointDao.insertOrReplaceInTx(clientPoint);
+                }
+            }
+        });
     }
+
 }

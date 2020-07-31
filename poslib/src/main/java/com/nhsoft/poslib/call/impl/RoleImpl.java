@@ -14,7 +14,18 @@ import java.util.List;
  * 此类用于：
  */
 public class RoleImpl {
-    public static boolean saveRole(final List<SystemRole> dataLis){
+
+    private static RoleImpl instance;
+
+    public static RoleImpl getInstance() {
+        if (instance == null) {
+            instance = new RoleImpl();
+        }
+        return instance;
+    }
+
+
+    public  boolean saveSystemRoleList(final List<SystemRole> dataLis){
         final SystemRoleDao roleDao = DaoManager.getInstance().getDaoSession().getSystemRoleDao();
         final RolePrivilegeNewDao rolePrivilegeNewDao=DaoManager.getInstance().getDaoSession().getRolePrivilegeNewDao();
         roleDao.deleteAll();

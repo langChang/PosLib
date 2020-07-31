@@ -25,7 +25,9 @@ import com.nhsoft.poslib.utils.TimeUtil;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -97,6 +99,37 @@ public class PosItemImpl {
                 }
             }
         });
+    }
+
+
+    public String getPosItemLastEditTime() {
+        String item_last_edit_time = null;
+        try {
+            DaoSession session = DaoManager.getInstance().getDaoSession();
+            String strSql = "select *  from pos_item  order by ITEM_LAST_EDIT_TIME desc limit 1";
+            Cursor c = session.getDatabase().rawQuery(strSql, null);
+            if (c.moveToFirst()) {
+                item_last_edit_time = c.getString(c.getColumnIndex("ITEM_LAST_EDIT_TIME"));
+            }
+            c.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        if (TextUtils.isEmpty(item_last_edit_time)) {
+            item_last_edit_time = stampToDate(1);
+        }
+        return item_last_edit_time;
+    }
+
+    /*
+     * 将时间戳转换为时间
+     */
+    private String stampToDate(long time) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(time);
+        res = simpleDateFormat.format(date);
+        return res;
     }
 
 

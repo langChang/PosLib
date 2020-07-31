@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.AmountPay;
 import com.nhsoft.poslib.entity.CardChange;
@@ -23,7 +24,7 @@ import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.order.PosOrderKitDetail;
 import com.nhsoft.poslib.entity.shift.PrintShiftTable;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.service.greendao.CardChangeDao;
@@ -278,6 +279,34 @@ public class OrderImpl {
                 .list();
         mPosOrderDao.detachAll();
         return getPosOrderList;
+    }
+
+    /**
+     * 获取该班次号下所有 posOrder
+     * @param systemBookCode
+     * @param branchNum
+     * @param shiftTableNum
+     * @param shiftTableBizday
+     * @param orderUploadState
+     * @return
+     */
+    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState){
+        PosOrderDao posOrderDao=DaoManager.getInstance().getDaoSession().getPosOrderDao();
+        List<PosOrder> posOrderList = posOrderDao.queryBuilder()
+                .where(
+                        PosOrderDao.Properties.OrderUploadState.eq(orderUploadState),
+                        PosOrderDao.Properties.SystemBookCode.eq(systemBookCode)
+//                        , PosOrderDao.Properties.ShiftTableBizday.eq(shiftTableBizday)
+//                        , PosOrderDao.Properties.ShiftTableNum.eq(shiftTableNum)
+                        , PosOrderDao.Properties.BranchNum.eq(branchNum)
+                        , PosOrderDao.Properties.OrderStateCode.eq(5))
+
+                .orderAsc(PosOrderDao.Properties.OrderNo)
+                .list();
+        if(posOrderList == null){
+            posOrderList = new ArrayList<>();
+        }
+        return posOrderList;
     }
 
 
@@ -915,7 +944,7 @@ public class OrderImpl {
      * @return
      */
     public boolean deleteOrder(final PosOrder posOrder) {
-        PosCarryLogImpl.tryDeleteOrder(posOrder);
+         RetailPosManager.getInstance().tryDeleteOrder(posOrder);
         final PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         final PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
