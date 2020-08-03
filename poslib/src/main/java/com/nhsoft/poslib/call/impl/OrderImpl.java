@@ -283,6 +283,7 @@ public class OrderImpl {
 
     /**
      * 获取该班次号下所有 posOrder
+     *
      * @param systemBookCode
      * @param branchNum
      * @param shiftTableNum
@@ -290,8 +291,8 @@ public class OrderImpl {
      * @param orderUploadState
      * @return
      */
-    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState){
-        PosOrderDao posOrderDao=DaoManager.getInstance().getDaoSession().getPosOrderDao();
+    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState) {
+        PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         List<PosOrder> posOrderList = posOrderDao.queryBuilder()
                 .where(
                         PosOrderDao.Properties.OrderUploadState.eq(orderUploadState),
@@ -303,7 +304,7 @@ public class OrderImpl {
 
                 .orderAsc(PosOrderDao.Properties.OrderNo)
                 .list();
-        if(posOrderList == null){
+        if (posOrderList == null) {
             posOrderList = new ArrayList<>();
         }
         return posOrderList;
@@ -945,7 +946,7 @@ public class OrderImpl {
      * @return
      */
     public boolean deleteOrder(final PosOrder posOrder) {
-         RetailPosManager.getInstance().tryDeleteOrder(posOrder);
+        RetailPosManager.getInstance().tryDeleteOrder(posOrder);
         final PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         final PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
@@ -2418,6 +2419,7 @@ public class OrderImpl {
 
     /**
      * 实时上传成功后将posorder订单上传状态修改掉
+     *
      * @param order_num 订单的编号
      */
     public void changeOrderUploadStatus(String order_num) {
@@ -3656,13 +3658,14 @@ public class OrderImpl {
 
     /**
      * 获取订单的
+     *
      * @param posOrder
      * @param branchName
      * @param systemBookName
      * @param vipCardConfig
      * @return
      */
-    public String getPosOrderToJson(PosOrder posOrder, String branchName, String systemBookName,VipCardConfig vipCardConfig) {
+    public String getPosOrderToJson(PosOrder posOrder, String branchName, String systemBookName, VipCardConfig vipCardConfig) {
         JSONObject totalInfoObject = new JSONObject();
         JSONObject posOrderObject = new JSONObject();
         JSONObject posOrderDetailObject = new JSONObject();
@@ -3694,7 +3697,7 @@ public class OrderImpl {
             posOrderObject.put("order_card_user", posOrder.getOrderCardUser());
 
             posOrderObject.put("order_card_type_desc", posOrder.getOrderCardTypeDesc());
-            posOrderObject.put("order_discount_money",  NumberUtil.getNewFloatString(posOrder.getOrderDiscountMoney()));
+            posOrderObject.put("order_discount_money", NumberUtil.getNewFloatString(posOrder.getOrderDiscountMoney()));
             posOrderObject.put("order_commission", posOrder.getOrderCommission());
 
             posOrderObject.put("order_total_money", NumberUtil.getNewFloatString(posOrder.getOrderTotalMoney()));
@@ -3703,7 +3706,7 @@ public class OrderImpl {
 
             posOrderObject.put("order_balance", posOrder.getOrderBalance());
             posOrderObject.put("order_total_invoice", posOrder.getOrderTotalInvoice());
-            posOrderObject.put("order_change",  NumberUtil.getNewFloatString(posOrder.getOrderChange()));
+            posOrderObject.put("order_change", NumberUtil.getNewFloatString(posOrder.getOrderChange()));
             posOrderObject.put("order_time", posOrder.getOrderTime());
             posOrderObject.put("order_machine", posOrder.getOrderMachine());
 
@@ -3724,7 +3727,7 @@ public class OrderImpl {
 
             posOrderObject.put("order_source", posOrder.getOrderSource());
             posOrderObject.put("order_post_fee", posOrder.getOrderPostFee());
-            posOrderObject.put("order_promotion_discount_money",  NumberUtil.getNewFloatString(posOrder.getOrderPromotionDiscountMoney()));
+            posOrderObject.put("order_promotion_discount_money", NumberUtil.getNewFloatString(posOrder.getOrderPromotionDiscountMoney()));
             posOrderObject.put("order_external_no", posOrder.getOrderExternalNo());
             posOrderObject.put("order_card_change", posOrder.getOrderCardChange());
             posOrderObject.put("order_tax_money", posOrder.getOrderTaxMoney());
@@ -3828,7 +3831,7 @@ public class OrderImpl {
             String wechatCustNum = null;
             String consume_money = null;
             String consume_balance = null;
-            int  remind_type = 1;
+            int remind_type = 1;
 
             if ((!TextUtils.isEmpty(posOrder.getOpenId()) || !TextUtils.isEmpty(posOrder.getOrderPrintedNum())) && posOrder.getVipUserInfo() != null) {
                 VipUserInfo vipUserInfo = posOrder.getVipUserInfo();
@@ -3836,14 +3839,13 @@ public class OrderImpl {
                 wechatOpenId = posOrder.getOpenId();
                 wechatPrintNum = posOrder.getOrderPrintedNum();
                 wechatCustNum = String.valueOf(posOrder.getOrderCardUserNum());
-                consume_money = NumberUtil.getNewFloatString(posOrder.getOrderPaymentMoney()-posOrder.getOrderMgrDiscountMoney());
+                consume_money = NumberUtil.getNewFloatString(posOrder.getOrderPaymentMoney() - posOrder.getOrderMgrDiscountMoney());
                 consume_balance = TextUtils.isEmpty(vipUserInfo.getCard_balance()) ?
                         "0.00" : NumberUtil.getNewFloatString(Float.parseFloat(vipUserInfo.getCard_balance()));
 //                consume_balance = NumberUtil.getNewFloatString(payment.getPaymentCardBalance() - payment.getPaymentMoney());
-                totalInfoObject.put("consume_balance",consume_balance);
-                totalInfoObject.put("consume_money",consume_money);
+                totalInfoObject.put("consume_balance", consume_balance);
+                totalInfoObject.put("consume_money", consume_money);
             }
-
 
 
             List<Payment> paymentList = DataSynchronousImpl.getInstance().getPaymentList
@@ -3873,7 +3875,7 @@ public class OrderImpl {
                 paymentObject.put("payment_consume_count", payment.getPaymentConsumeCount());
                 paymentObject.put("payment_date", payment.getPaymentDate());
                 paymentObject.put("payment_lastest_date", payment.getPaymentLastestDate());
-                if(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(payment.getPaymentPayBy()) && posOrder.getOrderCardUserNum() == payment.getPaymentCustNum()){
+                if (LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(payment.getPaymentPayBy()) && posOrder.getOrderCardUserNum() == payment.getPaymentCustNum()) {
                     remind_type = 0;
                 }
 
@@ -3922,18 +3924,19 @@ public class OrderImpl {
 
     /**
      * 获取一组订单的JSON
-     * @param posOrderList  订单JSON
+     *
+     * @param list 订单JSON
      * @return 返回一组订单的JSON
      */
-    public String getPosOrderListToJson(List<PosOrder> posOrderList) {
+    public String getPosOrderListToJson(List<PosOrder> list) {
         JSONObject posOrderObject = new JSONObject();
         JSONObject posOrderDetailObject = new JSONObject();
         JSONObject posOrderKitObject = new JSONObject();
         JSONObject paymentObject = new JSONObject();
-        JSONArray posOrderListArray = new JSONArray();
+        JSONArray posOrderList = new JSONArray();
         JSONArray posOrderDetailList = new JSONArray();
         JSONArray paymentJsonList = new JSONArray();
-        for (PosOrder posOrder : posOrderList) {
+        for (PosOrder posOrder : list) {
             posOrderObject = new JSONObject();
             posOrderDetailList = new JSONArray();
             paymentJsonList = new JSONArray();
@@ -3964,7 +3967,7 @@ public class OrderImpl {
                 posOrderObject.put("order_payment_money", NumberUtil.getNewFloatString(posOrder.getOrderPaymentMoney()));
                 posOrderObject.put("order_round", NumberUtil.getNewFloatString(posOrder.getOrderRound()));
 
-                posOrderObject.put("order_balance",  NumberUtil.getNewFloatString(posOrder.getOrderBalance()));
+                posOrderObject.put("order_balance", NumberUtil.getNewFloatString(posOrder.getOrderBalance()));
                 posOrderObject.put("order_total_invoice", posOrder.getOrderTotalInvoice());
                 posOrderObject.put("order_change", posOrder.getOrderChange());
                 posOrderObject.put("order_time", posOrder.getOrderTime());
@@ -3988,8 +3991,8 @@ public class OrderImpl {
 
                 posOrderObject.put("order_source", posOrder.getOrderSource());
                 posOrderObject.put("order_post_fee", posOrder.getOrderPostFee());
-                posOrderObject.put("order_promotion_discount_money",  NumberUtil.getNewFloatString(posOrder.getOrderPromotionDiscountMoney()));
-                posOrderObject.put("order_card_change",  NumberUtil.getNewFloatString(posOrder.getOrderCardChange()));
+                posOrderObject.put("order_promotion_discount_money", NumberUtil.getNewFloatString(posOrder.getOrderPromotionDiscountMoney()));
+                posOrderObject.put("order_card_change", NumberUtil.getNewFloatString(posOrder.getOrderCardChange()));
                 posOrderObject.put("order_tax_money", posOrder.getOrderTaxMoney());
                 posOrderObject.put("order_online_discount", posOrder.getOrderOnlineDiscount());
                 posOrderObject.put("order_detail_item_count", posOrder.getOrderDetailItemCount());
@@ -4025,7 +4028,7 @@ public class OrderImpl {
                     posOrderDetailObject.put("order_detail_discount", posOrderDetail.getOrderDetailDiscount());
 
                     posOrderDetailObject.put("order_detail_money", NumberUtil.getNewFloatString(posOrderDetail.getOrderDetailMoney()));
-                    posOrderDetailObject.put("order_detail_payment_money",NumberUtil.getNewFloatString( posOrderDetail.getOrderDetailPaymentMoney()));
+                    posOrderDetailObject.put("order_detail_payment_money", NumberUtil.getNewFloatString(posOrderDetail.getOrderDetailPaymentMoney()));
                     posOrderDetailObject.put("order_detail_state_code", posOrderDetail.getOrderDetailStateCode());
                     posOrderDetailObject.put("order_detail_state_name", posOrderDetail.getOrderDetailStateName());
                     posOrderDetailObject.put("order_detail_commission", posOrderDetail.getOrderDetailCommission());
@@ -4126,46 +4129,47 @@ public class OrderImpl {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            posOrderListArray.put(posOrderObject);
+            posOrderList.put(posOrderObject);
         }
-        return posOrderListArray.toString();
+        return posOrderList.toString();
     }
 
 
-    public boolean checkPosOrder(PosOrder posOrder){
-        if(posOrder == null || posOrder.getPosOrderDetails()  == null || posOrder.getPosOrderDetails().size() == 0){
+    public boolean checkPosOrder(PosOrder posOrder) {
+        if (posOrder == null || posOrder.getPosOrderDetails() == null || posOrder.getPosOrderDetails().size() == 0) {
             return false;
         }
         List<PosOrderDetail> posOrderDetails = posOrder.getPosOrderDetails();
         float orderDiscountMoney = 0;
         float oderTotalMoney = 0;
         int policycount = 0;
-        for (PosOrderDetail posOrderDetail : posOrderDetails){
-            if(posOrderDetail.getOrderDetailType().equals(LibConfig.C_ORDER_DETAIL_TYPE_ITEM)){
+        for (PosOrderDetail posOrderDetail : posOrderDetails) {
+            if (posOrderDetail.getOrderDetailType().equals(LibConfig.C_ORDER_DETAIL_TYPE_ITEM)) {
                 policycount = 0;
-                if(posOrderDetail.getOrderDetailPolicyPromotionFlag())policycount ++;
-                if(posOrderDetail.getOrderDetailPolicyPresentFlag())policycount ++;
-                if(posOrderDetail.getOrderDetailPolicyPromotionQuantityFlag())policycount ++;
-                if(posOrderDetail.getOrderDetailPolicyDiscountFlag())policycount ++;
-                if(policycount > 1)return false;
+                if (posOrderDetail.getOrderDetailPolicyPromotionFlag()) policycount++;
+                if (posOrderDetail.getOrderDetailPolicyPresentFlag()) policycount++;
+                if (posOrderDetail.getOrderDetailPolicyPromotionQuantityFlag()) policycount++;
+                if (posOrderDetail.getOrderDetailPolicyDiscountFlag()) policycount++;
+                if (policycount > 1) return false;
 
-                if(posOrderDetail.getOrderDetailPaymentMoney() != posOrderDetail.getOrderDetailMoney() + posOrderDetail.getOrderDetailAppendMoney()){
+                if (posOrderDetail.getOrderDetailPaymentMoney() != posOrderDetail.getOrderDetailMoney() + posOrderDetail.getOrderDetailAppendMoney()) {
                     return false;
                 }
-                if(LibConfig.C_ORDER_DETAIL_TYPE_ITEM.equals(posOrderDetail.getOrderDetailType())){
-                    if(posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_RETURN)){
+                if (LibConfig.C_ORDER_DETAIL_TYPE_ITEM.equals(posOrderDetail.getOrderDetailType())) {
+                    if (posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_RETURN)) {
                         orderDiscountMoney -= posOrderDetail.getOrderDetailDiscount();
                         oderTotalMoney -= posOrderDetail.getOrderDetailPaymentMoney();
-                    }else if(posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_SALE)){
+                    } else if (posOrderDetail.getOrderDetailStateCode().equals(LibConfig.S_ORDER_DETAIL_SALE)) {
                         orderDiscountMoney += posOrderDetail.getOrderDetailDiscount();
                         oderTotalMoney += posOrderDetail.getOrderDetailPaymentMoney();
                     }
                 }
             }
         }
-        if(orderDiscountMoney != posOrder.getOrderDiscountMoney())return false;
+        if (orderDiscountMoney != posOrder.getOrderDiscountMoney()) return false;
 //
-        if(oderTotalMoney != posOrder.getOrderPaymentMoney() + posOrder.getOrderMgrDiscountMoney() + posOrder.getOrderRound() + posOrder.getQuickZeroMoney() + posOrder.getOrderCouponTotalMoney())return false;
+        if (oderTotalMoney != posOrder.getOrderPaymentMoney() + posOrder.getOrderMgrDiscountMoney() + posOrder.getOrderRound() + posOrder.getQuickZeroMoney() + posOrder.getOrderCouponTotalMoney())
+            return false;
 //
 //        if(posOrder.getOrderPaymentMoney() != NumberUtil.roundMoney(oderTotalMoney - posOrder.getOrderCouponTotalMoney(),LibConfig.saleParamsBean.getRoundType(),LibConfig.saleParamsBean.getRoundTo()))return false;
 //
