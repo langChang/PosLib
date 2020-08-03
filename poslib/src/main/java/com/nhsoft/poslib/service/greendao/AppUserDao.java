@@ -38,6 +38,7 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
         public final static Property User_max_discount_rate = new Property(11, float.class, "user_max_discount_rate", false, "USER_MAX_DISCOUNT_RATE");
         public final static Property User_max_order_number = new Property(12, Integer.class, "user_max_order_number", false, "USER_MAX_ORDER_NUMBER");
         public final static Property Merchant_num = new Property(13, Integer.class, "merchant_num", false, "MERCHANT_NUM");
+        public final static Property Branch_num = new Property(14, Integer.class, "branch_num", false, "BRANCH_NUM");
     }
 
     private DaoSession daoSession;
@@ -69,7 +70,8 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
                 "\"USER_MAX_DISCOUNT\" REAL NOT NULL ," + // 10: user_max_discount
                 "\"USER_MAX_DISCOUNT_RATE\" REAL NOT NULL ," + // 11: user_max_discount_rate
                 "\"USER_MAX_ORDER_NUMBER\" INTEGER," + // 12: user_max_order_number
-                "\"MERCHANT_NUM\" INTEGER);"); // 13: merchant_num
+                "\"MERCHANT_NUM\" INTEGER," + // 13: merchant_num
+                "\"BRANCH_NUM\" INTEGER);"); // 14: branch_num
     }
 
     /** Drops the underlying database table. */
@@ -135,6 +137,11 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
         if (merchant_num != null) {
             stmt.bindLong(14, merchant_num);
         }
+ 
+        Integer branch_num = entity.getBranch_num();
+        if (branch_num != null) {
+            stmt.bindLong(15, branch_num);
+        }
     }
 
     @Override
@@ -194,6 +201,11 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
         if (merchant_num != null) {
             stmt.bindLong(14, merchant_num);
         }
+ 
+        Integer branch_num = entity.getBranch_num();
+        if (branch_num != null) {
+            stmt.bindLong(15, branch_num);
+        }
     }
 
     @Override
@@ -223,7 +235,8 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
             cursor.getFloat(offset + 10), // user_max_discount
             cursor.getFloat(offset + 11), // user_max_discount_rate
             cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // user_max_order_number
-            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13) // merchant_num
+            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // merchant_num
+            cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14) // branch_num
         );
         return entity;
     }
@@ -244,6 +257,7 @@ public class AppUserDao extends AbstractDao<AppUser, Long> {
         entity.setUser_max_discount_rate(cursor.getFloat(offset + 11));
         entity.setUser_max_order_number(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
         entity.setMerchant_num(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
+        entity.setBranch_num(cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14));
      }
     
     @Override

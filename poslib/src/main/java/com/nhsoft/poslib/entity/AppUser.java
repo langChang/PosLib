@@ -50,6 +50,7 @@ public class AppUser {
     private float user_max_discount_rate;
     private Integer user_max_order_number;//挂单单数
     private Integer merchant_num;//农贸 商户号
+    private Integer branch_num;
 
     public Integer getMerchant_num() {
         return merchant_num;
@@ -73,11 +74,11 @@ public class AppUser {
     @Generated(hash = 1682778229)
     private transient AppUserDao myDao;
 
-    @Generated(hash = 452040870)
+    @Generated(hash = 993000177)
     public AppUser(Long app_user_num, String system_book_code, String app_user_code, String app_user_name,
             String app_user_password, int app_user_state_code, String app_user_phone, String app_user_email,
             String app_user_pw_key, boolean touch_pos_user, float user_max_discount, float user_max_discount_rate,
-            Integer user_max_order_number, Integer merchant_num) {
+            Integer user_max_order_number, Integer merchant_num, Integer branch_num) {
         this.app_user_num = app_user_num;
         this.system_book_code = system_book_code;
         this.app_user_code = app_user_code;
@@ -92,6 +93,7 @@ public class AppUser {
         this.user_max_discount_rate = user_max_discount_rate;
         this.user_max_order_number = user_max_order_number;
         this.merchant_num = merchant_num;
+        this.branch_num = branch_num;
     }
 
     @Generated(hash = 70494256)
@@ -282,6 +284,14 @@ public class AppUser {
 
     public void setUser_max_order_number(Integer user_max_order_number) {
         this.user_max_order_number = user_max_order_number;
+    }
+
+    public Integer getBranch_num() {
+        return this.branch_num;
+    }
+
+    public void setBranch_num(Integer branch_num) {
+        this.branch_num = branch_num;
     }
 
 
