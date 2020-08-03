@@ -59,7 +59,7 @@ public class AccountBankImpl {
      * 获取现金银行
      * @return
      */
-    public AccountBank getBean(){
+    public AccountBank getAccountBankNum(){
         final AccountBankDao mAccountBankDao = DaoManager.getInstance().getDaoSession().getAccountBankDao();
         List<AccountBank> list = mAccountBankDao.queryBuilder().where(
                 AccountBankDao.Properties.Account_bank_cash_flag.eq(true),

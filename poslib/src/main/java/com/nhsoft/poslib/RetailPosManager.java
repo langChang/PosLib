@@ -1080,6 +1080,9 @@ public class RetailPosManager {
         return AccountBankImpl.getInstance().saveAccountBankList(accountBankList);
     }
 
+    public AccountBank getAccountBank(){
+        return AccountBankImpl.getInstance().getAccountBankNum();
+    }
     /*********************************AddVipDialogImpl*********************************************/
 
     /*********************************AdjustPriceImpl*********************************************/
@@ -1407,7 +1410,7 @@ public class RetailPosManager {
 
 
     /**
-     * 创建一个订单号
+     * 创建一个销售订单号
      * @param book_code 帐套号
      * @param branch_num 门店编号
      * @param shift_table_bizday 营业日
@@ -1419,6 +1422,19 @@ public class RetailPosManager {
         return KeyGeneratorBizdayImpl.getInstance().createPosOrderKG(book_code, branch_num, shift_table_bizday, key_item,pos_machine_seq);
     }
 
+
+    /**
+     * 创建一个储值订单号
+     * @param book_code 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 营业日
+     * @param key_item 订单类型
+     * @param pos_machine_seq 终端的序列号
+     * @return
+     */
+    public KeyGeneratorBizday createDepositKG(String book_code, int branch_num, String shift_table_bizday, String keyItem, int pos_machine_seq) {
+        return KeyGeneratorBizdayImpl.getInstance().createDepositKG(book_code, branch_num, shift_table_bizday, keyItem, pos_machine_seq);
+    }
     /**
      * 保存订单的流水号
      * @param keyGeneratorBizday

@@ -972,7 +972,7 @@ public class PayStyleImpl {
     public String getPayStyleBankNum(String payby){
         String account_bank_num="";
         if (payby.equals("现金")){
-            account_bank_num= AccountBankImpl.getInstance().getBean().getAccount_bank_num()+"";
+            account_bank_num= RetailPosManager.getInstance().getAccountBank().getAccount_bank_num()+"";
         }else {
             PayStyleToCashBank beanByName = PayStyleToCashBankImpl.getInstance().getBeanByName(payby);
             if (beanByName==null){
