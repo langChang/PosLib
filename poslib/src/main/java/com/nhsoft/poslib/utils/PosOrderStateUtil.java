@@ -46,7 +46,7 @@ public class PosOrderStateUtil {
     }
 
     /**
-     * 将单据置为异常
+     * 将单据置为正常
      * @param posOrder
      */
     public static void setPosOrderByComplete(PosOrder posOrder){

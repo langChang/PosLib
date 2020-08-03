@@ -372,6 +372,7 @@ public class OrderImpl {
         PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         PosOrder load = posOrderDao.load(posOrder.getOrderNo());
         if (load != null) {
+            PosOrderStateUtil.setPosOrderByComplete(posOrder);
             PosOrderStateUtil.setPosOrderByComplete(load);
             posOrderDao.update(load);
         }
@@ -4127,7 +4128,7 @@ public class OrderImpl {
             }
             posOrderListArray.put(posOrderObject);
         }
-        return posOrderList.toString();
+        return posOrderListArray.toString();
     }
 
 
