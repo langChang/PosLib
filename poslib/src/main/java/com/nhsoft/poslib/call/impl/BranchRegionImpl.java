@@ -12,14 +12,25 @@ import java.util.List;
  * 此类用于：
  */
 public class BranchRegionImpl {
-    public static boolean saveBranchRegion(final List<BranchRegion> dataLis) {
+
+    private static BranchRegionImpl instance;
+    public static BranchRegionImpl getInstance() {
+        if (instance == null) {
+            instance = new BranchRegionImpl();
+        }
+        return instance;
+    }
+
+
+
+    public boolean saveBranchRegionList(final List<BranchRegion> branchRegionList) {
         final BranchRegionDao mBranchRegionDao = DaoManager.getInstance().getDaoSession().getBranchRegionDao();
         mBranchRegionDao.deleteAll();
-        if (dataLis.size() == 0) return true;
+        if (branchRegionList.size() == 0) return true;
         boolean isSuccess = MatterUtils.doMatter(mBranchRegionDao, new Runnable() {
             @Override
             public void run() {
-                mBranchRegionDao.insertOrReplaceInTx(dataLis);
+                mBranchRegionDao.insertOrReplaceInTx(branchRegionList);
             }
         });
 

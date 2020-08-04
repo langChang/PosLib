@@ -21,31 +21,41 @@ import java.util.List;
  */
 public class ManagementTemplateImpl {
 
-    public static boolean saveManagementTemplate(final ManagementTemplate result) {
+    private static ManagementTemplateImpl instance;
+
+    public static ManagementTemplateImpl getInstance() {
+        if (instance == null) {
+            instance = new ManagementTemplateImpl();
+        }
+        return instance;
+
+
+    }
+
+    public boolean saveManagementTemplate(final ManagementTemplate result) {
 
         final ManagementTemplateDao managementTemplateDao = DaoManager.getInstance().getDaoSession().getManagementTemplateDao();
         final ManagementTemplateDetailDao managementTemplateDetailDao = DaoManager.getInstance().getDaoSession().getManagementTemplateDetailDao();
         managementTemplateDetailDao.deleteAll();
         managementTemplateDao.deleteAll();
-        if (result == null)  return true;
+        if (result == null) return true;
         return MatterUtils.doMatter(managementTemplateDao, new Runnable() {
             @Override
             public void run() {
 
-                    managementTemplateDao.insertOrReplaceInTx(result);
-                    if( result.getManagement_template_details() != null){
-                        List<ManagementTemplateDetail> management_template_details = result.getManagement_template_details();
-                        if (management_template_details != null && management_template_details.size() > 0) {
-                            managementTemplateDetailDao.insertOrReplaceInTx(management_template_details);
-                        }
+                managementTemplateDao.insertOrReplaceInTx(result);
+                if (result.getManagement_template_details() != null) {
+                    List<ManagementTemplateDetail> management_template_details = result.getManagement_template_details();
+                    if (management_template_details != null && management_template_details.size() > 0) {
+                        managementTemplateDetailDao.insertOrReplaceInTx(management_template_details);
                     }
+                }
             }
         });
     }
 
 
-
-    public static String getMangementTMaxDate() {
+    public  String geTemplateLastEditTime() {
         String item_last_edit_time = null;
         try {
             DaoSession session = DaoManager.getInstance().getDaoSession();
@@ -64,10 +74,10 @@ public class ManagementTemplateImpl {
         return item_last_edit_time;
     }
 
-    public static List<ManagementTemplateDetail> getTemplateDetails(Long management_template_num){
-        if(management_template_num == null || management_template_num.longValue() == 0){
+    public static List<ManagementTemplateDetail> getTemplateDetails(Long management_template_num) {
+        if (management_template_num == null || management_template_num.longValue() == 0) {
             return new ArrayList<>();
-        }else {
+        } else {
             ManagementTemplateDetailDao managementTemplateDetailDao = DaoManager.getInstance().getDaoSession().getManagementTemplateDetailDao();
             return managementTemplateDetailDao.queryBuilder().where(ManagementTemplateDetailDao.Properties.Management_template_num.eq(management_template_num)).build().list();
         }

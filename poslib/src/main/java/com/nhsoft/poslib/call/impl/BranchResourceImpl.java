@@ -23,7 +23,7 @@ public class BranchResourceImpl {
      * @param branchResourceList
      * @return
      */
-    public boolean save(final List<BranchResource> branchResourceList){
+    public boolean saveBranchResourceList(final List<BranchResource> branchResourceList){
         final BranchResourceDao resourceDao=DaoManager.getInstance().getDaoSession().getBranchResourceDao();
         resourceDao.deleteAll();
         return  MatterUtils.doMatter(resourceDao, new Runnable() {

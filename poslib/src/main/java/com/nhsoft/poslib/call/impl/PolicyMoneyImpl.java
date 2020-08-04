@@ -21,7 +21,7 @@ public class PolicyMoneyImpl {
         return instance;
     }
 
-    public boolean saveBean(final List<PolicyMoney> policyMoneyList){
+    public boolean savePolicyMoneyList(final List<PolicyMoney> policyMoneyList){
         final PolicyMoneyDao policyMoneyDao = DaoManager.getInstance().getDaoSession().getPolicyMoneyDao();
         policyMoneyDao.deleteAll();
         final PolicyMoneyDetailDao policyMoneyDetailDao =DaoManager.getInstance().getDaoSession().getPolicyMoneyDetailDao();

@@ -49,7 +49,7 @@ public class GlobalDataImpl implements GlobalDataCallback {
         //会员卡参数
         LibConfig.sVipCardParams = VipSendCardImpl.getInstance().getVipCardTypeBean(LibConfig.activeLoginBean.getSystem_book_code());//获取消费卡类型
         //积分政策
-        LibConfig.allPointPolicyList = PointPolicyImpl.loadAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
+        LibConfig.allPointPolicyList = RetailPosManager.getInstance().getAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
         //营销活动
         LibConfig.allMarketAction = MarketActionImpl.getAllMarketAction(LibConfig.activeLoginBean.getBranch_num());
         //积分规则
@@ -80,7 +80,7 @@ public class GlobalDataImpl implements GlobalDataCallback {
             LibConfig.allPolicyQuantityList = PolicyQuantityImpl.getNewestPolciyQuantity();
             LibConfig.allPolicyMoneyList = PolicyMoneyImpl.getNewestPolciyMoney();
             LibConfig.allPolicyPresentList = PolicyPresentImpl.getNewestPolciyPresent();
-            LibConfig.allPointPolicyList = PointPolicyImpl.loadAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
+            LibConfig.allPointPolicyList = RetailPosManager.getInstance().getAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
 
         LibConfig.activeBranch = BranchImpl.getInstance().getBranch(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
         BranchGroupImpl.initMyBranchGroup(LibConfig.activeLoginBean.getBranch_num());

@@ -2,9 +2,9 @@ package com.nhsoft.poslib.utils;
 
 import android.text.TextUtils;
 
+import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.call.impl.PosCarryLogImpl;
+import com.nhsoft.poslib.libconfig.LibConfig;
 
 /**
  * Created by Iverson on 2019/3/5 4:25 PM
@@ -63,7 +63,7 @@ public class TagUtils {
             if(orderDetailMemo.contains(LibConfig.GOODS_CHANGE_TAG))return;
             posOrderDetail.setOrderDetailMemo(new StringBuilder().append(LibConfig.GOODS_CHANGE_TAG).toString());
         }
-        PosCarryLogImpl.tryChangeGoodsPrice(posOrderDetail);
+         RetailPosManager.getInstance().tryChangeGoodsPrice(posOrderDetail);
     }
 
 

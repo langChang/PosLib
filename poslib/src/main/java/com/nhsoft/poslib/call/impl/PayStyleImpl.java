@@ -844,7 +844,7 @@ public class PayStyleImpl {
      * 5、储值金额范围
      * 赠金 = 赠率>=1?赠率：赠率*payMoney
      */
-    public double StrangeGivingMoney(String systemBookCode, String payMoney, String branchNum, String cardType, String payType) {
+    public double strangeGivingMoney(String systemBookCode, String payMoney, String branchNum, String cardType, String payType) {
         double money = 0.00;
         if ("在线支付".equals(payType)) {
             payType = "第三方在线支付";
@@ -972,7 +972,7 @@ public class PayStyleImpl {
     public String getPayStyleBankNum(String payby){
         String account_bank_num="";
         if (payby.equals("现金")){
-            account_bank_num= AccountBankImpl.getInstance().getBean().getAccount_bank_num()+"";
+            account_bank_num= RetailPosManager.getInstance().getAccountBank().getAccount_bank_num()+"";
         }else {
             PayStyleToCashBank beanByName = PayStyleToCashBankImpl.getInstance().getBeanByName(payby);
             if (beanByName==null){
@@ -981,6 +981,78 @@ public class PayStyleImpl {
             }
         }
         return account_bank_num;//现金银行编号
+    }
+
+
+
+    /**
+     * 1、支持卡存款并且支持前台销售，
+     * 2、如果 条件一中包括“现金”放在第一位,如果不包含，聚合支付放在第一位
+     * 3、支付宝，微信支付，云闪付，移动和包支付，翼支付 合并为聚合支付
+     *
+     * @param list
+     * @return
+     */
+    public List<String> getPayTypeNameList(List<PosScaleStyleTypeBean> list) {
+        List<String> typeBeanList = new ArrayList<>();
+
+        PosScaleStyleTypeBean posScaleStyleTypeBean = new PosScaleStyleTypeBean();
+        PosScaleStyleTypeBean posScaleStyleTypeBean_1 = new PosScaleStyleTypeBean();
+        posScaleStyleTypeBean_1.setPaymentTypeName("在线支付");
+
+        boolean contoinCash = false;
+        for (PosScaleStyleTypeBean mPosScaleStyleTypeBean : list) {
+//            EvtLog.e("PayStyleService:=" + mPosScaleStyleTypeBean.getPaymentTypeName() + "  type:=" + mPosScaleStyleTypeBean.getPosCardPaymentType());
+            if (mPosScaleStyleTypeBean.getPosCardPaymentType().equals("1") && mPosScaleStyleTypeBean.getPosOrderPaymentType().equals("1")) {// 支持卡存款 &&  支持前台销售
+
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("支付宝")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("微信支付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("云闪付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("移动和包支付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("翼支付")) {
+                    continue;
+                }
+
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("储值卡")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("签单")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("零钱包")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("积分消费")) {
+                    continue;
+                }
+
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("现金")) {
+                    posScaleStyleTypeBean = mPosScaleStyleTypeBean;
+                    contoinCash = true;
+                    continue;
+                }
+
+                typeBeanList.add(mPosScaleStyleTypeBean.getPaymentTypeName());
+            }
+
+
+        }
+        if (contoinCash) {
+            typeBeanList.add(0, posScaleStyleTypeBean.getPaymentTypeName());
+            typeBeanList.add(1, posScaleStyleTypeBean_1.getPaymentTypeName());
+        } else {
+            typeBeanList.add(0, posScaleStyleTypeBean_1.getPaymentTypeName());
+        }
+
+        return typeBeanList;
     }
 
 

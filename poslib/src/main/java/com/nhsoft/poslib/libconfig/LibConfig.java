@@ -39,10 +39,22 @@ import java.util.Map;
  */
 public class LibConfig {
 
-
     public static String BOOK_SCOPE_ID = "";
     public static String SYSTEM_BOOK;
-    public static String BRANCH_NUM;
+    public static int BRANCH_NUM;
+
+
+    public static String BRANCH_NAME;
+    public static String SYSTEM_BOOK_NAME;
+    public static int SHIFT_TABLE_NUM = 0;
+    public static String SHIFT_OPERATOR = "";
+    public static String SHIFT_TABLE_BIZDAY = "";
+    public static boolean POLICY_PROMOTION_DISABLE_PAY_DISCOUNT = false;
+    public static int POS_MACHINE_SEQUENCE = 0;
+
+
+
+
     public static       String  activeLocalMac;//当前pos机ID
     public static       String  activeLocalMacEth0;//当前pos机 有线网卡的MacID
     /*****************打印小票************/

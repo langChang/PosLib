@@ -24,7 +24,7 @@ public class PointOrderImpl {
         return instance;
     }
 
-    public boolean insertPointOrder(final List<PointOrder> pointOrderList){
+    public boolean savePointOrderList(final List<PointOrder> pointOrderList){
         final PointOrderDao pointOrderDao= DaoManager.getInstance().getDaoSession().getPointOrderDao();
         final PointOrderDetialDao pointOrderDetialDao=DaoManager.getInstance().getDaoSession().getPointOrderDetialDao();
         pointOrderDao.deleteAll();

@@ -16,7 +16,15 @@ import java.util.List;
  */
 public class PointPolicyImpl {
 
-    public static boolean savePointPolicy(final List<PointPolicy> result) {
+    private static PointPolicyImpl instance;
+    public static PointPolicyImpl getInstance(){
+        if (instance==null){
+            instance=new PointPolicyImpl();
+        }
+        return instance;
+    }
+
+    public boolean savePointPolicyList(final List<PointPolicy> result) {
         final PointPolicyDao pointPolicyDao = DaoManager.getInstance().getDaoSession().getPointPolicyDao();
         final PointPolicyDetailDao pointPolicyDetailDao = DaoManager.getInstance().getDaoSession().getPointPolicyDetailDao();
 
@@ -41,7 +49,7 @@ public class PointPolicyImpl {
     }
 
 
-    public static List<PointPolicy> loadAllPointPolicy(String systemBookCode) {
+    public List<PointPolicy> loadAllPointPolicy(String systemBookCode) {
         List<PointPolicy> pointPolicies = new ArrayList<>();
         final PointPolicyDao pointPolicyDao = DaoManager.getInstance().getDaoSession().getPointPolicyDao();
         final PointPolicyDetailDao pointPolicyDetailDao = DaoManager.getInstance().getDaoSession().getPointPolicyDetailDao();

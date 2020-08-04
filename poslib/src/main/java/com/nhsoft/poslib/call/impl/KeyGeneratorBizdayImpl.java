@@ -319,7 +319,6 @@ public class KeyGeneratorBizdayImpl {
 
     /**
      * 数据库没有的时候设置最大posorder值
-     *
      * @param systemCode
      * @param branchNum
      * @param shiftTableBizday
@@ -516,7 +515,7 @@ public class KeyGeneratorBizdayImpl {
         return String.valueOf(year).substring(2, 4) + daytext;
     }
 
-    public String getCurrentDate() {
+    public String getTodayShiftBizday() {
         Date date = new Date();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());

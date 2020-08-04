@@ -4,6 +4,10 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.nhsoft.poslib.RetailPosManager;
+import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
+import com.nhsoft.poslib.call.impl.OrderImpl;
+import com.nhsoft.poslib.call.impl.PayStyleImpl;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.CardTypeParam;
 import com.nhsoft.poslib.entity.KeyGeneratorBizday;
@@ -17,16 +21,11 @@ import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.order.PosOrderKitDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.PosOrderState;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.RedisBean;
-import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
-import com.nhsoft.poslib.call.impl.OrderImpl;
-import com.nhsoft.poslib.call.impl.PayStyleImpl;
-import com.nhsoft.poslib.call.impl.PosCarryLogImpl;
-import com.nhsoft.poslib.call.impl.PosItemImpl;
 import com.nhsoft.poslib.service.greendao.PosItemDao;
 
 import java.util.ArrayList;
@@ -214,14 +213,14 @@ public class PosOrderOperationUtil {
                     }
                 }
                 if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && LibConfig.S_ORDER_DETAIL_PRESENT_NAME.equals(posOrderDetail.getOrderDetailStateName())) {
-                    PosCarryLogImpl.tryPresentGoods(posOrderDetail);
+                     RetailPosManager.getInstance().tryPresentGoods(posOrderDetail);
                 }
 
 
             }
 
             if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && posOrder.getOrderMgrDiscountMoney() != 0) {
-                PosCarryLogImpl.tryOrderMgr(posOrder);
+                RetailPosManager.getInstance().tryOrderMgr(posOrder);
             }
 
             posOrder.setOrderPromotionDiscountMoney(policyPromotionMoney);
@@ -282,7 +281,7 @@ public class PosOrderOperationUtil {
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderImpl.getInstance().doPayment(posOrder);
+                boolean b = RetailPosManager.getInstance().savePosOrder(posOrder);
 
             }
             return true;
@@ -450,14 +449,13 @@ public class PosOrderOperationUtil {
                     }
                 }
                 if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && LibConfig.S_ORDER_DETAIL_PRESENT_NAME.equals(posOrderDetail.getOrderDetailStateName())) {
-                    PosCarryLogImpl.tryPresentGoods(posOrderDetail);
+                     RetailPosManager.getInstance().tryPresentGoods(posOrderDetail);
                 }
-
 
             }
 
             if ((LibConfig.S_ORDER_COMPLETE == orderState || LibConfig.S_ORDER_CANCEL == orderState) && posOrder.getOrderMgrDiscountMoney() != 0) {
-                PosCarryLogImpl.tryOrderMgr(posOrder);
+                 RetailPosManager.getInstance().tryOrderMgr(posOrder);
             }
 
             posOrder.setOrderPromotionDiscountMoney(policyPromotionMoney);
@@ -518,7 +516,7 @@ public class PosOrderOperationUtil {
 
             if (orderState == LibConfig.S_ORDER_CANCEL) {
                 PosOrderStateUtil.setPosOrderByCancel(posOrder);
-                boolean b = OrderImpl.getInstance().doPayment(posOrder);
+                boolean b = RetailPosManager.getInstance().savePosOrder(posOrder);
 
             }
             return true;

@@ -1,6 +1,6 @@
 package com.nhsoft.poslib.call.impl;
 
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.AppUser;
 import com.nhsoft.poslib.entity.PrivilegeResourceNew;
@@ -30,7 +30,7 @@ public class PrivilegeResourceNewImpl {
     }
 
 
-    public static boolean savePrivilege(final List<PrivilegeResourceNew> dataLis) {
+    public boolean savePrivilegeList(final List<PrivilegeResourceNew> dataLis) {
         final PrivilegeResourceNewDao mPrivilegeDao = DaoManager.getInstance().getDaoSession().getPrivilegeResourceNewDao();
         mPrivilegeDao.deleteAll();
         if (dataLis.size() == 0) return true;
@@ -65,7 +65,7 @@ public class PrivilegeResourceNewImpl {
         }
         List<RolePrivilegeNew> rolePrivilegeNews = systemRole.getRole_privilege_news();
         for (RolePrivilegeNew rolePrivilegeNew : rolePrivilegeNews) {
-            if (rolePrivilegeNew.getPrivilege_resource_new()!=null&&rolePrivilegeNew.getPrivilege_resource_new().getPrivilege_resource_name().equals(privilageName)) {
+            if (rolePrivilegeNew.getPrivilege_resource_new() != null && rolePrivilegeNew.getPrivilege_resource_new().getPrivilege_resource_name().equals(privilageName)) {
                 if (operatorName.equals(LibConfig.ACTION_SELECT)) {
                     return rolePrivilegeNew.getRole_query();
                 } else if (operatorName.equals(LibConfig.ACTION_EDIT)) {

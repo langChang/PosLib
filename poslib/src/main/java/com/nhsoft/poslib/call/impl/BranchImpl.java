@@ -20,7 +20,7 @@ public class BranchImpl {
         return instance;
     }
 
-    public static boolean saveBranch(final List<Branch> dataLis){
+    public boolean saveBranchList(final List<Branch> dataLis){
         final BranchDao branchItemDao = DaoManager.getInstance().getDaoSession().getBranchDao();
         if(dataLis.size() == 0)return true;
         branchItemDao.deleteAll();
@@ -53,5 +53,12 @@ public class BranchImpl {
                 ).unique();
 
         return branch;
+    }
+
+
+    public Long getBranchTempleteNum(long branchNum){
+        final BranchDao branchDao = DaoManager.getInstance().getDaoSession().getBranchDao();
+        Branch branch = branchDao.load(branchNum);
+        return branch.getManagement_template_num();
     }
 }

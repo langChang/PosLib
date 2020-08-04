@@ -8,6 +8,7 @@ import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.BookResource;
 import com.nhsoft.poslib.entity.OtherPayment;
 import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.model.VipCardTypeBean;
 import com.nhsoft.poslib.service.greendao.BookResourceDao;
 import com.nhsoft.poslib.utils.MatterUtils;
@@ -35,7 +36,7 @@ public class BookResourceImpl {
         return instance;
     }
 
-    public static boolean saveBookResource(final List<BookResource> dataLis) {
+    public boolean saveBookResourceList(final List<BookResource> dataLis) {
         final BookResourceDao mBookResourceDao = DaoManager.getInstance().getDaoSession().getBookResourceDao();
         mBookResourceDao.deleteAll();
         if (dataLis.size() == 0) return true;
@@ -254,5 +255,29 @@ public class BookResourceImpl {
 
         }
         return false;
+    }
+
+
+    /**
+     * 获取储值卡全局配置
+     * @param book_code
+     * @return
+     */
+    public VipCardConfig getVipCardConfig(String book_code){
+        VipCardConfig vipCardConfigBean = null;
+        BookResource bookPosCardType = BookResourceImpl.getInstance().getBookPosSale(book_code, LibConfig.S_LOCAL_VIP_STYPE);
+        if (bookPosCardType != null) {
+            Gson gson = new Gson();
+            String s = XmlParser.xml2json(bookPosCardType.getBookResourceParam());
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                JSONObject object = jsonObject.optJSONObject("消费卡参数");
+                vipCardConfigBean = gson.fromJson(object.toString(), VipCardConfig.class);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return vipCardConfigBean;
     }
 }

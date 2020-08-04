@@ -14,14 +14,24 @@ import java.util.List;
  * 此类用于：
  */
 public class EmployeeImpl {
-    public static boolean saveEmployee(final List<Employee> dataLis){
+
+    private static EmployeeImpl instance;
+    public static EmployeeImpl getInstance() {
+        if (instance == null) {
+            instance = new EmployeeImpl();
+        }
+        return instance;
+    }
+
+
+    public boolean saveEmployeeList(final List<Employee> employeeList){
         final EmployeeDao employeeDao = DaoManager.getInstance().getDaoSession().getEmployeeDao();
         employeeDao.deleteAll();
-        if(dataLis.size() == 0)return true;
+        if(employeeList.size() == 0)return true;
         boolean isSuccess = MatterUtils.doMatter(employeeDao, new Runnable() {
             @Override
             public void run() {
-                employeeDao.insertOrReplaceInTx(dataLis);
+                employeeDao.insertOrReplaceInTx(employeeList);
             }
         });
         return isSuccess;

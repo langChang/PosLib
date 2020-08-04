@@ -21,7 +21,7 @@ public class PolicyPresentImpl {
         return instance;
     }
 
-    public boolean saveBean(final List<PolicyPresent> policyPresentList){
+    public boolean savePolicyPresentList(final List<PolicyPresent> policyPresentList){
         final PolicyPresentDao policyPresentDao  = DaoManager.getInstance().getDaoSession().getPolicyPresentDao();
         policyPresentDao.deleteAll();
         final PolicyPresentDetailDao policyPresentDetailDao =DaoManager.getInstance().getDaoSession().getPolicyPresentDetailDao();

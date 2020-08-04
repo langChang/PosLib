@@ -17,9 +17,17 @@ import java.util.List;
  */
 public class PolicyPromotionImpl {
 
-    public static boolean savePolicyPromotion(final List<PolicyPromotion> result) {
+
+    private static PolicyPromotionImpl instance;
+    public static PolicyPromotionImpl getInstance(){
+        if (instance==null){
+            instance=new PolicyPromotionImpl();
+        }
+        return instance;
+    }
 
 
+    public boolean savePolicyPromotionList(final List<PolicyPromotion> result) {
         final PolicyPromotionDao policyPromotionDao = DaoManager.getInstance().getDaoSession().getPolicyPromotionDao();
         final PolicyPromotionDetailDao policyPromotionDetailDao = DaoManager.getInstance().getDaoSession().getPolicyPromotionDetailDao();
         policyPromotionDetailDao.deleteAll();
@@ -70,7 +78,7 @@ public class PolicyPromotionImpl {
     }
 
 
-    public static boolean isEnablePayDiscount() {
+    public boolean isEnablePayDiscount() {
 
         if (LibConfig.allVipCardPolicyPromotionList != null && LibConfig.allVipCardPolicyPromotionList.size() > 0) {
             for (PolicyPromotion policyPromotion : LibConfig.allVipCardPolicyPromotionList) {

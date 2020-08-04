@@ -23,7 +23,7 @@ public class AppUserImpl {
         }
         return instance;
     }
-    public static boolean saveAppUser(final List<AppUser> result) {
+    public boolean saveAppUserList(final List<AppUser> result) {
         final AppUserDao appUserDao = DaoManager.getInstance().getDaoSession().getAppUserDao();
         final UserRoleDao userRoleDao = DaoManager.getInstance().getDaoSession().getUserRoleDao();
         userRoleDao.deleteAll();

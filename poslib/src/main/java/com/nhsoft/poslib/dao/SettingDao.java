@@ -155,7 +155,7 @@ public class SettingDao {
         SharedPreferenceUtil.saveValue(USER_SETTING, PAY_URL_PATH,new Gson().toJson(systemBookProxy));
     }
 
-    public static SystemBookProxy getPayUrlPath(){
+    public static SystemBookProxy getSystemBookProxy(){
         String userInfo = SharedPreferenceUtil.getStringValueByKey(USER_SETTING,PAY_URL_PATH);
         if(TextUtils.isEmpty(userInfo)){
             return null;

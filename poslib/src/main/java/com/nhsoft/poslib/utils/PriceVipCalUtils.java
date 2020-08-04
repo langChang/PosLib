@@ -81,7 +81,7 @@ public class PriceVipCalUtils {
         if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
 
-        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!RetailPosManager.getInstance().isEnablePayDiscount()) return Float.MAX_VALUE;
 
         //消费折扣
         if (RetailPosManager.isOpenCrm()) {
@@ -243,7 +243,7 @@ public class PriceVipCalUtils {
     public static Float getVipMemberPriceBySettle(PosOrderDetail posOrderDetail, VipUserInfo vipUserInfo) {
         if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
-        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!RetailPosManager.getInstance().isEnablePayDiscount()) return Float.MAX_VALUE;
 
         float vipMemberPrice = getVipMemberPrice(posOrderDetail, vipUserInfo);
         if (RetailPosManager.isOpenCrm()) {
@@ -264,7 +264,7 @@ public class PriceVipCalUtils {
     public static Float getVipMemberPriceByCheck(PosOrderDetail posOrderDetail, VipUserInfo vipUserInfo) {
         if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return Float.MAX_VALUE;
-        if (!PolicyPromotionImpl.isEnablePayDiscount()) return Float.MAX_VALUE;
+        if (!RetailPosManager.getInstance().isEnablePayDiscount()) return Float.MAX_VALUE;
         if (RetailPosManager.isOpenCrm()) {
             return getCrmPayVipPrice(vipUserInfo, posOrderDetail, Float.MAX_VALUE);
         } else {

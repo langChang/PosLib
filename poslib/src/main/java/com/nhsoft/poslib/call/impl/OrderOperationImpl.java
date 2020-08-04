@@ -74,8 +74,8 @@ public class OrderOperationImpl implements OrderOperationCallback {
             keyGeneratorBizday.setKeyGBString(posOrder.getOrderNo());
         }
         boolean result = PosOrderOperationUtil.startInsertOrder(posOrder, keyGeneratorBizday, LibConfig.S_ORDER_INIT);
-        OrderImpl.getInstance().doPayment(posOrder);
-        PosCarryLogImpl.tryCollectionOrder(posOrder);
+        RetailPosManager.getInstance().savePosOrder(posOrder);
+         RetailPosManager.getInstance().tryCollectionOrder(posOrder);
         return result;
     }
 

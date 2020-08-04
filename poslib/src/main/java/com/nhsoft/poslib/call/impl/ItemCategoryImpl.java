@@ -25,7 +25,7 @@ public class ItemCategoryImpl {
         }
         return instance;
     }
-    public static boolean saveItemCategory(final List<ItemCategory> dataLis){
+    public boolean saveItemCategoryList(final List<ItemCategory> dataLis){
         final ItemCategoryDao mItemCategoryDao = DaoManager.getInstance().getDaoSession().getItemCategoryDao();
         mItemCategoryDao.deleteAll();
         if(dataLis.size() == 0)return true;

@@ -19,7 +19,7 @@ public class MeasureUnitImpl {
         return instance;
     }
 
-    public boolean saveMeasureUnit(final List<MeasureUnit> list) {
+    public boolean saveMeasureUnitList(final List<MeasureUnit> list) {
         final MeasureUnitDao measureUnitDao = DaoManager.getInstance().getDaoSession().getMeasureUnitDao();
         final MeasureUnitItemDao measureUnitItemDao = DaoManager.getInstance().getDaoSession().getMeasureUnitItemDao();
 
