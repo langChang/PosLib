@@ -3,9 +3,10 @@ package com.nhsoft.poslib.model;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class VipUserInfo implements Cloneable{
+public class VipUserInfo implements Cloneable, Serializable {
 
     /**
      * card_user_num : String||卡Id

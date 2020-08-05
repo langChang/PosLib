@@ -51,7 +51,8 @@ public class LibConfig {
     public static String SHIFT_TABLE_BIZDAY = "";
     public static boolean POLICY_PROMOTION_DISABLE_PAY_DISCOUNT = false;
     public static int POS_MACHINE_SEQUENCE = 0;
-
+    public static String POS_MACHINE_TERMINAL_ID = "";
+    public static boolean MATRIX_PRICE_ACTIVED;
 
 
 
@@ -287,6 +288,5 @@ public class LibConfig {
     public static       int S_HOME_SHOW_BY_CURRENT_MODE = 1;//当前默认为收银模式
     public static final int S_HOME_SHOW_BY_CASH         = 1;//收银模式
     public static final int S_HOME_SHOW_BY_RETURN       = 2; //退货模式
-
 
 }

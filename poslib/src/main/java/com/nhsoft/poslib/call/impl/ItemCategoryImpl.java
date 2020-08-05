@@ -54,7 +54,7 @@ public class ItemCategoryImpl {
         return isSuccess;
     }
 
-    public static void setHierarchyCategory(){
+    public void setHierarchyCategory(){
         List<ItemCategory> itemCategoryList=getAllFirstCategoryList();
         for (ItemCategory itemCategory:itemCategoryList){
             itemCategory.setHierarchy(1);

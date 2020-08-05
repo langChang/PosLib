@@ -360,5 +360,27 @@ public class ShiftTableImpl {
 
     }
 
+    /**
+     * 获取本地没有上传的所有的班次(有流水，未上传，)
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public List<ShiftTable> getNotUploadList(String systemBookCode, int branchNum){
+        List<ShiftTable> shiftTables=null;
+        ShiftTableDao shiftTableDao=DaoManager.getInstance().getDaoSession().getShiftTableDao();
+        shiftTables=shiftTableDao.queryBuilder().where(
+                ShiftTableDao.Properties.System_book_code.eq(systemBookCode),//账套号
+                ShiftTableDao.Properties.Branch_num.eq(branchNum)//店
+                ,ShiftTableDao.Properties.Shift_table_synchronized.eq(false)//上传
+                ,ShiftTableDao.Properties.Shift_table_need_carry.eq(true)//流水
+                ,ShiftTableDao.Properties.Shift_table_upload_times.lt(3)//上传次数
+
+        ).list();
+        return shiftTables;
+    }
+
+
+
 
 }

@@ -60,7 +60,7 @@ public class AppUserImpl {
      * @return
      */
     public AppUser login(String systemBookCode, int branchNum, String appUserCode){
-        Branch branch = BranchImpl.getInstance().getBranch(systemBookCode, branchNum);
+        Branch branch = BranchImpl.getInstance().getBranchByNum(systemBookCode, branchNum);
         if(branch != null){
             AppUserDao appUserDao = DaoManager.getInstance().getDaoSession().getAppUserDao();
             return appUserDao.queryBuilder().where(

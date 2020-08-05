@@ -82,7 +82,7 @@ public class GlobalDataImpl implements GlobalDataCallback {
             LibConfig.allPolicyPresentList = PolicyPresentImpl.getNewestPolciyPresent();
             LibConfig.allPointPolicyList = RetailPosManager.getInstance().getAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
 
-        LibConfig.activeBranch = BranchImpl.getInstance().getBranch(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
+        LibConfig.activeBranch = BranchImpl.getInstance().getBranchByNum(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
         BranchGroupImpl.initMyBranchGroup(LibConfig.activeLoginBean.getBranch_num());
         return LibConfig.saleParamsBean == null ? false : true;
     }
@@ -100,7 +100,7 @@ public class GlobalDataImpl implements GlobalDataCallback {
             }
         }
         ItemCategoryImpl.getInstance().setHierarchyCategory();
-        LibConfig.activityShowGoods = RetailPosManager.getInstance().getRetailGoodsList();
+        LibConfig.activityShowGoods = RetailPosManager.getInstance().getAllShowPosItem();
     }
 
     public boolean initSaleBean(){
