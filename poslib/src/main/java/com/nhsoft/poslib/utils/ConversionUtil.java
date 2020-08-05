@@ -53,7 +53,7 @@ public class ConversionUtil {
 //            posOrderDetail.setOrderDetailStdPrice(posItemGrade == null ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price() == 0 ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price());//标准单价
 //        }
 
-        float finalRegularPrice = PriceUtil.getItemRegularPrice(posItem, posItemGrade);
+        float finalRegularPrice = RetailPosManager.getInstance().getItemRegularPrice(posItem, posItemGrade);
 
         if (TextUtils.isEmpty(memo) || !memo.contains(LibConfig.GOODS_CHANGE_TAG)) {
 //            if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
@@ -150,7 +150,7 @@ public class ConversionUtil {
         posOrderDetail.setOrderDetailNum(0);//明细编号
         posOrderDetail.setOrderDetailType(LibConfig.C_ORDER_DETAIL_TYPE_ITEM); //业务类型
 
-        float finalRegularPrice = PriceUtil.getItemRegularPrice(posItem, posItemGrade);
+        float finalRegularPrice = RetailPosManager.getInstance().getItemRegularPrice(posItem, posItemGrade);
         posOrderDetail.setOrderDetailStdPrice(finalRegularPrice);
 
 //        if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
@@ -220,7 +220,7 @@ public class ConversionUtil {
 //            posOrderDetail.setOrderDetailStdPrice(posItemGrade == null ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price() == 0 ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price());//标准单价
 //        }
 
-        float finalRegularPrice = PriceUtil.getItemRegularPrice(posItem, posItemGrade);
+        float finalRegularPrice = RetailPosManager.getInstance().getItemRegularPrice(posItem, posItemGrade);
         posOrderDetail.setOrderDetailStdPrice(finalRegularPrice);
 
         if (paymentMoney != 0 && suttle != 0) {

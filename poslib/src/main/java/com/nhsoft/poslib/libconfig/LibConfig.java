@@ -55,6 +55,12 @@ public class LibConfig {
     public static boolean MATRIX_PRICE_ACTIVED;
 
 
+    public static int mCardType = -1;
+    public static final int     FIND__BY_PHONE = 1;//手机号
+    public static final int     FIND__BY_CARD  = 2;//付款码
+    public static final int     FIND__BY_PAY   = 3;//卡号
+
+
 
     public static       String  activeLocalMac;//当前pos机ID
     public static       String  activeLocalMacEth0;//当前pos机 有线网卡的MacID

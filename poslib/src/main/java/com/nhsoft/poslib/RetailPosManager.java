@@ -1997,6 +1997,17 @@ public class RetailPosManager {
 
 
     /**
+     *  获取商品的标准价
+     * @param posItem  主商品
+     * @param posItemGrade  分级商品
+     * @return
+     */
+    public float getItemRegularPrice(PosItem posItem,PosItemGrade posItemGrade){
+        return PosItemImpl.getInstance().getItemRegularPrice(posItem, posItemGrade);
+    }
+
+
+    /**
      * 检查商品是否在消费劵支持的范围内
      *
      * @param couponsBean

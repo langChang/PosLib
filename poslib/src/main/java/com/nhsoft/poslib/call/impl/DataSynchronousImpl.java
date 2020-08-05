@@ -10,7 +10,6 @@ import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDetailDao;
 import com.nhsoft.poslib.service.greendao.PosOrderKitDetailDao;
-import com.nhsoft.poslib.service.greendao.ShiftTableDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 
 import java.util.List;

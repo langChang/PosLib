@@ -600,7 +600,7 @@ public class PosOrderOperationUtil {
 //                    } else {
 //                        posOrderKitDetail.setOrderKitDetailStdPrice(posItemGrade == null ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price() == 0 ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price());//标准单价
 //                    }
-                    float finalRegularPrice = PriceUtil.getItemRegularPrice(posItem, posItemGrade);
+                    float finalRegularPrice = RetailPosManager.getInstance().getItemRegularPrice(posItem, posItemGrade);
                     posOrderKitDetail.setOrderKitDetailStdPrice(finalRegularPrice);
 
                     posOrderDetail.setOrderDetailHasKit(true);

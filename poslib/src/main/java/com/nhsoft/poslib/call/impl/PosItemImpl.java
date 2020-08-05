@@ -982,4 +982,42 @@ public class PosItemImpl {
         return 0;
     }
 
+
+
+    /**
+     * 取分级商品标准价格
+     * @param posItemGrade
+     * @return
+     */
+    private float getItemGradeRegularPrice(PosItemGrade posItemGrade){
+        float truePrice;
+        if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived()) {
+            float branch_grade_regular_price = posItemGrade.getBranch_grade_regular_price();
+            if(branch_grade_regular_price == 0){
+                branch_grade_regular_price = posItemGrade.getItem_grade_regular_price();
+            }
+            truePrice = branch_grade_regular_price;
+        }else {
+            float item_grade_regular_price = posItemGrade.getItem_grade_regular_price() == null ? 0 : posItemGrade.getItem_grade_regular_price().floatValue();
+            truePrice = item_grade_regular_price;
+        }
+        return truePrice;
+    }
+
+
+    public float getItemRegularPrice(PosItem posItem,PosItemGrade posItemGrade){
+        float truePrice;
+        if(posItemGrade != null){
+            float gradeRegularPrice =getItemGradeRegularPrice(posItemGrade);
+            truePrice = gradeRegularPrice;
+        }else {
+            if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
+                truePrice = posItem.getBranch_regular_price() ;//门店标准单价
+            } else {
+                truePrice =  posItem.getItem_regular_price();//中心标准单价
+            }
+        }
+        return truePrice;
+    }
+
 }
