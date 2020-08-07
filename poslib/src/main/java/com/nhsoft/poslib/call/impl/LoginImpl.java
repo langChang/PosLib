@@ -23,7 +23,7 @@ public class LoginImpl {
 
     private DaoSession mDaoSession = DaoManager.getInstance().getDaoSession();
 
-    public boolean insert(final Login login) {
+    public boolean saveLogin(final Login login) {
         mDaoSession.getLoginDao().deleteAll();
         return MatterUtils.doMatter(mDaoSession.getLoginDao(), new Runnable() {
             @Override

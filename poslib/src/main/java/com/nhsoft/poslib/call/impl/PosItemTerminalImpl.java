@@ -71,7 +71,7 @@ public class PosItemTerminalImpl {
 //                posItemList.add(posItem);
 //            }
             if (posItemTerminal.getPosItem()==null){
-                posItemList.add(PosItemImpl.getInstance().getPosItemByKey(posItemTerminal.getItem_num().longValue()));
+                posItemList.add(PosItemImpl.getInstance().getPosItemByItemNum(posItemTerminal.getItem_num().longValue()));
             }else {
                 posItemList.add(posItemTerminal.getPosItem());
             }

@@ -268,9 +268,9 @@ public class OrderOperationImpl implements OrderOperationCallback {
                     posOrderDetail.setOrderDetailStateName(orderState.POS_ORDER_DETAIL_STATE_NAME); //状态名称
                 }
 
-                PosItem posItem = PosItemImpl.getInstance().getPosItemByKey(posOrderDetail.getItemNum());
+                PosItem posItem = PosItemImpl.getInstance().getPosItemByItemNum(posOrderDetail.getItemNum());
                 if (posOrderDetail.getItemGradeNum() != 0) {
-                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByKey(posOrderDetail.getItemGradeNum(),posItem.getItem_num());
+                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(posOrderDetail.getItemGradeNum(),posItem.getItem_num());
                     if (posItemGrade != null) {
                         posOrderDetail.setItemGradeNum(posItemGrade.getItem_grade_num());
                         posOrderDetail.setPosItemGrade(posItemGrade);
@@ -308,7 +308,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         mCurrentPosorder.setOrderPayee("" + LibConfig.activeAppUser.getApp_user_name());
         mCurrentPosorder.setOrderDate(TimeUtil.getInstance().stampToDate(System.currentTimeMillis()));
         Payment newPayment;
-        List<Payment> payments = OrderImpl.getInstance().getPaymentList(oldPosOrder.getOrderNo());
+        List<Payment> payments = OrderImpl.getInstance().getPaymentList(LibConfig.SYSTEM_BOOK,LibConfig.BRANCH_NUM,oldPosOrder.getOrderNo());
 
         List<Payment> mReturnPayment = new ArrayList<>();
         for (Payment payment : payments) {

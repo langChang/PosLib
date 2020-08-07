@@ -6,15 +6,20 @@ package com.nhsoft.poslib.model;
  */ 
 
 public class LoginRequest{
-    private String code;
+    private String user_code;
     private String user_psw;
 
-    public String getCode() {
-        return code;
+    public LoginRequest(String user_code,String userPsw){
+        this.user_code = user_code;
+        this.user_psw = userPsw;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getUser_code() {
+        return user_code;
+    }
+
+    public void setUser_code(String code) {
+        this.user_code = code;
     }
 
     public String getUser_psw() {

@@ -450,7 +450,7 @@ public class PosItemImpl {
     }
 
 
-    public PosItem getPosItemByKey(long item_num) {
+    public PosItem getPosItemByItemNum(long item_num) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItem posItem = pos_itemDao.load(item_num);
         pos_itemDao.detachAll();
@@ -458,7 +458,7 @@ public class PosItemImpl {
 //        return pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_category_code.eq(categoryCode)).list();
     }
 
-    public PosItemGrade getPosItemGradeByKey(int item_grade_num,long item_num) {
+    public PosItemGrade getPosItemGradeByItemGradeNum(int item_grade_num, long item_num) {
         PosItemGradeDao posItemGradeDao = DaoManager.getInstance().getDaoSession().getPosItemGradeDao();
         PosItemGrade posItemGrade = posItemGradeDao.queryBuilder().where(PosItemGradeDao.Properties.Item_grade_num.eq(item_grade_num),PosItemGradeDao.Properties.Item_num.eq(item_num)).build().unique();
         posItemGradeDao.detachAll();
@@ -466,13 +466,13 @@ public class PosItemImpl {
 
     }
 
-    public PosItem getPosItemByKey(String name) {
+    public PosItem getPosItemByName(String name) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItem posItem = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_name.eq(name)).limit(1).offset(0).unique();
         return posItem;
     }
 
-    public PosItem getPosItemByNmu(String id) {
+    public PosItem getPosItemByNmu(String item_num) {
         //and branch_num=?  and item_del_tag = 0 and item_eliminative_flag = 0 and branch_sale_cease_flag = 0
         // and item_type != 11 and item_type != 9 order by item_sequence
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
@@ -486,7 +486,7 @@ public class PosItemImpl {
 //                PosItemDao.Properties.Item_type.notEq(9)
 //        ).limit(1).offset(0).unique();
 
-        PosItem posItem1 = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_num.eq(id)).limit(1).offset(0).unique();
+        PosItem posItem1 = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_num.eq(item_num)).limit(1).offset(0).unique();
         if (posItem1 == null) {
             return null;
         }
@@ -586,13 +586,12 @@ public class PosItemImpl {
 
     /**
      * 根据 store_item_pinyin 模糊查询
-     *
      * @param storeItemPinyin
      * @param systemBookCode
      * @param branchNum
      * @return
      */
-    public List<PosItem> getPosItemByItemNum(String systemBookCode, int branchNum, String storeItemPinyin) {
+    public List<PosItem> getPosItemByPinyin(String systemBookCode, int branchNum, String storeItemPinyin) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItemGradeDao posItemGradeDao = DaoManager.getInstance().getDaoSession().getPosItemGradeDao();
         List<PosItem> posItems ;

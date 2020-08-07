@@ -12,7 +12,6 @@ import com.nhsoft.poslib.call.impl.AggregationImpl;
 import com.nhsoft.poslib.call.impl.AppUserImpl;
 import com.nhsoft.poslib.call.impl.AttachedScreenImpl;
 import com.nhsoft.poslib.call.impl.BookResourceImpl;
-import com.nhsoft.poslib.call.impl.BottomMenuImpl;
 import com.nhsoft.poslib.call.impl.BranchGroupImpl;
 import com.nhsoft.poslib.call.impl.BranchImpl;
 import com.nhsoft.poslib.call.impl.BranchRegionImpl;
@@ -221,7 +220,6 @@ public class RetailPosManager {
             return 2;
         }
 
-
         LibConfig.SYSTEM_BOOK = LibConfig.activeLoginBean.getSystem_book_code();
         LibConfig.SYSTEM_BOOK_NAME = LibConfig.activeLoginBean.getSystem_book_name();
         LibConfig.BRANCH_NUM = LibConfig.activeLoginBean.getBranch_num();
@@ -240,21 +238,11 @@ public class RetailPosManager {
      *
      * @return true 为初始化前台参数成功 false 为初始化前台参数失败
      */
-    public boolean initSaleParams() {
+    public boolean initHomeData() {
         GlobalDataImpl globalData = new GlobalDataImpl();
-        return globalData.initSaleParams();
+        return globalData.initHomeData();
     }
 
-
-    /**
-     * 初始化前台展示商品
-     *
-     * @retur
-     */
-    public void initShowGoods() {
-        GlobalDataImpl globalData = new GlobalDataImpl();
-        globalData.initShowGoods();
-    }
 
 
     /**
@@ -278,15 +266,6 @@ public class RetailPosManager {
         clearData.clearData(days);
     }
 
-    /**
-     * 为了农贸版本修改
-     */
-    public void resetBottomMenuData() {
-        if (!UserDao.getDeteleBottomMenu()) {
-            BottomMenuImpl.getInstance().removeAllBottomMenu();
-            UserDao.setDeteleBottomMenu(true);
-        }
-    }
 
     /**
      * 获取当前登录信息
@@ -372,8 +351,13 @@ public class RetailPosManager {
     }
 
 
-    public Payment updatePayment(Payment payment, float receiveMoney) {
-        return null;
+    /**
+     * 更新某个支付
+     *
+     * @param payment
+     */
+    public void updatePaymentBalanceStatus(Payment payment) {
+        OrderImpl.getInstance().updatePaymentBalanceStatus(payment);
     }
 
     /**
@@ -570,7 +554,7 @@ public class RetailPosManager {
         List<PosItem> posItems = new ArrayList<>();
         Pattern pattern = Pattern.compile("[a-zA-Z]");
         if (pattern.matcher(searchText).find()) {
-            posItems = PosItemImpl.getInstance().getPosItemByItemNum(
+            posItems = PosItemImpl.getInstance().getPosItemByPinyin(
                     LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), searchText.toUpperCase());
         } else {
             if (posOrderDetails != null && WeightOutBarUtil.isWeightOutBarGoods(searchText)) {
@@ -684,10 +668,6 @@ public class RetailPosManager {
         return serachList;
     }
 
-    public PosItem copyPosItem(PosItem posItem) {
-        PosItem copyPosItem = new Gson().fromJson(new Gson().toJson(posItem), PosItem.class);
-        return copyPosItem;
-    }
 
     /**
      * 检查PosItem是否停售
@@ -1080,6 +1060,14 @@ public class RetailPosManager {
         return AggregationImpl.getInstance().saveAggregation(aggregation);
     }
 
+
+    /**
+     * 获取线上支付配置
+     * @return
+     */
+    public Aggregation getOnlinePaySetting(){
+        return AggregationImpl.getInstance().getAggreation();
+    }
 
     /*********************************AmountPayImpl*********************************************/
 
@@ -1487,6 +1475,20 @@ public class RetailPosManager {
     }
 
 
+    /**
+     * 创建一个支付方式订单号
+     * @param book_code 帐套号
+     * @param branch_num 门店编号
+     * @param shift_table_bizday 营业日
+     * @param key_item 订单类型
+     * @param pos_machine_seq 终端的序列号
+     * @return
+     */
+    public KeyGeneratorBizday createPaymentKG(String book_code,int branch_num,String shift_table_bizday,String key_item,int pos_machine_seq){
+        return KeyGeneratorBizdayImpl.getInstance().createPaymentKG(book_code, branch_num, shift_table_bizday, key_item,pos_machine_seq);
+    }
+
+
 
 
     /**
@@ -1509,6 +1511,16 @@ public class RetailPosManager {
         KeyGeneratorBizdayImpl.getInstance().saveKeyGeneratorBizday(keyGeneratorBizday);
     }
 
+
+    /**
+     * 获取在线支付的子商务号
+     * @param systemCode
+     * @param branchNum
+     * @return
+     */
+    public String getPayOutId(String systemCode, int branchNum) {
+        return KeyGeneratorBizdayImpl.getInstance().getPayOutId(systemCode, branchNum);
+    }
     /*********************************LoginImpl*********************************************/
 
     /**
@@ -1519,6 +1531,18 @@ public class RetailPosManager {
     public Login getLoginData() {
         return LoginImpl.getInstance().getLogin();
     }
+
+
+    /**
+     * 保存登录信息
+     *
+     * @return 返回登录信息
+     */
+    public boolean saveLoginData(Login login) {
+        return LoginImpl.getInstance().saveLogin(login);
+    }
+
+
     /*********************************ManagementTemplateImpl*********************************************/
 
 
@@ -1663,7 +1687,7 @@ public class RetailPosManager {
      * @return 班次号下所有该标记posOrder
      */
     public List<PosOrder> getPosOrderList(String book_code, int branch_num, int shift_table_num, String shift_table_bizday, boolean sycn_flag) {
-        return OrderImpl.getInstance().getPosOrderList(book_code, branch_num, shift_table_num, shift_table_bizday, sycn_flag);
+        return OrderImpl.getInstance().getAllCompleteOrderList(book_code, branch_num, shift_table_num, shift_table_bizday, sycn_flag);
     }
 
 
@@ -1695,6 +1719,41 @@ public class RetailPosManager {
     }
 
 
+    /**
+     * 获取所有完成的订单
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public List<PosOrder> getAllCompleteOrderList(String systemBookCode, int branchNum) {
+        return OrderImpl.getInstance().getAllCompleteOrderList(systemBookCode, branchNum);
+    }
+
+    /**
+     * 根据订单号来查询订单
+     * @param orderNo
+     * @return
+     */
+    public PosOrder getOrderByNum(String orderNo) {
+        return OrderImpl.getInstance().getOrderByNum(orderNo);
+    }
+
+    /**
+     * 检查订单是否能退货
+     * @param order_no
+     * @return
+     */
+    public boolean checkOrderCanQuit(String  order_no) {
+        return OrderImpl.getInstance().checkOrderCanQuit(order_no);
+    }
+
+    public List<PosOrderDetail> getPosOrderDetailList(String order_no){
+        return OrderImpl.getInstance().getPosOrderDetailList(order_no);
+    }
+
+    public List<PosOrderDetail> getPosOrderDetailList(String book_code ,int branch_num,String order_no){
+        return OrderImpl.getInstance().getPosOrderDetailList(book_code, branch_num, order_no);
+    }
     /*********************************OrderOperationImpl*********************************************/
 
     /*********************************OtherRevenueImpl*********************************************/
@@ -2030,7 +2089,55 @@ public class RetailPosManager {
     }
 
 
-    /*********************************PosItemTerminalImpl*********************************************/
+    /**
+     * 根据 store_item_pinyin 模糊查询
+     * @param storeItemPinyin
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public List<PosItem> getPosItemByPinyin(String systemBookCode, int branchNum, String storeItemPinyin) {
+        return PosItemImpl.getInstance().getPosItemByPinyin(systemBookCode, branchNum, storeItemPinyin);
+    }
+
+    /**
+     * 根据 store_item_pinyin 模糊查询
+     * @param item_num
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public PosItem getPosItemByItemNum(long item_num) {
+        return PosItemImpl.getInstance().getPosItemByItemNum(item_num);
+    }
+
+    /**
+     * 根据 store_item_pinyin 模糊查询
+     * @param item_grade_num
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public PosItemGrade getPosItemGradeByItemGradeNum(int item_grade_num,long item_num) {
+        return PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(item_grade_num, item_num);
+    }
+
+    /**
+     * 根据item_num来查找pos_item_grade数据
+     *
+     * @param item_num
+     * @return
+     */
+    public List<PosItemGrade> getAllItemGrade(final long item_num) {
+        return PosItemImpl.getInstance().getAllItemGrade(item_num);
+    }
+
+
+    public PosItem copyPosItem(PosItem posItem){
+        return new Gson().fromJson(new Gson().toJson(posItem),PosItem.class);
+    }
+
+        /*********************************PosItemTerminalImpl*********************************************/
 
     /*********************************PosMachineImpl*********************************************/
 
@@ -2080,6 +2187,14 @@ public class RetailPosManager {
         return PosMachineImpl.getInstance().getPosMachine(branch_num, terminal_id);
     }
 
+
+    /**
+     * 获取最大注册的终端序列号
+     * @return
+     */
+    public int getMaxPosMachineNum(){
+        return PosMachineImpl.getInstance().getMaxPosMachineNum();
+    }
 
     /*********************************PriceImpl*********************************************/
 
@@ -2167,6 +2282,26 @@ public class RetailPosManager {
         return ShiftTableImpl.getInstance().getNotUploadList(book_code, branch_num);
     }
 
+
+    /**
+     * 获取本地没有关闭的所有的班次(有流水，未交班)
+     * @param book_code
+     * @param branch_num
+     * @return
+     */
+    public List<ShiftTable> getUnClosedShiftTable(String book_code, int branch_num){
+        return ShiftTableImpl.getInstance().getUnClosedShiftTable(book_code, branch_num);
+    }
+
+
+    /**
+     * 初始化班次
+     */
+    public void initShiftTable() {
+        ShiftTableImpl.getInstance().initShiftTable();
+    }
+
+
     /*********************************ShiftTablePaymentImpl*********************************************/
 
     /*********************************StoreHouseImpl*********************************************/
@@ -2183,6 +2318,14 @@ public class RetailPosManager {
 
 
     /**
+     * 获取所有的仓库信息
+     * @return
+     */
+    public List<StoreHouse> getAllStoreHouse(){
+        return StoreHouseImpl.getInstance().getAllStoreHouse();
+    }
+
+    /**
      * 获取今天的营业日
      * @param book_code 帐套号
      * @param branch_num 门店编号
@@ -2191,6 +2334,7 @@ public class RetailPosManager {
     public String getCurrentByzday(String book_code,int branch_num){
         return ShiftTableImpl.getInstance().getCurrentBizday(book_code, branch_num);
     }
+
 
 
     /*********************************SystemBookImpl*********************************************/

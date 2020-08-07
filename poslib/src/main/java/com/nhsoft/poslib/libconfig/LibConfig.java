@@ -54,6 +54,9 @@ public class LibConfig {
     public static String POS_MACHINE_TERMINAL_ID = "";
     public static boolean MATRIX_PRICE_ACTIVED;
 
+    public static String APP_PAY_ID       = "";
+    public static String APP_PAY_KEY      = "";
+
 
     public static int mCardType = -1;
     public static final int     FIND__BY_PHONE = 1;//手机号
@@ -204,6 +207,13 @@ public class LibConfig {
     public static List<String> openDrawPayment = new ArrayList<>();
 
 
+    public static List<Map<String, String>> FoundVipUserInfoList;//挂失 找到的会员主键和对应的验证码
+    public static Map<String, String> findVipUserInfoMap=new HashMap<>();//找到的会员主键和对应的验证码 //移动POS
+    public static List<Map<String, String>> FoundVipUserInfoReplaceCardList;//换卡 找到的会员主键和对应的验证码
+    public static List<Map<String, String>> FoundVipUserInfoModifyList;//修改手机号 找到的会员主键和对应的验证码
+
+
+
     /***************************商品标记**********************************/
     public static String GOODS_CHANGE_TAG = "手改"; //商品手改标记
     public static String GOODS_VIP_TAG    = "VIP"; //商品手改标记
@@ -295,4 +305,17 @@ public class LibConfig {
     public static final int S_HOME_SHOW_BY_CASH         = 1;//收银模式
     public static final int S_HOME_SHOW_BY_RETURN       = 2; //退货模式
 
+
+    public static final int CHANGE_ACCOUNT   = 1; //修改数量
+    public static final int CHANGE_PRICE     = 2; //修改单价
+    public static final int CHANGE_SUB_TOTAL = 3; //修改小计
+    public static final int CHANGE_DISCOUNT  = 4; //修改折扣
+
+
+
+    /***************************折扣方式**********************************/
+    public static final String S_ORDER_DISCOUNT_BY_MONEY = "order_discount_by_money";
+    public static final String S_ORDER_DISCOUNT_BY_BIT   = "order_discount_by_bit";
+
 }
+

@@ -207,7 +207,7 @@ public class OrderImpl {
      * @param orderNum
      * @return
      */
-    public List<Payment> getPayment(String systemBookCode, int branchNum, String orderNum) {
+    public List<Payment> getPaymentList(String systemBookCode, int branchNum, String orderNum) {
         PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         try {
             return paymentDao.queryBuilder().where(
@@ -265,7 +265,7 @@ public class OrderImpl {
      * @param branchNum
      * @return
      */
-    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum) {
+    public List<PosOrder> getAllCompleteOrderList(String systemBookCode, int branchNum) {
         int page = 10;
         PosOrderDao mPosOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         List<PosOrder> getPosOrderList = mPosOrderDao.queryBuilder()
@@ -291,7 +291,7 @@ public class OrderImpl {
      * @param orderUploadState
      * @return
      */
-    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState) {
+    public List<PosOrder> getAllCompleteOrderList(String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, boolean orderUploadState) {
         PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         List<PosOrder> posOrderList = posOrderDao.queryBuilder()
                 .where(
@@ -335,7 +335,7 @@ public class OrderImpl {
             List<PosOrderDetail> posOrderDetails = posOrderDetailDao._queryPosOrder_PosOrderDetails(posOrder.getOrderNo());
             List<Payment> payments = paymentDao._queryPosOrder_Payments(posOrder.getOrderNo());
             for (PosOrderDetail detail : posOrderDetails) {
-                PosItem posItem = PosItemImpl.getInstance().getPosItemByKey(detail.getItemNum());
+                PosItem posItem = PosItemImpl.getInstance().getPosItemByItemNum(detail.getItemNum());
                 detail.setPosItem(posItem);
             }
             posOrder.setPosOrderDetails(posOrderDetails);
@@ -599,6 +599,7 @@ public class OrderImpl {
     }
 
 
+
     /**
      * 根据订单号获取查找订单
      *
@@ -859,7 +860,7 @@ public class OrderImpl {
      * @param branchNum
      * @return
      */
-    public List<PosOrder> getPosOrderList(String systemBookCode, int branchNum, String phone) {
+    public List<PosOrder> getAllCompleteOrderList(String systemBookCode, int branchNum, String phone) {
 
         PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         return posOrderDao.queryBuilder()
@@ -893,7 +894,7 @@ public class OrderImpl {
             List<PosOrderDetail> posOrderDetails = posOrderDetailDao._queryPosOrder_PosOrderDetails(posOrder.getOrderNo());
             List<Payment> payments = paymentDao._queryPosOrder_Payments(posOrder.getOrderNo());
             for (PosOrderDetail detail : posOrderDetails) {
-                PosItem posItem = PosItemImpl.getInstance().getPosItemByKey(detail.getItemNum());
+                PosItem posItem = PosItemImpl.getInstance().getPosItemByItemNum(detail.getItemNum());
                 if (!TextUtils.isEmpty(detail.getKitAmountStr())) {
                     posItem.setPosItemKits((List<PosItemKit>) new Gson().fromJson(detail.getKitAmountStr(), new TypeToken<ArrayList<PosItemKit>>() {
                     }.getType()));
@@ -901,7 +902,7 @@ public class OrderImpl {
 
                 detail.setPosItem(posItem);
                 if (detail.getItemGradeNum() != 0) {
-                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByKey(detail.getItemGradeNum(), detail.getItemNum());
+                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(detail.getItemGradeNum(), detail.getItemNum());
                     detail.setPosItemGrade(posItemGrade);
                 }
             }
@@ -1056,7 +1057,7 @@ public class OrderImpl {
     //根据posOrder 把该posOrder 下的PosOrderDetail和Payment 设置就去
     public PosOrder getCompletePosOrder(final PosOrder posOrder) {
         List<PosOrderDetail> posOrderDetails = getPosOrderDetailList(posOrder.getSystemBookCode(), posOrder.getBranchNum(), posOrder.getOrderNo());
-        List<Payment> paymentList = getPayment(posOrder.getSystemBookCode(), posOrder.getBranchNum(), posOrder.getOrderNo());
+        List<Payment> paymentList = getPaymentList(posOrder.getSystemBookCode(), posOrder.getBranchNum(), posOrder.getOrderNo());
         posOrder.setPosOrderDetails(posOrderDetails);
         posOrder.setPayments(paymentList);
         return posOrder;
@@ -1357,7 +1358,7 @@ public class OrderImpl {
         ).list();
 
         for (PosOrder posOrder : posOrderList) {
-            List<Payment> paymentList = getPayment(posOrder.getSystemBookCode(), posOrder.getBranchNum(), posOrder.getOrderNo());
+            List<Payment> paymentList = getPaymentList(posOrder.getSystemBookCode(), posOrder.getBranchNum(), posOrder.getOrderNo());
             for (Payment payment : paymentList) {
                 amount = amount + payment.getPaymentMoney();
             }
@@ -1653,7 +1654,7 @@ public class OrderImpl {
             loop1:
             for (AmountPay amountPay : amountPays) {
                 loop2:
-                for (Payment payment : getPayment(systemBookCode, branchNum, posOrder.getOrderNo())) {
+                for (Payment payment : getPaymentList(systemBookCode, branchNum, posOrder.getOrderNo())) {
                     if (payment.getPaymentPayBy().equals(amountPay.getName())) {
                         amountPay.setAmountMoney(amountPay.getAmountMoney() - payment.getPaymentMoney());
                         break loop2;
@@ -1902,7 +1903,7 @@ public class OrderImpl {
             loop1:
             for (AmountPay amountPay : amountPays) {
                 loop2:
-                for (Payment payment : getPayment(systemBookCode, branchNum, posOrder.getOrderNo())) {
+                for (Payment payment : getPaymentList(systemBookCode, branchNum, posOrder.getOrderNo())) {
                     if (payment.getPaymentPayBy().equals(amountPay.getName())) {
                         amountPay.setAmountMoney(amountPay.getAmountMoney() - payment.getPaymentMoney());
                         break loop2;
@@ -1912,7 +1913,7 @@ public class OrderImpl {
 
             for (AmountPay amountPay : posPays) {
                 loop2:
-                for (Payment payment : getPayment(systemBookCode, branchNum, posOrder.getOrderNo())) {
+                for (Payment payment : getPaymentList(systemBookCode, branchNum, posOrder.getOrderNo())) {
                     if (payment.getPaymentPayBy().equals(amountPay.getName())) {
                         amountPay.setAmountMoney(amountPay.getAmountMoney() - payment.getPaymentMoney());
                         break loop2;
@@ -2262,7 +2263,7 @@ public class OrderImpl {
             loop1:
             for (AmountPay amountPay : amountPays) {
                 loop2:
-                for (Payment payment : getPayment(systemBookCode, branchNum, posOrder.getOrderNo())) {
+                for (Payment payment : getPaymentList(systemBookCode, branchNum, posOrder.getOrderNo())) {
                     if (payment.getPaymentPayBy().equals(amountPay.getName())) {
                         amountPay.setAmountMoney(amountPay.getAmountMoney() - payment.getPaymentMoney());
                         break loop2;
@@ -2272,7 +2273,7 @@ public class OrderImpl {
 
             for (AmountPay amountPay : posPays) {
                 loop2:
-                for (Payment payment : getPayment(systemBookCode, branchNum, posOrder.getOrderNo())) {
+                for (Payment payment : getPaymentList(systemBookCode, branchNum, posOrder.getOrderNo())) {
                     if (payment.getPaymentPayBy().equals(amountPay.getName())) {
                         amountPay.setAmountMoney(amountPay.getAmountMoney() - payment.getPaymentMoney());
                         break loop2;
@@ -3536,11 +3537,6 @@ public class OrderImpl {
     }
 
 
-    public List<Payment> getPaymentList(String OrderNo) {
-        PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
-        return paymentDao.queryBuilder().where(PaymentDao.Properties.OrderNo.eq(OrderNo)).list();
-    }
-
     /**
      * 获取订单抵扣的优惠劵
      *
@@ -3900,7 +3896,7 @@ public class OrderImpl {
             posOrderObject.put("payments", paymentJsonList);
             posOrderObject.put("pos_order_details", posOrderDetailList);
             totalInfoObject.put("upload_iwm", false);
-//            VipCardConfig vipCardConfigBean = getVipCardTypeBean(Constant.SYSTEM_BOOK_CODE);
+//            VipCardConfig vipCardConfigBean = getVipCardTypeBean(LibConfig.SYSTEM_BOOK);
             if (vipCardConfig == null || "0".equals(vipCardConfig.getConsumeWeChatHint())) {
                 remind_type = 2;
             }
@@ -4178,4 +4174,31 @@ public class OrderImpl {
         return true;
     }
 
+
+    public PosOrder getOrderByNum(String orderNo) {
+        final PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
+        PosOrder posOrder = posOrderDao.queryBuilder().where(PosOrderDao.Properties.OrderNo.eq(orderNo)).unique();
+        if (posOrder != null) {
+            posOrder.setPosOrderDetails(getPosOrderDetailList(posOrder.getOrderNo()));
+            posOrder.setPayments(this.getPaymentList(LibConfig.SYSTEM_BOOK,LibConfig.BRANCH_NUM,orderNo));
+        }
+        return posOrder;
+    }
+
+
+    /**
+     * 判断该订单号对应的订单是不是 已退货
+     *
+     * @return
+     */
+    public boolean checkOrderCanQuit(String order_no) {
+        PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
+        PosOrder posOrder = posOrderDao.queryBuilder().where(PosOrderDao.Properties.OrderRefBillno.isNull(), PosOrderDao.Properties.OrderNo.eq(order_no)).build().unique();
+        if (posOrder == null || posOrder.getOrderPaymentMoney() < 0) {
+//            posOrderDao.deleteAll();
+            return false;
+        }
+//        posOrderDao.deleteAll();
+        return true;
+    }
 }

@@ -57,7 +57,7 @@ public class PosItemGradeTerminalImpl {
                 .list();
         List<PosItemGrade> posItemGradeList=new ArrayList<>();
         for(PosItemGradeTerminal posItemGradeTerminal:posItemTerminalList){
-            PosItemGrade posItemGrade= PosItemImpl.getInstance().getPosItemGradeByKey(posItemGradeTerminal.getItem_grade_num(),posItemGradeTerminal.getItem_num());
+            PosItemGrade posItemGrade= PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(posItemGradeTerminal.getItem_grade_num(),posItemGradeTerminal.getItem_num());
             if (posItemGrade!=null){
                 if (!posItemGrade.getItem_grade_sale_cease_flag())
                     posItemGradeList.add(posItemGrade);
