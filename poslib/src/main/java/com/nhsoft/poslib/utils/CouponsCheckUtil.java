@@ -117,6 +117,14 @@ public class CouponsCheckUtil {
                             coupons_discount_amount = coupons_discount_amount - posOrderDetail.getOrderDetailAmount();
                         }
                     }
+                }else {
+                    isUseable = false;
+                    checkCouponsStatus.setUse(false);
+                    if (isNet) {
+                        checkCouponsStatus.setMsg("当前没有商品可抵扣！");
+//                mContext.toastShort(mContext.getString(R.string.no_coupons_limit_money_by_goods));
+                    }
+                    return checkCouponsStatus;
                 }
             }
             if(insertMoney != 0){
