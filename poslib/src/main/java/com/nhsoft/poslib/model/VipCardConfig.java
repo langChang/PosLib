@@ -218,6 +218,16 @@ public class VipCardConfig implements Serializable {
     private float exchangeMoney;// 换取储值
     private String UsePointNeedPsw;//使用积分需要密码验证
     private String FirstDeliverCardNoPay;//第一次发放实体卡不收取换卡费用
+    private boolean enableCardSmsCheck;
+
+
+    public boolean isEnableCardSmsCheck() {
+        return enableCardSmsCheck;
+    }
+
+    public void setEnableCardSmsCheck(boolean enableCardSmsCheck) {
+        this.enableCardSmsCheck = enableCardSmsCheck;
+    }
 
     private String PosReadCardHideInfo;//前台读卡不显示卡信息(余额) 0没勾显示 -1勾了不显示
 

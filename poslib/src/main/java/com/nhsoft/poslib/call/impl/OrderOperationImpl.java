@@ -343,6 +343,9 @@ public class OrderOperationImpl implements OrderOperationCallback {
         payment.setPaymentChange(payment.getPaymentReceive() - payment.getPaymentMoney());
         payment.setPaymentCardPrintNum(oldpayment.getPaymentCardPrintNum());
         payment.setClientFid(oldpayment.getClientFid());
+        if(LibConfig.C_PAYMENT_TYPE_SIGNBILL_NAME.equals(payBy)){
+            payment.setPaymentBalance(Money);
+        }
         payment.setWechatOpenId(oldpayment.getWechatOpenId());
         payment.setPaymentCardUserName(oldpayment.getPaymentCardUserName());
         payment.setUploadOk(false);

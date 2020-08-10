@@ -4,22 +4,16 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.Reader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * Created by Iverson on 2020/3/25 3:21 PM
@@ -32,40 +26,40 @@ public class MacUtil {
      *
      * @return
      */
-    public static String getMac(Context context) {
-        String strMac = null;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Log.e("=====", "6.0以下");
-            Toast.makeText(context, "6.0以下", Toast.LENGTH_SHORT).show();
-            strMac = getLocalMacAddressFromWifiInfo(context);
-            return strMac;
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Log.e("=====", "6.0以上7.0以下");
-            Toast.makeText(context, "6.0以上7.0以下", Toast.LENGTH_SHORT).show();
-            strMac = getMacAddress(context);
-            return strMac;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.e("=====", "7.0以上");
-            if (!TextUtils.isEmpty(getMacAddress())) {
-                Log.e("=====", "7.0以上1");
-                Toast.makeText(context, "7.0以上1", Toast.LENGTH_SHORT).show();
-                strMac = getMacAddress();
-                return strMac;
-            } else if (!TextUtils.isEmpty(getMachineHardwareAddress())) {
-                Log.e("=====", "7.0以上2");
-                Toast.makeText(context, "7.0以上2", Toast.LENGTH_SHORT).show();
-                strMac = getMachineHardwareAddress();
-                return strMac;
-            } else {
-                Log.e("=====", "7.0以上3");
-                Toast.makeText(context, "7.0以上3", Toast.LENGTH_SHORT).show();
-                strMac = getLocalMacAddressFromBusybox();
-                return strMac;
-            }
-        }
-        return "02:00:00:00:00:00";
-    }
+//    public static String getMac(Context context) {
+//        String strMac = null;
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            Log.e("=====", "6.0以下");
+//            Toast.makeText(context, "6.0以下", Toast.LENGTH_SHORT).show();
+//            strMac = getLocalMacAddressFromWifiInfo(context);
+//            return strMac;
+//        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N
+//                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            Log.e("=====", "6.0以上7.0以下");
+//            Toast.makeText(context, "6.0以上7.0以下", Toast.LENGTH_SHORT).show();
+//            strMac = getMacAddress(context);
+//            return strMac;
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            Log.e("=====", "7.0以上");
+//            if (!TextUtils.isEmpty(getMacAddress())) {
+//                Log.e("=====", "7.0以上1");
+//                Toast.makeText(context, "7.0以上1", Toast.LENGTH_SHORT).show();
+//                strMac = getMacAddress();
+//                return strMac;
+//            } else if (!TextUtils.isEmpty(getMachineHardwareAddress())) {
+//                Log.e("=====", "7.0以上2");
+//                Toast.makeText(context, "7.0以上2", Toast.LENGTH_SHORT).show();
+//                strMac = getMachineHardwareAddress();
+//                return strMac;
+//            } else {
+//                Log.e("=====", "7.0以上3");
+//                Toast.makeText(context, "7.0以上3", Toast.LENGTH_SHORT).show();
+//                strMac = getLocalMacAddressFromBusybox();
+//                return strMac;
+//            }
+//        }
+//        return "02:00:00:00:00:00";
+//    }
 
 
     /**
@@ -81,53 +75,53 @@ public class MacUtil {
         return mac;
     }
 
-
-    /**
-     * android 6.0及以上、7.0以下 获取mac地址
-     *
-     * @param context
-     * @return
-     */
-    public static String getMacAddress(Context context) {
-        if(!TextUtils.isEmpty(mMacAddress)){
-            return mMacAddress;
-        }
-// 如果是6.0以下，直接通过wifimanager获取
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            String macAddress0 = getMacAddress0(context);
-            if (!TextUtils.isEmpty(macAddress0)) {
-                return macAddress0;
-            }
-        }
-        String str = "";
-        String macSerial = "";
-        try {
-            Process pp = Runtime.getRuntime().exec(
-                    "cat /sys/class/net/wlan0/address");
-            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
-            LineNumberReader input = new LineNumberReader(ir);
-            for (; null != str; ) {
-                str = input.readLine();
-                if (str != null) {
-                    macSerial = str.trim();// 去空格
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            Log.e("----->" + "NetInfoManager", "getMacAddress:" + ex.toString());
-        }
-        if (macSerial == null || "".equals(macSerial)) {
-            try {
-                return loadFileAsString("/sys/class/net/eth0/address")
-                        .toUpperCase().substring(0, 17);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("----->" + "NetInfoManager",
-                        "getMacAddress:" + e.toString());
-            }
-        }
-        return macSerial;
-    }
+//
+//    /**
+//     * android 6.0及以上、7.0以下 获取mac地址
+//     *
+//     * @param context
+//     * @return
+//     */
+//    public static String getMacAddress(Context context) {
+//        if(!TextUtils.isEmpty(mMacAddress)){
+//            return mMacAddress;
+//        }
+//// 如果是6.0以下，直接通过wifimanager获取
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            String macAddress0 = getMacAddress0(context);
+//            if (!TextUtils.isEmpty(macAddress0)) {
+//                return macAddress0;
+//            }
+//        }
+//        String str = "";
+//        String macSerial = "";
+//        try {
+//            Process pp = Runtime.getRuntime().exec(
+//                    "cat /sys/class/net/wlan0/address");
+//            InputStreamReader ir = new InputStreamReader(pp.getInputStream());
+//            LineNumberReader input = new LineNumberReader(ir);
+//            for (; null != str; ) {
+//                str = input.readLine();
+//                if (str != null) {
+//                    macSerial = str.trim();// 去空格
+//                    break;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            Log.e("----->" + "NetInfoManager", "getMacAddress:" + ex.toString());
+//        }
+//        if (macSerial == null || "".equals(macSerial)) {
+//            try {
+//                return loadFileAsString("/sys/class/net/eth0/address")
+//                        .toUpperCase().substring(0, 17);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                Log.e("----->" + "NetInfoManager",
+//                        "getMacAddress:" + e.toString());
+//            }
+//        }
+//        return macSerial;
+//    }
     private static String getMacAddress0(Context context) {
         if (isAccessWifiStateAuthorized(context)) {
             WifiManager wifiMgr = (WifiManager) context
@@ -182,25 +176,30 @@ public class MacUtil {
      *
      * @return
      */
-    public static String getMacAddress() {
-        String strMacAddr = null;
-        try {
-// 获得IpD地址
-            InetAddress ip = getLocalInetAddress();
-            byte[] b = NetworkInterface.getByInetAddress(ip)
-                    .getHardwareAddress();
-            StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < b.length; i++) {
-                if (i != 0) {
-                    buffer.append(':');
-                }
-                String str = Integer.toHexString(b[i] & 0xFF);
-                buffer.append(str.length() == 1 ? 0 + str : str);
-            }
-            strMacAddr = buffer.toString().toUpperCase();
-        } catch (Exception e) {
-        }
-        return strMacAddr;
+    public static String getMacAddress(Context context) {
+        return PixelUtil.getMac(context);
+//        if(!TextUtils.isEmpty(SettingDao.getMacAddress())){
+//            return SettingDao.getMacAddress();
+//        }
+//        String strMacAddr = null;
+//        try {
+//// 获得IpD地址
+//            InetAddress ip = getLocalInetAddress();
+//            byte[] b = NetworkInterface.getByInetAddress(ip)
+//                    .getHardwareAddress();
+//            StringBuffer buffer = new StringBuffer();
+//            for (int i = 0; i < b.length; i++) {
+//                if (i != 0) {
+//                    buffer.append(':');
+//                }
+//                String str = Integer.toHexString(b[i] & 0xFF);
+//                buffer.append(str.length() == 1 ? 0 + str : str);
+//            }
+//            strMacAddr = buffer.toString().toUpperCase().replace(":", "-");
+//            SettingDao.saveMacAddress(strMacAddr);
+//        } catch (Exception e) {
+//        }
+//        return strMacAddr == null ? "" : strMacAddr;
     }
     /**
      * 获取移动设备本地IP

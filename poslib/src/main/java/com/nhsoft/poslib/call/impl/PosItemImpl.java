@@ -913,6 +913,9 @@ public class PosItemImpl {
             for (CouponsXmlModel xmlCouponsBean : LibConfig.sCouponsXmlModels) {
                 if (couponsBean.getTicket_send_detail_type().equals(xmlCouponsBean.getCouponsName())) {
 
+                    if(!TextUtils.isEmpty(xmlCouponsBean.getCouponsDiscountAmount())){
+                        couponsBean.setCoupons_discount_amount(Float.parseFloat(xmlCouponsBean.getCouponsDiscountAmount()));
+                    }
                     if(xmlCouponsBean.isMoneyExceptPromotionItems() == 1){
                         if(!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid() )){
                             return 2;

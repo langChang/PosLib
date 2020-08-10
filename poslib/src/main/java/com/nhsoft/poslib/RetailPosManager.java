@@ -210,12 +210,12 @@ public class RetailPosManager {
      * 初始化本地一些基本参数
      * @return 1：代表初始化成功 2: 终端初始化失败。
      */
-    public int initLocalData(){
+    public int initLocalData(Context context){
         //初始化POSMachine
         //初始化Branch
         //初始化ShifteTable
         LibConfig.activeLoginBean = getLoginData();
-        LibConfig.activePosMachine = getLocalPosMachine(LibConfig.activeLoginBean.getBranch_num(), getMachineMac());
+        LibConfig.activePosMachine = getLocalPosMachine(LibConfig.activeLoginBean.getBranch_num(), getMachineMac(context));
         if(LibConfig.activePosMachine == null){
             return 2;
         }
@@ -229,6 +229,7 @@ public class RetailPosManager {
         LibConfig.POS_MACHINE_SEQUENCE = LibConfig.activePosMachine.getPos_machine_sequence();
         LibConfig.activeBranch = getBranchByNum(LibConfig.SYSTEM_BOOK, LibConfig.BRANCH_NUM);
         LibConfig.MATRIX_PRICE_ACTIVED = LibConfig.activeBranch.getBranch_matrix_price_actived();
+        initSaleBean();
         return 1;
     }
 
@@ -2156,8 +2157,8 @@ public class RetailPosManager {
      *
      * @return
      */
-    public String getMachineMac() {
-        return PosMachineImpl.getInstance().getMacAddress();
+    public String getMachineMac(Context context) {
+        return PosMachineImpl.getInstance().getMacAddress(context);
     }
 
     /**
@@ -2165,8 +2166,8 @@ public class RetailPosManager {
      *
      * @return
      */
-    public String getLocalPosMachine() {
-        return PosMachineImpl.getInstance().getMacAddress();
+    public String getLocalPosMachine(Context context) {
+        return PosMachineImpl.getInstance().getMacAddress(context);
     }
 
     /**

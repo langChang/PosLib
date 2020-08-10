@@ -28,6 +28,8 @@ public class CouponsXmlModel implements Serializable {
     private int    couponsPointDelayday;
     @SerializedName("消费券应用分类")
     private String couponsType;
+    @SerializedName("抵用数量")
+    private String couponsDiscountAmount;
     @SerializedName("消费券超额张数累加")
     private int    couponsAddPage;
     @SerializedName("消费券单独使用")
@@ -312,6 +314,17 @@ public class CouponsXmlModel implements Serializable {
             this.goodsList = goodsList;
         }
     }
+
+
+    public String getCouponsDiscountAmount() {
+        return couponsDiscountAmount;
+    }
+
+    public void setCouponsDiscountAmount(String couponsDiscountAmount) {
+        this.couponsDiscountAmount = couponsDiscountAmount;
+    }
+
+
 
     public static class GoodsData implements Serializable {
         @SerializedName("商品名称")

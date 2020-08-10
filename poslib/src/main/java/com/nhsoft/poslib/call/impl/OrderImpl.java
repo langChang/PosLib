@@ -210,10 +210,7 @@ public class OrderImpl {
     public List<Payment> getPaymentList(String systemBookCode, int branchNum, String orderNum) {
         PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         try {
-            return paymentDao.queryBuilder().where(
-                    PaymentDao.Properties.SystemBookCode.eq(systemBookCode)
-                    , PaymentDao.Properties.BranchNum.eq(branchNum)
-                    , PaymentDao.Properties.OrderNo.eq(orderNum)
+            return paymentDao.queryBuilder().where(PaymentDao.Properties.OrderNo.eq(orderNum)
             ).list();
         } catch (Exception e) {
             EvtLog.d("getPayment:=" + systemBookCode + " :=" + branchNum + " :=" + orderNum + " :=" + e.toString());

@@ -49,7 +49,16 @@ public class CouponsBean implements Cloneable {
     private int     ticket_limit_amount;
     private boolean isDestruction = false;
     private float ticket_max_use_money;
+    private float coupons_discount_amount; //抵扣数量
 
+
+    public float getCoupons_discount_amount() {
+        return coupons_discount_amount;
+    }
+
+    public void setCoupons_discount_amount(float coupons_discount_amount) {
+        this.coupons_discount_amount = coupons_discount_amount;
+    }
 
     public float getTicket_max_use_money() {
         return ticket_max_use_money;

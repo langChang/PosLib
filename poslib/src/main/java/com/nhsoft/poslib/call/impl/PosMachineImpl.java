@@ -1,6 +1,7 @@
 package com.nhsoft.poslib.call.impl;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
@@ -103,9 +104,9 @@ public class PosMachineImpl {
      * 获取mac地址
      * @return
      */
-    public String getMacAddress(){
+    public String getMacAddress(Context context){
         if(!TextUtils.isEmpty(MacUtil.mMacAddress))return MacUtil.mMacAddress;
-        MacUtil.mMacAddress = MacUtil.getMacAddress();
+        MacUtil.mMacAddress = MacUtil.getMacAddress(context);
         return MacUtil.mMacAddress;
     }
 

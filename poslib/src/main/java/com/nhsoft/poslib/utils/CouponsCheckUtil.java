@@ -4,8 +4,8 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nhsoft.poslib.R;
 import com.nhsoft.poslib.RetailPosManager;
+import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
 import com.nhsoft.poslib.entity.ItemCategory;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.order.PosOrder;
@@ -15,7 +15,6 @@ import com.nhsoft.poslib.model.BranchXmlModel;
 import com.nhsoft.poslib.model.CheckCouponsStatus;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
-import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
 
 import org.json.JSONObject;
 
@@ -51,7 +50,9 @@ public class CouponsCheckUtil {
         }
 
 
-        if(!"购物抵用券".equals(couponsBean.getTicket_category()) && !"消费折扣券".equals(couponsBean.getTicket_category())){
+        List<PosOrderDetail> goodsCouponsContainList = new ArrayList<>();
+
+        if(!"购物抵用券".equals(couponsBean.getTicket_category()) && !"消费折扣券".equals(couponsBean.getTicket_category())&& !"商品券".equals(couponsBean.getTicket_category())) {
             if(isNet){
                 checkCouponsStatus.setMsg("此劵不是购物抵用劵或者是消费折扣劵！");
             }
@@ -81,6 +82,8 @@ public class CouponsCheckUtil {
 
                 } else if ("购物抵用券".equals(couponsBean.getTicket_category())) {
                     insertMoney = insertMoney + posOrderDetail.getOrderDetailPaymentMoney();
+                }else if ("商品券".equals(couponsBean.getTicket_category())) {
+                    goodsCouponsContainList.add(posOrderDetail);
                 }
 
             }
@@ -94,6 +97,32 @@ public class CouponsCheckUtil {
 //            } else if (inGoodsList == 2) {
 ////                return false;
 //            }
+        }
+
+        if("商品券".equals(couponsBean.getTicket_category())){
+            insertMoney = 0;
+            float coupons_discount_amount = couponsBean.getCoupons_discount_amount();
+            if(coupons_discount_amount != 0){
+                if(!goodsCouponsContainList.isEmpty()){
+                    for (PosOrderDetail posOrderDetail : goodsCouponsContainList){
+                        if(coupons_discount_amount < 0.0001){
+                            break;
+                        }
+                        if(posOrderDetail.getOrderDetailAmount() >= coupons_discount_amount){
+                            insertMoney+= posOrderDetail.getOrderDetailPrice()*coupons_discount_amount;
+                            coupons_discount_amount = 0;
+                            break;
+                        }else {
+                            insertMoney+= posOrderDetail.getOrderDetailPaymentMoney();
+                            coupons_discount_amount = coupons_discount_amount - posOrderDetail.getOrderDetailAmount();
+                        }
+                    }
+                }
+            }
+            if(insertMoney != 0){
+                couponsBean.setResidueMoney(NumberUtil.getNewFloat(insertMoney));
+                couponsBean.setTicket_send_detail_value(NumberUtil.getNewFloat(insertMoney));
+            }
         }
 
         if(!isUseable && couponsBean.getTicket_limit_money() != 0){
