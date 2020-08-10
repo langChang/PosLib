@@ -87,7 +87,9 @@ public class PricePromotionCalUtils {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyPromotion.getPolicy_promotion_card_type())) {
                         } else {
-                            if (isSettle) {
+                            if (LibConfig.saleParamsBean != null && LibConfig.saleParamsBean.isEnableCardPayDiscount() && !isSettle) {
+                                continue;
+                            } else {
                                 if(LibConfig.activeVipMember != null){
                                     if (!policyPromotion.getPolicy_promotion_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
                                         continue;
@@ -95,8 +97,6 @@ public class PricePromotionCalUtils {
                                     if (!policyPromotion.getPolicy_promotion_card_type().contains(">" + LibConfig.discountVipMember.getCard_user_type_name() + "<"))
                                         continue;
                                 }
-                            } else {
-                                continue;
                             }
                         }
                     }

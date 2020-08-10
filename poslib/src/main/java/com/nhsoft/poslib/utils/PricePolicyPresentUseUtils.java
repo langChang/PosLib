@@ -27,11 +27,11 @@ public class PricePolicyPresentUseUtils {
             if (policyPresent.getPolicy_present_card_only()) {
                 if (LibConfig.activeVipMember == null) return null;
 
-                if(RetailPosManager.isOpenCrm()){
+//                if(RetailPosManager.isOpenCrm()){
                     if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyPresent.getPolicy_present_level_ids())){
                         return null;
                     }
-                }else {
+//                }else {
                     if (!TextUtils.isEmpty(policyPresent.getPolicy_present_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyPresent.getPolicy_present_card_type())) {
@@ -40,7 +40,7 @@ public class PricePolicyPresentUseUtils {
                                 return null;
                         }
                     }
-                }
+//                }
 
             }
 

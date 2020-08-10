@@ -42,11 +42,11 @@ public class PriceDiscountUtils {
             if (policyDiscount.getPolicy_discount_card_only()) {
                 if (LibConfig.activeVipMember == null) continue;
 
-                if(RetailPosManager.isOpenCrm()){
+//                if(RetailPosManager.isOpenCrm()){
                    if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyDiscount.getPolicy_discount_level_ids())){
                        continue;
                    }
-                }else {
+//                }else {
                     if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyDiscount.getPolicy_discount_card_type())) {
@@ -55,7 +55,7 @@ public class PriceDiscountUtils {
                                 continue;
                         }
                     }
-                }
+//                }
 
             }
 
