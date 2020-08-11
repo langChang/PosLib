@@ -81,9 +81,16 @@ public class CouponsCheckUtil {
                     }
 
                 } else if ("购物抵用券".equals(couponsBean.getTicket_category())) {
-                    insertMoney = insertMoney + posOrderDetail.getOrderDetailPaymentMoney();
+                    insertMoney = insertMoney + (posOrderDetail.getOrderDetailPaymentMoney() - posOrderDetail.getOrderDetailDiscount());
                 }else if ("商品券".equals(couponsBean.getTicket_category())) {
-                    goodsCouponsContainList.add(posOrderDetail);
+                    if (couponsBean.isExcept_promotion_items()) {
+                        if (TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())){
+                            goodsCouponsContainList.add(posOrderDetail);
+                        }
+                    }else {
+                        goodsCouponsContainList.add(posOrderDetail);
+                    }
+
                 }
 
             }
@@ -117,12 +124,20 @@ public class CouponsCheckUtil {
                             coupons_discount_amount = coupons_discount_amount - posOrderDetail.getOrderDetailAmount();
                         }
                     }
+
+                    if(insertMoney < 0.0001){
+                        isUseable = false;
+                        checkCouponsStatus.setUse(false);
+                        if (isNet) {
+                            checkCouponsStatus.setMsg("当前没有商品可抵扣！");
+                        }
+                        return checkCouponsStatus;
+                    }
                 }else {
                     isUseable = false;
                     checkCouponsStatus.setUse(false);
                     if (isNet) {
                         checkCouponsStatus.setMsg("当前没有商品可抵扣！");
-//                mContext.toastShort(mContext.getString(R.string.no_coupons_limit_money_by_goods));
                     }
                     return checkCouponsStatus;
                 }

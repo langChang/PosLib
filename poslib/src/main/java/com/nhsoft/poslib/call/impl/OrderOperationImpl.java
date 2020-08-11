@@ -248,6 +248,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
 
             TagUtils.removeVipTag(posOrderDetailold);
 
+            posOrderDetailold.setOrderDetailPolicyFid("");
             posOrderDetailold.setOrderDetailPolicyDiscountFlag(false);
             posOrderDetailold.setOrderDetailPolicyPresentFlag(false);
             posOrderDetailold.setOrderDetailPolicyPromotionFlag(false);

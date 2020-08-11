@@ -205,6 +205,9 @@ public class VipCardConfig implements Serializable {
     private String AliMemberDepositEnrollShop;
     private String UnLossCardNeedSmsCheck;
     private String EnableCardTypeSettlementDiscount;
+    private String EnableCardPayDiscount; //是否启用卡的支付折扣
+    private String CardConsumeDiscountType; //消费折扣类型。
+
     private String BanPrintPhoneQueryCard;
     @SerializedName("不允许修改存款金额")
     private String noEditMoney;
@@ -694,4 +697,21 @@ public class VipCardConfig implements Serializable {
     public void setBanPrintPhoneQueryCard(String BanPrintPhoneQueryCard) {
         this.BanPrintPhoneQueryCard = BanPrintPhoneQueryCard;
     }
+
+    public boolean isEnableCardPayDiscount() {
+        return EnableCardPayDiscount == null ? false : !(Integer.parseInt(EnableCardPayDiscount) == 0);
+    }
+
+    public void setEnableCardPayDiscount(String enableCardPayDiscount) {
+        this.EnableCardPayDiscount = enableCardPayDiscount;
+    }
+
+    public boolean isCustomerDiscountType() {
+        return CardConsumeDiscountType == null ? false : "身份等级".equals(CardConsumeDiscountType);
+    }
+
+    public void setCardConsumeDiscountType(String cardConsumeDiscountType) {
+        CardConsumeDiscountType = cardConsumeDiscountType;
+    }
+
 }

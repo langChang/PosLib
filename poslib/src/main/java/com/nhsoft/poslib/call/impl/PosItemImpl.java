@@ -905,6 +905,12 @@ public class PosItemImpl {
     }
 
 
+    /**
+     *
+     * @param couponsBean
+     * @param posOrderDetail
+     * @return
+     */
     public int isInGoodsList(CouponsBean couponsBean, PosOrderDetail posOrderDetail) {
         if (LibConfig.sCouponsXmlModels != null) {
             if (!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_SALE_NAME))
