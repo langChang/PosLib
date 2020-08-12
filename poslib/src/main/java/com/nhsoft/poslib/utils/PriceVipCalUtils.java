@@ -99,12 +99,6 @@ public class PriceVipCalUtils {
             boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
             boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
 
-            //没有开启卡支付折扣并且是卡类型折扣
-            if(!isEnablePayDiscount && !isCustomerDiscountType){
-                return getCouponsVipPrice(vipUserInfo,posOrderDetail);
-            }
-
-
 
             VipCrmAmaLevel vipLevel = RetailPosManager.getVipLevel(vipUserInfo.getLevel());
             if (vipLevel == null) return finalPrice;
@@ -134,6 +128,13 @@ public class PriceVipCalUtils {
                     }
                 }
 
+            }
+
+
+            //没有开启卡支付折扣并且是卡类型折扣
+            if(!isEnablePayDiscount && !isCustomerDiscountType){
+                float cardCouponsPrice = getCouponsVipPrice(vipUserInfo, posOrderDetail);
+                return cardCouponsPrice > birthPrice ? birthPrice : cardCouponsPrice;
             }
 
 

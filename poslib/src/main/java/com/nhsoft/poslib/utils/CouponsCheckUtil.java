@@ -15,6 +15,8 @@ import com.nhsoft.poslib.model.BranchXmlModel;
 import com.nhsoft.poslib.model.CheckCouponsStatus;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
+import com.nhsoft.poslib.model.VipCardConfig;
+import com.nhsoft.poslib.model.VipCardTypeBean;
 
 import org.json.JSONObject;
 
@@ -59,8 +61,34 @@ public class CouponsCheckUtil {
             return checkCouponsStatus;
         }
         for (PosOrderDetail posOrderDetail : posOrderDetails) {
-            if (LibConfig.activeVipMember != null && LibConfig.activeVipMember.isDiscount_without_coupon() && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG))
-                continue;
+
+            //会员折扣不与消费券同享
+            if(LibConfig.activeVipMember != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG)){
+                boolean discount_without_coupon = LibConfig.activeVipMember.isDiscount_without_coupon();
+                if(RetailPosManager.isOpenCrm()){
+                    VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+//                    boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+                    boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+                    if(!isCustomerDiscountType){
+                        VipCardTypeBean vipCardTypeBean = RetailPosManager.getInstance().getVipCardTypeBean(LibConfig.activeVipMember.getCard_user_type_name());
+                        if(vipCardTypeBean != null && !"0".equals(vipCardTypeBean.getVipConsumeWithOthers())){
+                            discount_without_coupon = true;
+                        }else {
+                            discount_without_coupon = false;
+                        }
+                    }
+                }
+                if(discount_without_coupon){
+                    continue;
+                }
+            }
+
+
+
+
+
+//            if (LibConfig.activeVipMember != null && LibConfig.activeVipMember.isDiscount_without_coupon() && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG))
+//                continue;
 //            int inGoodsList = RetailPosManager.getInstance().isContainGoods(couponsBean, posOrderDetail);
             if (RetailPosManager.getInstance().isContainGoods(couponsBean, posOrderDetail)) {
                 isUseable = true;
