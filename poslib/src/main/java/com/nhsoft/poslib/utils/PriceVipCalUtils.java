@@ -104,13 +104,21 @@ public class PriceVipCalUtils {
 
                 if (checkBirthDay(vipUserInfo.getCard_user_birth_date())) {
                     try {
-                        float birthBit = 0;
-                        if (!TextUtils.isEmpty(vipUserInfo.getCard_user_type_birth_discount())) {
-                            birthBit = Float.parseFloat(vipUserInfo.getCard_user_type_birth_discount());
+
+                        VipCardTypeBean vipCardTypeBean  = BookResourceImpl.getInstance().getVipCardTypeBeanList
+                                (LibConfig.activeShiftTable.getSystemBookCode(), LibConfig.S_LOCAL_VIP_TYPE, vipUserInfo.getCard_user_type_name());
+
+                        if (vipCardTypeBean != null && !TextUtils.isEmpty(vipCardTypeBean.getDiscountPriceLevel())) {
+                            float birthBit = 0;
+                            if (!TextUtils.isEmpty(vipUserInfo.getCard_user_type_birth_discount())) {
+                                birthBit = Float.parseFloat(vipUserInfo.getCard_user_type_birth_discount());
+                            }
+                            if (birthBit > 0 && birthBit <= 1) {
+                                birthPrice = getFinalLevelPrice(posItem,posItemGrade,Integer.parseInt(vipCardTypeBean.getDiscountPriceLevel())) * birthBit;
+                            }
+
                         }
-                        if (birthBit > 0 && birthBit <= 1) {
-                            birthPrice = posOrderDetail.getOrderDetailStdPrice() * birthBit;
-                        }
+                        
                     } catch (NumberFormatException e) {
 
                     }
