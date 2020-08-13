@@ -221,7 +221,7 @@ public class VipUserInfo implements Cloneable, Serializable {
     }
 
     public String getOpen_id() {
-        return open_id;
+        return open_id == null ? openid : open_id;
     }
 
     public void setOpen_id(String open_id) {
@@ -584,7 +584,7 @@ public class VipUserInfo implements Cloneable, Serializable {
     }
 
     public String getOpenid() {
-        return openid;
+        return openid == null ? open_id : openid;
     }
 
     public void setOpenid(String openid) {
