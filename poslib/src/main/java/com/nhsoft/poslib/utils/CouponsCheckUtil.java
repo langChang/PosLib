@@ -15,8 +15,6 @@ import com.nhsoft.poslib.model.BranchXmlModel;
 import com.nhsoft.poslib.model.CheckCouponsStatus;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.CouponsXmlModel;
-import com.nhsoft.poslib.model.VipCardConfig;
-import com.nhsoft.poslib.model.VipCardTypeBean;
 
 import org.json.JSONObject;
 
@@ -62,26 +60,26 @@ public class CouponsCheckUtil {
         }
         for (PosOrderDetail posOrderDetail : posOrderDetails) {
 
-            //会员折扣不与消费券同享
-            if(LibConfig.activeVipMember != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG)){
-                boolean discount_without_coupon = LibConfig.activeVipMember.isDiscount_without_coupon();
-                if(RetailPosManager.isOpenCrm()){
-                    VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
-//                    boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
-                    boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
-                    if(!isCustomerDiscountType){
-                        VipCardTypeBean vipCardTypeBean = RetailPosManager.getInstance().getVipCardTypeBean(LibConfig.activeVipMember.getCard_user_type_name());
-                        if(vipCardTypeBean != null && !"0".equals(vipCardTypeBean.getVipConsumeWithOthers())){
-                            discount_without_coupon = true;
-                        }else {
-                            discount_without_coupon = false;
-                        }
-                    }
-                }
-                if(discount_without_coupon){
-                    continue;
-                }
-            }
+//            //会员折扣不与消费券同享
+//            if(LibConfig.activeVipMember != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG)){
+//                boolean discount_without_coupon = LibConfig.activeVipMember.isDiscount_without_coupon();
+//                if(RetailPosManager.isOpenCrm()){
+//                    VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+////                    boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+//                    boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+//                    if(!isCustomerDiscountType){
+//                        VipCardTypeBean vipCardTypeBean = RetailPosManager.getInstance().getVipCardTypeBean(LibConfig.activeVipMember.getCard_user_type_name());
+//                        if(vipCardTypeBean != null && !"0".equals(vipCardTypeBean.getVipConsumeWithOthers())){
+//                            discount_without_coupon = true;
+//                        }else {
+//                            discount_without_coupon = false;
+//                        }
+//                    }
+//                }
+//                if(discount_without_coupon){
+//                    continue;
+//                }
+//            }
 
 
 
