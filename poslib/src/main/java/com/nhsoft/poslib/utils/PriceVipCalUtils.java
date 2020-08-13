@@ -75,7 +75,7 @@ public class PriceVipCalUtils {
                 }
             }
         }
-        return couponsDiscount;
+        return  Float.MAX_VALUE;
     }
 
     /**
@@ -101,9 +101,22 @@ public class PriceVipCalUtils {
             boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
             //没有开启卡支付折扣并且是卡类型折扣
             if(!isEnablePayDiscount && !isCustomerDiscountType){
-//                float cardCouponsPrice = getCouponsVipPrice(vipUserInfo, posOrderDetail);
-//                return cardCouponsPrice > birthPrice ? birthPrice : cardCouponsPrice;
-                return getCouponsVipPrice(vipUserInfo, posOrderDetail);
+
+                if (checkBirthDay(vipUserInfo.getCard_user_birth_date())) {
+                    try {
+                        float birthBit = 0;
+                        if (!TextUtils.isEmpty(vipUserInfo.getCard_user_type_birth_discount())) {
+                            birthBit = Float.parseFloat(vipUserInfo.getCard_user_type_birth_discount());
+                        }
+                        if (birthBit > 0 && birthBit <= 1) {
+                            birthPrice = posOrderDetail.getOrderDetailStdPrice() * birthBit;
+                        }
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+                float cardCouponsPrice = getCouponsVipPrice(vipUserInfo, posOrderDetail);
+                return cardCouponsPrice > birthPrice ? birthPrice : cardCouponsPrice;
             }
 
             VipCrmAmaLevel vipLevel = RetailPosManager.getVipLevel(vipUserInfo.getLevel());
