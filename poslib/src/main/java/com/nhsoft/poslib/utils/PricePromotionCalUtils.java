@@ -121,6 +121,19 @@ public class PricePromotionCalUtils {
                                     continue;
                             }
                         }
+                    }else {
+                        if (!TextUtils.isEmpty(policyPromotion.getPolicy_promotion_card_type())) {
+                            if(!isSettle)continue;
+                            if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+                                    "<消费卡类型列表/>").equals(policyPromotion.getPolicy_promotion_card_type())) {
+                            } else {
+                                if (!policyPromotion.getPolicy_promotion_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                    continue;
+                            }
+                        }
+                        if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyPromotion.getPolicy_promotion_level_ids())) {
+                            continue;
+                        }
                     }
                 } else {
                     if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyPromotion.getPolicy_promotion_level_ids())) {

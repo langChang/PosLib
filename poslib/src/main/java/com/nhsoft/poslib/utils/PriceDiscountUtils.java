@@ -75,6 +75,18 @@ public class PriceDiscountUtils {
                             }
                         }
 
+                    }else {
+                        if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyDiscount.getPolicy_discount_level_ids())) {
+                            continue;
+                        }
+                        if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
+                            if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+                                    "<消费卡类型列表/>").equals(policyDiscount.getPolicy_discount_card_type())) {
+                            } else {
+                                if (!policyDiscount.getPolicy_discount_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                    continue;
+                            }
+                        }
                     }
                 } else {
                     if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyDiscount.getPolicy_discount_level_ids())) {
