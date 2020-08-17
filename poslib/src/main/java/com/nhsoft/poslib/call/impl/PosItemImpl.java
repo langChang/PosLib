@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.nhsoft.poslib.PosTypeEnum;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.ItemBar;
@@ -326,12 +327,27 @@ public class PosItemImpl {
                     continue;
             }
 
-            if (posItem.getItem_type() == 10) {
-                List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
-                if (posItemGrades == null || posItemGrades.size() == 0) continue;
-                posItem.setPos_item_grade_list(posItemGrades);
+
+            if(RetailPosManager.sPosType == PosTypeEnum.AMA_POS){
+                if (posItem.getItem_type() == 10) {
+                    List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
+                    if (posItemGrades == null || posItemGrades.size() == 0) continue;
+                    posItem.setPos_item_grade_list(posItemGrades);
+                }
+                newPosItemList.add(posItem);
+            }else if(RetailPosManager.sPosType == PosTypeEnum.MOBILE_POS){
+                if (posItem.getItem_type() == 10) {
+                    List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
+                    if (posItemGrades == null || posItemGrades.size() == 0) continue;
+                    for (PosItemGrade posItemGrade : posItemGrades) {
+                        PosItem clonePosItem = RetailPosManager.getInstance().copyPosItem(posItem);
+                        clonePosItem.setShowPosItemGrade(posItemGrade);
+                        newPosItemList.add(clonePosItem);
+                    }
+                    continue;
+                }
+                newPosItemList.add(posItem);
             }
-            newPosItemList.add(posItem);
         }
         pos_itemDao.detachAll();
         return newPosItemList;

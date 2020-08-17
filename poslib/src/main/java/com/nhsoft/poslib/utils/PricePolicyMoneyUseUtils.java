@@ -5,7 +5,8 @@ import android.text.TextUtils;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.entity.PolicyMoney;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.model.VipCardConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,74 +21,119 @@ public class PricePolicyMoneyUseUtils {
 
     public static PolicyMoney getPolicyMoneyUse(List<PosOrderDetail> posOrderDetails, PolicyMoney policyMoney) {
 
-            if (!isSelectDay(policyMoney)) return null; //判断星期几包含了没有
-            if (!currentTimeContain(policyMoney))return null; //具体时间
-            if (!currentDateContain(policyMoney)) return null;//具体日期
+        if (!isSelectDay(policyMoney)) return null; //判断星期几包含了没有
+        if (!currentTimeContain(policyMoney)) return null; //具体时间
+        if (!currentDateContain(policyMoney)) return null;//具体日期
 
-            if (policyMoney.getPromotion_money_card_only()) {
-                if (LibConfig.activeVipMember == null) return null;
+        if (policyMoney.getPromotion_money_card_only()) {
+            if (LibConfig.activeVipMember == null) return null;
 
-//                if(RetailPosManager.isOpenCrm()){
-                    if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyMoney.getPromotion_money_level_ids())){
-                        return null;
+            VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+            if (RetailPosManager.isOpenCrm() && vipConfig != null) {
+                boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+                boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+                if (!isEnablePayDiscount) {
+                    if (isCustomerDiscountType) {
+                        if (!TextUtils.isEmpty(policyMoney.getPromotion_money_level_ids())) {
+                            return null;
+                        }
+
+                        if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyMoney.getPromotion_money_level_ids())) {
+                            return null;
+                        }
                     }
-//                }else {
-                    if (!TextUtils.isEmpty(policyMoney.getPromotion_money_card_type())) {
+
+                    if (!isCustomerDiscountType) {
+                        if (TextUtils.isEmpty(policyMoney.getPromotion_money_card_type())) {
+                            return null;
+                        }
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
-                                "<消费卡类型列表/>").equals(policyMoney.getPromotion_money_card_type())) {
-                        } else {
+                                "<消费卡类型列表/>").equals(policyMoney.getPromotion_money_level_ids())) {
+                            return null;
+                        }
+
+                        if (!TextUtils.isEmpty(policyMoney.getPromotion_money_card_type())) {
                             if (!policyMoney.getPromotion_money_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
                                 return null;
                         }
                     }
-//                }
-
-            }
-
-
-            float goodsUseTotalMoney = 0;
-
-            if("全场".equals(policyMoney.getPromotion_money_assigned_type())){
-                for (PosOrderDetail posOrderDetail : posOrderDetails){
-                    if(TextUtils.isEmpty(policyMoney.getPromotion_money_items()) || !policyMoney.getPromotion_money_items().contains("<商品编号>"+posOrderDetail.getItemNum()+"</商品编号>")){
-                        if(!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)){
-                            goodsUseTotalMoney+= posOrderDetail.getOrderDetailPaymentMoney();
-                        }
-                    }
                 }
-            }else if("指定类别".equals(policyMoney.getPromotion_money_assigned_type())){
-                for (PosOrderDetail posOrderDetail : posOrderDetails){
-
-                    if(posOrderDetail.getPosItem() == null || TextUtils.isEmpty(policyMoney.getPromotion_money_assigned_category()) ||
-                            !policyMoney.getPromotion_money_assigned_category().contains(posOrderDetail.getPosItem().getItem_category_code())){
-                        continue;
-                    }
-
-                    if(TextUtils.isEmpty(policyMoney.getPromotion_money_items()) || !policyMoney.getPromotion_money_items().contains("<商品编号>"+posOrderDetail.getItemNum()+"</商品编号>")){
-                        if(!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)){
-                            goodsUseTotalMoney+= posOrderDetail.getOrderDetailPaymentMoney();
-                        }
-
-                    }
+            } else {
+                if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyMoney.getPromotion_money_level_ids())) {
+                    return null;
                 }
-            }else{
-                for (PosOrderDetail posOrderDetail : posOrderDetails){
-                    if(!TextUtils.isEmpty(policyMoney.getPromotion_money_items()) && policyMoney.getPromotion_money_items().contains("<商品编号>"+posOrderDetail.getItemNum()+"</商品编号>")){
-                        if(!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)){
-                            goodsUseTotalMoney+= posOrderDetail.getOrderDetailPaymentMoney();
-                        }
+                if (!TextUtils.isEmpty(policyMoney.getPromotion_money_card_type())) {
+                    if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+                            "<消费卡类型列表/>").equals(policyMoney.getPromotion_money_card_type())) {
+                    } else {
+                        if (!policyMoney.getPromotion_money_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                            return null;
                     }
                 }
             }
 
-            if(goodsUseTotalMoney >= policyMoney.getPromotion_money_bill_money()){
-                if(policyMoney.getPromotion_money_append()){
-                    policyMoney.setMultiple((int) (goodsUseTotalMoney/policyMoney.getPromotion_money_bill_money()));
-                }else {
-                    policyMoney.setMultiple(1);
+
+//                if(RetailPosManager.isOpenCrm()){
+//                    if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyMoney.getPromotion_money_level_ids())){
+//                        return null;
+//                    }
+////                }else {
+//                    if (!TextUtils.isEmpty(policyMoney.getPromotion_money_card_type())) {
+//                        if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+//                                "<消费卡类型列表/>").equals(policyMoney.getPromotion_money_card_type())) {
+//                        } else {
+//                            if (!policyMoney.getPromotion_money_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+//                                return null;
+//                        }
+//                    }
+////                }
+//
+        }
+
+
+        float goodsUseTotalMoney = 0;
+
+        if ("全场".equals(policyMoney.getPromotion_money_assigned_type())) {
+            for (PosOrderDetail posOrderDetail : posOrderDetails) {
+                if (TextUtils.isEmpty(policyMoney.getPromotion_money_items()) || !policyMoney.getPromotion_money_items().contains("<商品编号>" + posOrderDetail.getItemNum() + "</商品编号>")) {
+                    if (!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)) {
+                        goodsUseTotalMoney += posOrderDetail.getOrderDetailPaymentMoney();
+                    }
                 }
-                return policyMoney;
             }
+        } else if ("指定类别".equals(policyMoney.getPromotion_money_assigned_type())) {
+            for (PosOrderDetail posOrderDetail : posOrderDetails) {
+
+                if (posOrderDetail.getPosItem() == null || TextUtils.isEmpty(policyMoney.getPromotion_money_assigned_category()) ||
+                        !policyMoney.getPromotion_money_assigned_category().contains(posOrderDetail.getPosItem().getItem_category_code())) {
+                    continue;
+                }
+
+                if (TextUtils.isEmpty(policyMoney.getPromotion_money_items()) || !policyMoney.getPromotion_money_items().contains("<商品编号>" + posOrderDetail.getItemNum() + "</商品编号>")) {
+                    if (!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)) {
+                        goodsUseTotalMoney += posOrderDetail.getOrderDetailPaymentMoney();
+                    }
+
+                }
+            }
+        } else {
+            for (PosOrderDetail posOrderDetail : posOrderDetails) {
+                if (!TextUtils.isEmpty(policyMoney.getPromotion_money_items()) && policyMoney.getPromotion_money_items().contains("<商品编号>" + posOrderDetail.getItemNum() + "</商品编号>")) {
+                    if (!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_PRESENT_NAME)) {
+                        goodsUseTotalMoney += posOrderDetail.getOrderDetailPaymentMoney();
+                    }
+                }
+            }
+        }
+
+        if (goodsUseTotalMoney >= policyMoney.getPromotion_money_bill_money()) {
+            if (policyMoney.getPromotion_money_append()) {
+                policyMoney.setMultiple((int) (goodsUseTotalMoney / policyMoney.getPromotion_money_bill_money()));
+            } else {
+                policyMoney.setMultiple(1);
+            }
+            return policyMoney;
+        }
 
         return null;
     }

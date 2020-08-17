@@ -3,11 +3,12 @@ package com.nhsoft.poslib.utils;
 import android.text.TextUtils;
 
 import com.nhsoft.poslib.RetailPosManager;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 import com.nhsoft.poslib.entity.PolicyDiscount;
 import com.nhsoft.poslib.entity.PolicyDiscountDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.call.impl.PosItemImpl;
+import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.model.VipCardConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,17 +25,19 @@ public class PriceDiscountUtils {
     public static List<PolicyDiscount> getPolicyDiscountPrice(PosOrderDetail posOrderDetail, List<PolicyDiscount> policyDiscounts) {
         if (!PosItemImpl.getInstance().goodsCanDiscount(posOrderDetail.getItemNum(), posOrderDetail.getItemGradeNum()))
             return null;
-        if(posOrderDetail.getOrderDetailPolicyPromotionFlag() || posOrderDetail.getOrderDetailPolicyDiscountFlag() || !TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())){
+        if (posOrderDetail.getOrderDetailPolicyPromotionFlag() || posOrderDetail.getOrderDetailPolicyDiscountFlag() || !TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())) {
             return null;
         }
         List<PolicyDiscount> policyDiscountList = posOrderDetail.getPolicyDiscounts();
-        if(policyDiscountList == null){
+        if (policyDiscountList == null) {
             policyDiscountList = new ArrayList<>();
         }
 
 
-        if(posOrderDetail.getOrderDetailMemo() != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_CHANGE_TAG))return null;
-        out: for (PolicyDiscount policyDiscount : policyDiscounts) {
+        if (posOrderDetail.getOrderDetailMemo() != null && posOrderDetail.getOrderDetailMemo().contains(LibConfig.GOODS_CHANGE_TAG))
+            return null;
+        out:
+        for (PolicyDiscount policyDiscount : policyDiscounts) {
             if (!isSelectDay(policyDiscount)) continue; //判断星期几包含了没有
             if (!currentTimeContain(policyDiscount)) continue;  //具体时间
             if (!currentDateContain(policyDiscount)) continue;//具体日期
@@ -42,11 +45,41 @@ public class PriceDiscountUtils {
             if (policyDiscount.getPolicy_discount_card_only()) {
                 if (LibConfig.activeVipMember == null) continue;
 
-//                if(RetailPosManager.isOpenCrm()){
-                   if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyDiscount.getPolicy_discount_level_ids())){
-                       continue;
-                   }
-//                }else {
+                VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+                if (RetailPosManager.isOpenCrm() && vipConfig != null) {
+                    boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+                    boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+                    if (!isEnablePayDiscount) {
+                        if (isCustomerDiscountType) {
+                            if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_level_ids())) {
+                                continue;
+                            }
+
+                            if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyDiscount.getPolicy_discount_level_ids())) {
+                                continue;
+                            }
+                        }
+
+                        if (!isCustomerDiscountType) {
+                            if (TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
+                                continue;
+                            }
+                            if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+                                    "<消费卡类型列表/>").equals(policyDiscount.getPolicy_discount_level_ids())) {
+                                continue;
+                            }
+
+                            if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
+                                if (!policyDiscount.getPolicy_discount_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                    continue;
+                            }
+                        }
+
+                    }
+                } else {
+                    if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyDiscount.getPolicy_discount_level_ids())) {
+                        continue;
+                    }
                     if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyDiscount.getPolicy_discount_card_type())) {
@@ -55,20 +88,36 @@ public class PriceDiscountUtils {
                                 continue;
                         }
                     }
+                }
+
+
+//                if(RetailPosManager.isOpenCrm()){
+//                   if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyDiscount.getPolicy_discount_level_ids())){
+//                       continue;
+//                   }
+////                }else {
+//                    if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_card_type())) {
+//                        if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+//                                "<消费卡类型列表/>").equals(policyDiscount.getPolicy_discount_card_type())) {
+//                        } else {
+//                            if (!policyDiscount.getPolicy_discount_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+//                                continue;
+//                        }
+//                    }
 //                }
 
             }
 
-            if("指定商品".equals(policyDiscount.getPolicy_discount_assigned_type())){
+            if ("指定商品".equals(policyDiscount.getPolicy_discount_assigned_type())) {
                 List<PolicyDiscountDetail> policy_promotion_details = policyDiscount.getPolicy_discount_details();
-                for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details){
-                    if(posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()){
+                for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details) {
+                    if (posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()) {
                         policyDiscountList.add(policyDiscount);
                         continue out;
                     }
                 }
-            }else if("指定类别".equals(policyDiscount.getPolicy_discount_assigned_type())){
-                if(!TextUtils.isEmpty(policyDiscount.getPolicy_discount_assigned_category())){
+            } else if ("指定类别".equals(policyDiscount.getPolicy_discount_assigned_type())) {
+                if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_assigned_category())) {
                     String item_category_code = posOrderDetail.getPosItem().getItem_category_code();
                     String[] splitCategory = policyDiscount.getPolicy_discount_assigned_category().split(",");
                     boolean inUsable = false;
@@ -80,29 +129,29 @@ public class PriceDiscountUtils {
                     }
                     if (!inUsable) continue;
                     List<PolicyDiscountDetail> policy_promotion_details = policyDiscount.getPolicy_discount_details();
-                    for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details){
-                        if(posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()){
+                    for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details) {
+                        if (posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()) {
                             inUsable = false;
                             break;
                         }
                     }
-                    if(inUsable){
+                    if (inUsable) {
                         policyDiscountList.add(policyDiscount);
                         continue out;
                     }
                 }
 
-            }else if("全场".equals(policyDiscount.getPolicy_discount_assigned_type())){
+            } else if ("全场".equals(policyDiscount.getPolicy_discount_assigned_type())) {
                 boolean inUsable = true;
                 List<PolicyDiscountDetail> policy_promotion_details = policyDiscount.getPolicy_discount_details();
-                for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details){
-                    if(posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()){
+                for (PolicyDiscountDetail policyDiscountDetail : policy_promotion_details) {
+                    if (posOrderDetail.getItemNum() == policyDiscountDetail.getItem_num()) {
                         inUsable = false;
                         break;
                     }
                 }
 
-                if(inUsable){
+                if (inUsable) {
                     policyDiscountList.add(policyDiscount);
                     continue out;
                 }
@@ -176,10 +225,10 @@ public class PriceDiscountUtils {
             Date nowDate = new SimpleDateFormat(format).parse(nowString);
             Date starDate = new SimpleDateFormat(format).parse(startString);
             Date endDate = new SimpleDateFormat(format).parse(endString);
-            int replayType  = 0;
-            if(!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每月".equals(policyDiscount.getPolicy_discount_repeat_type())){
+            int replayType = 0;
+            if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每月".equals(policyDiscount.getPolicy_discount_repeat_type())) {
                 replayType = 1;
-            }else if(!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每年".equals(policyDiscount.getPolicy_discount_repeat_type())){
+            } else if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每年".equals(policyDiscount.getPolicy_discount_repeat_type())) {
                 replayType = 2;
             }
             if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {

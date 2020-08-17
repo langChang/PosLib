@@ -118,7 +118,7 @@ public class PriceVipCalUtils {
                             }
 
                         }
-                        
+
                     } catch (NumberFormatException e) {
 
                     }
@@ -139,12 +139,13 @@ public class PriceVipCalUtils {
                         float birthBit = vipLevel.getBirth_discount();
                         if (birthBit > 0 && birthBit <= 1) {
                             birthPrice = levelPrice * birthBit;
-                        } else {
-                            float price_discount = vipLevel.getPrice_discount();
-                            if (price_discount > 0 && price_discount <= 1) {
-                                gradePrice = levelPrice * price_discount;
-                            }
                         }
+
+                        float price_discount = vipLevel.getPrice_discount();
+                        if (price_discount > 0 && price_discount <= 1) {
+                            gradePrice = levelPrice * price_discount;
+                        }
+
                     } catch (Exception e) {
 
                     }
@@ -293,7 +294,7 @@ public class PriceVipCalUtils {
         }
 
         Float minValue = (birthPrice < vipPrice) ? birthPrice : vipPrice;
-        minValue = (minValue < gradePrice) ? minValue : gradePrice;
+//        minValue = (minValue < gradePrice) ? minValue : gradePrice;
         return minValue;
     }
 

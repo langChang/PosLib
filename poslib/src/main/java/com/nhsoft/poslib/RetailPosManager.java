@@ -557,6 +557,25 @@ public class RetailPosManager {
         if (pattern.matcher(searchText).find()) {
             posItems = PosItemImpl.getInstance().getPosItemByPinyin(
                     LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), searchText.toUpperCase());
+
+            if(RetailPosManager.sPosType == PosTypeEnum.MOBILE_POS){
+                List<PosItem> newPosItems = new ArrayList<>();
+                for (PosItem posItem : posItems) {
+                    if (posItem.getItem_type() == 10) {
+                        List<PosItemGrade> allItemGrade = getAllItemGrade(posItems.get(0).getItem_num());
+                        if (allItemGrade == null || allItemGrade.size() == 0) {
+                            continue;
+                        }
+                        for (PosItemGrade posItemGrade : allItemGrade) {
+                            PosItem copyPosItem = RetailPosManager.getInstance().copyPosItem(posItem);
+                            copyPosItem.setShowPosItemGrade(posItemGrade);
+                            newPosItems.add(copyPosItem);
+                        }
+                        continue;
+                    }
+                    newPosItems.add(posItem);
+                }
+            }
         } else {
             if (posOrderDetails != null && WeightOutBarUtil.isWeightOutBarGoods(searchText)) {
                 PosOrderDetail posOrderDetail = WeightOutBarUtil.getWeightOutBarGoods(searchText, posOrderDetails);
@@ -815,10 +834,24 @@ public class RetailPosManager {
         if (vipUserInfo == null) return null;
         RedisBean redisBean = new RedisBean();
         if (!TextUtils.isEmpty(vipUserInfo.getCustomer_id())) {
+
+            VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+            if (RetailPosManager.isOpenCrm() && vipConfig != null) {
+                boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+                boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+                if(!isEnablePayDiscount && !isCustomerDiscountType && !TextUtils.isEmpty(vipUserInfo.getCard_user_num())){
+                    redisBean.setRedis_key("PolicyPromotion_" + redisNo + "_" + vipUserInfo.getCard_user_num());
+                    redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), ""));
+                    redisBean.setRedis_value("YES");
+                    redisBean.setVip_id(vipUserInfo.getCard_user_num());
+                    return redisBean;
+                }
+            }
             redisBean.setRedis_key("PolicyPromotion_" + redisNo + "_" + vipUserInfo.getCustomer_id());
             redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), ""));
             redisBean.setRedis_value("YES");
             redisBean.setVip_id(vipUserInfo.getCustomer_id());
+
         } else {
             redisBean.setRedis_key("PolicyPromotion_" + redisNo + "_" + vipUserInfo.getCard_user_num());
             redisBean.setRedis_time(TimeUtil.getSubTime(TimeUtil.getInstance().getNowDateString(), ""));
@@ -2104,8 +2137,6 @@ public class RetailPosManager {
     /**
      * 根据 store_item_pinyin 模糊查询
      * @param item_num
-     * @param systemBookCode
-     * @param branchNum
      * @return
      */
     public PosItem getPosItemByItemNum(long item_num) {
@@ -2115,8 +2146,7 @@ public class RetailPosManager {
     /**
      * 根据 store_item_pinyin 模糊查询
      * @param item_grade_num
-     * @param systemBookCode
-     * @param branchNum
+     * @param item_num
      * @return
      */
     public PosItemGrade getPosItemGradeByItemGradeNum(int item_grade_num,long item_num) {

@@ -3,11 +3,12 @@ package com.nhsoft.poslib.utils;
 import android.text.TextUtils;
 
 import com.nhsoft.poslib.RetailPosManager;
+import com.nhsoft.poslib.call.impl.PosItemImpl;
 import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PolicyQuantityDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
-import com.nhsoft.poslib.libconfig.LibConfig ;
-import com.nhsoft.poslib.call.impl.PosItemImpl;
+import com.nhsoft.poslib.libconfig.LibConfig;
+import com.nhsoft.poslib.model.VipCardConfig;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,11 +42,41 @@ public class PriceQuantityCalUtils {
 
             if (policyQuantity.getPromotion_quantity_card_only()) {
                 if (LibConfig.activeVipMember == null) continue;
-//                if(RetailPosManager.isOpenCrm()){
-                    if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyQuantity.getPromotion_quantity_level_ids())){
+                VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
+                if (RetailPosManager.isOpenCrm() && vipConfig != null) {
+                    boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
+                    boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
+                    if (!isEnablePayDiscount) {
+                        if (isCustomerDiscountType) {
+                            if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_level_ids())) {
+                                continue;
+                            }
+
+                            if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyQuantity.getPromotion_quantity_level_ids())) {
+                                continue;
+                            }
+                        }
+
+                        if (!isCustomerDiscountType) {
+                            if (TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
+                                continue;
+                            }
+                            if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+                                    "<消费卡类型列表/>").equals(policyQuantity.getPromotion_quantity_card_type())) {
+                                continue;
+                            }
+
+                            if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
+                                if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                    continue;
+                            }
+                        }
+
+                    }
+                } else {
+                    if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyQuantity.getPromotion_quantity_level_ids())) {
                         continue;
                     }
-//                }else {
                     if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyQuantity.getPromotion_quantity_card_type())) {
@@ -54,13 +85,30 @@ public class PriceQuantityCalUtils {
                                 continue;
                         }
                     }
+                }
+
+
+//
+////                if(RetailPosManager.isOpenCrm()){
+//                    if(!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember,policyQuantity.getPromotion_quantity_level_ids())){
+//                        continue;
+//                    }
+////                }else {
+//                    if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
+//                        if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
+//                                "<消费卡类型列表/>").equals(policyQuantity.getPromotion_quantity_card_type())) {
+//                        } else {
+//                            if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+//                                continue;
+//                        }
+//                    }
 //                }
 
             }
 
             Map<String, List<PosOrderDetail>> stringListMap = new HashMap<>();
 
-            for (int j = 0; j < posOrderDetails.size(); j++ ) {
+            for (int j = 0; j < posOrderDetails.size(); j++) {
 
                 PosOrderDetail posOrderDetail = posOrderDetails.get(j);
 
@@ -86,8 +134,8 @@ public class PriceQuantityCalUtils {
 
                 PolicyQuantityDetail containGoods = isContainGoods(policyQuantity, posOrderDetail);
                 if (null == containGoods) continue;
-                if (containGoods.getPromotion_quantity_detail_special_price() > posOrderDetail.getOrderDetailPrice()){
-                    if(policyQuantity.getPromotion_quantity_no().equals(posOrderDetail.getOrderDetailPolicyFid()) ){
+                if (containGoods.getPromotion_quantity_detail_special_price() > posOrderDetail.getOrderDetailPrice()) {
+                    if (policyQuantity.getPromotion_quantity_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
                         posOrderDetail.setOrderDetailPolicyPromotionQuantityFlag(false);
                         posOrderDetail.setOrderDetailPolicyFid(null);
                         continue;
@@ -110,7 +158,7 @@ public class PriceQuantityCalUtils {
                     float totalAmount = getTotalAmount(posOrderDetailList);
                     if (totalAmount >= containGoods.getPromotion_quantity_detail_min_amount()) {
                         for (PosOrderDetail posOrderDetail1 : posOrderDetailList) {
-                            if(checkPolicyPriceUse(containGoods.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                            if (checkPolicyPriceUse(containGoods.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                 if (containGoods.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                     posOrderDetail1.setOrderDetailPrice(containGoods.getPromotion_quantity_detail_special_price());
                                 } else {
@@ -152,7 +200,7 @@ public class PriceQuantityCalUtils {
                             PosOrderCalcUtil.calcPosOrderDetail(posOrderDetail1);
                         } else {
 
-                            if(checkPolicyPriceUse(containGoods.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                            if (checkPolicyPriceUse(containGoods.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                 if (containGoods.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                     posOrderDetail1.setOrderDetailPrice(containGoods.getPromotion_quantity_detail_special_price());
                                 } else {
@@ -182,7 +230,7 @@ public class PriceQuantityCalUtils {
                     }
 
                     float totalAmount = getTotalAmount(posOrderDetailList);
-                    if(promotion_quantity_min_amount != 0 && totalAmount < promotion_quantity_min_amount){
+                    if (promotion_quantity_min_amount != 0 && totalAmount < promotion_quantity_min_amount) {
                         for (PosOrderDetail posOrderDetail1 : posOrderDetailList) {
                             posOrderDetail1.setOrderDetailPolicyPromotionQuantityFlag(false);
                             if (containGoods.getPromotion_quantity_no().equals(posOrderDetail1.getOrderDetailPolicyFid())) {
@@ -195,12 +243,12 @@ public class PriceQuantityCalUtils {
 
 
                     if (policyQuantity.getPromotion_quantity_append() != null && policyQuantity.getPromotion_quantity_append()) {
-                        if (promotion_quantity_min_amount == 0){
+                        if (promotion_quantity_min_amount == 0) {
                             promotion_quantity_min_amount = Float.MAX_VALUE;
-                        }else {
+                        } else {
                             float pow = ((int) (totalAmount / promotion_quantity_min_amount)) * promotion_quantity_min_amount;
-                            if(pow > promotion_quantity_min_amount){
-                                promotion_quantity_min_amount = ((int)(totalAmount / promotion_quantity_min_amount)) * promotion_quantity_min_amount;
+                            if (pow > promotion_quantity_min_amount) {
+                                promotion_quantity_min_amount = ((int) (totalAmount / promotion_quantity_min_amount)) * promotion_quantity_min_amount;
                             }
                         }
 
@@ -210,15 +258,15 @@ public class PriceQuantityCalUtils {
                             if (policyQuantityDetail == null) continue;
 
 
-                            if(promotion_quantity_min_amount > current_quantity_amount){
-                                if(posOrderDetail1.getOrderDetailAmount() + current_quantity_amount > promotion_quantity_min_amount){
-                                    if(promotion_quantity_min_amount - current_quantity_amount - posOrderDetail1.getOrderDetailAmount() < 0){
+                            if (promotion_quantity_min_amount > current_quantity_amount) {
+                                if (posOrderDetail1.getOrderDetailAmount() + current_quantity_amount > promotion_quantity_min_amount) {
+                                    if (promotion_quantity_min_amount - current_quantity_amount - posOrderDetail1.getOrderDetailAmount() < 0) {
 
 
                                         clonePosOrderDeatil = RetailPosManager.getInstance().copyPosOrderDetail(posOrderDetail1);
-                                        if(!checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(),clonePosOrderDeatil)
-                                                && !TextUtils.isEmpty( clonePosOrderDeatil.getOrderDetailMemo())
-                                        && clonePosOrderDeatil.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG)){
+                                        if (!checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(), clonePosOrderDeatil)
+                                                && !TextUtils.isEmpty(clonePosOrderDeatil.getOrderDetailMemo())
+                                                && clonePosOrderDeatil.getOrderDetailMemo().contains(LibConfig.GOODS_VIP_TAG)) {
                                             clonePosOrderDeatil = null;
                                             continue;
                                         }
@@ -233,7 +281,7 @@ public class PriceQuantityCalUtils {
                                         posOrderDetail1.setOrderDetailAmount(promotion_quantity_min_amount - current_quantity_amount);
                                         current_quantity_amount += posOrderDetail1.getOrderDetailAmount();
 
-                                        if(checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                                        if (checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                             if (policyQuantityDetail.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                                 posOrderDetail1.setOrderDetailPrice(policyQuantityDetail.getPromotion_quantity_detail_special_price());
                                             } else {
@@ -246,8 +294,8 @@ public class PriceQuantityCalUtils {
                                         }
 
 
-                                    }else {
-                                        if(checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                                    } else {
+                                        if (checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                             current_quantity_amount += posOrderDetail1.getOrderDetailAmount();
                                             if (policyQuantityDetail.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                                 posOrderDetail1.setOrderDetailPrice(policyQuantityDetail.getPromotion_quantity_detail_special_price());
@@ -263,8 +311,8 @@ public class PriceQuantityCalUtils {
 
                                     }
 
-                                }else {
-                                    if(checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                                } else {
+                                    if (checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                         current_quantity_amount += posOrderDetail1.getOrderDetailAmount();
                                         if (policyQuantityDetail.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                             posOrderDetail1.setOrderDetailPrice(policyQuantityDetail.getPromotion_quantity_detail_special_price());
@@ -277,15 +325,13 @@ public class PriceQuantityCalUtils {
                                         PosOrderCalcUtil.calcPosOrderDetail(posOrderDetail1);
                                     }
                                 }
-                            }else {
+                            } else {
                                 posOrderDetail1.setOrderDetailPolicyPromotionQuantityFlag(false);
                                 if (containGoods.getPromotion_quantity_no().equals(posOrderDetail1.getOrderDetailPolicyFid())) {
                                     posOrderDetail1.setOrderDetailPolicyFid("");
                                 }
                                 PosOrderCalcUtil.calcPosOrderDetail(posOrderDetail1);
                             }
-
-
 
 
                         }
@@ -296,7 +342,7 @@ public class PriceQuantityCalUtils {
                                 PolicyQuantityDetail policyQuantityDetail = posOrderDetail1.getPolicyQuantityDetail();
                                 if (policyQuantityDetail == null) continue;
 
-                                if(checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(),posOrderDetail1)){
+                                if (checkPolicyPriceUse(policyQuantityDetail.getPromotion_quantity_detail_special_price(), posOrderDetail1)) {
                                     if (policyQuantityDetail.getPromotion_quantity_detail_special_price() > posOrderDetail1.getPosItem().getItem_min_price()) {
                                         posOrderDetail1.setOrderDetailPrice(policyQuantityDetail.getPromotion_quantity_detail_special_price());
                                     } else {
@@ -321,7 +367,7 @@ public class PriceQuantityCalUtils {
                     }
 
 
-                    if(clonePosOrderDeatil != null){
+                    if (clonePosOrderDeatil != null) {
                         posOrderDetails.add(clonePosOrderDeatil);
                     }
 
@@ -362,14 +408,15 @@ public class PriceQuantityCalUtils {
 
     /**
      * 比比促销价和商品售价
+     *
      * @param promotion_quantity_detail_special_price
      * @param posOrderDetail
      * @return
      */
-    private static boolean checkPolicyPriceUse(float promotion_quantity_detail_special_price,PosOrderDetail posOrderDetail){
-        if(promotion_quantity_detail_special_price <= posOrderDetail.getOrderDetailPrice()){
+    private static boolean checkPolicyPriceUse(float promotion_quantity_detail_special_price, PosOrderDetail posOrderDetail) {
+        if (promotion_quantity_detail_special_price <= posOrderDetail.getOrderDetailPrice()) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
