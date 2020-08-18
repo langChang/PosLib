@@ -699,7 +699,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public boolean isEnableCardPayDiscount() {
-        return EnableCardPayDiscount == null ? false : !(Integer.parseInt(EnableCardPayDiscount) == 0);
+        return EnableCardPayDiscount == null ? true : !(Integer.parseInt(EnableCardPayDiscount) == 0);
     }
 
     public void setEnableCardPayDiscount(String enableCardPayDiscount) {
@@ -707,7 +707,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public boolean isCustomerDiscountType() {
-        return CardConsumeDiscountType == null ? false : "身份等级".equals(CardConsumeDiscountType);
+        return CardConsumeDiscountType == null ? true : "身份等级".equals(CardConsumeDiscountType);
     }
 
     public void setCardConsumeDiscountType(String cardConsumeDiscountType) {

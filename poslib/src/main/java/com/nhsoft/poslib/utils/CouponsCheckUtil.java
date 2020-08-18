@@ -107,7 +107,7 @@ public class CouponsCheckUtil {
                     }
 
                 } else if ("购物抵用券".equals(couponsBean.getTicket_category())) {
-                    insertMoney = insertMoney + (posOrderDetail.getOrderDetailPaymentMoney() - posOrderDetail.getOrderDetailDiscount());
+                    insertMoney = insertMoney + (posOrderDetail.getOrderDetailPaymentMoney());
                 }else if ("商品券".equals(couponsBean.getTicket_category())) {
                     if (couponsBean.isExcept_promotion_items()) {
                         if (TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid())){
@@ -141,7 +141,7 @@ public class CouponsCheckUtil {
                         if(coupons_discount_amount < 0.0001){
                             break;
                         }
-                        if(posOrderDetail.getOrderDetailAmount() >= coupons_discount_amount){
+                        if(posOrderDetail.getOrderDetailAmount() > coupons_discount_amount){
                             insertMoney+= posOrderDetail.getOrderDetailPrice()*coupons_discount_amount;
                             coupons_discount_amount = 0;
                             break;

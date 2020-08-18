@@ -7,6 +7,7 @@ import com.nhsoft.poslib.entity.PolicyPresent;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.VipCardConfig;
+import com.nhsoft.poslib.model.VipUserInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +27,10 @@ public class PricePolicyPresentUseUtils {
         if (!currentDateContain(policyPresent)) return null;//具体日期
 
         if (policyPresent.getPolicy_present_card_only()) {
-            if (LibConfig.activeVipMember == null) return null;
+            if (LibConfig.activeVipMember == null && LibConfig.discountVipMember == null)
+                return null;
+
+            VipUserInfo vipUserInfo = LibConfig.activeVipMember== null ?  LibConfig.discountVipMember : LibConfig.activeVipMember;
 
 
             VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
@@ -35,11 +39,11 @@ public class PricePolicyPresentUseUtils {
                 boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
                 if (!isEnablePayDiscount) {
                     if (isCustomerDiscountType) {
-                        if (!TextUtils.isEmpty(policyPresent.getPolicy_present_level_ids())) {
+                        if (TextUtils.isEmpty(policyPresent.getPolicy_present_level_ids())) {
                             return null;
                         }
 
-                        if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyPresent.getPolicy_present_level_ids())) {
+                        if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyPresent.getPolicy_present_level_ids())) {
                             return null;
                         }
                     }
@@ -49,37 +53,37 @@ public class PricePolicyPresentUseUtils {
                             return null;
                         }
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
-                                "<消费卡类型列表/>").equals(policyPresent.getPolicy_present_level_ids())) {
+                                "<消费卡类型列表/>").equals(policyPresent.getPolicy_present_card_type())) {
                             return null;
                         }
 
                         if (!TextUtils.isEmpty(policyPresent.getPolicy_present_card_type())) {
-                            if (!policyPresent.getPolicy_present_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                            if (!policyPresent.getPolicy_present_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                                 return null;
                         }
                     }
                 }else {
-                    if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyPresent.getPolicy_present_level_ids())) {
+                    if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyPresent.getPolicy_present_level_ids())) {
                         return null;
                     }
                     if (!TextUtils.isEmpty(policyPresent.getPolicy_present_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyPresent.getPolicy_present_card_type())) {
                         } else {
-                            if (!policyPresent.getPolicy_present_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                            if (!policyPresent.getPolicy_present_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                                 return null;
                         }
                     }
                 }
             } else {
-                if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyPresent.getPolicy_present_level_ids())) {
+                if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyPresent.getPolicy_present_level_ids())) {
                     return null;
                 }
                 if (!TextUtils.isEmpty(policyPresent.getPolicy_present_card_type())) {
                     if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                             "<消费卡类型列表/>").equals(policyPresent.getPolicy_present_card_type())) {
                     } else {
-                        if (!policyPresent.getPolicy_present_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                        if (!policyPresent.getPolicy_present_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                             return null;
                     }
                 }

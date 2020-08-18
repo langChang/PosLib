@@ -9,6 +9,7 @@ import com.nhsoft.poslib.entity.PolicyQuantityDetail;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.VipCardConfig;
+import com.nhsoft.poslib.model.VipUserInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,18 +42,23 @@ public class PriceQuantityCalUtils {
             }
 
             if (policyQuantity.getPromotion_quantity_card_only()) {
-                if (LibConfig.activeVipMember == null) continue;
+                if (LibConfig.activeVipMember == null && LibConfig.discountVipMember == null)
+                    continue;
+
+                VipUserInfo vipUserInfo = LibConfig.activeVipMember== null ?  LibConfig.discountVipMember : LibConfig.activeVipMember;
+
+
                 VipCardConfig vipConfig = RetailPosManager.getInstance().getVipConfig(LibConfig.SYSTEM_BOOK);
                 if (RetailPosManager.isOpenCrm() && vipConfig != null) {
                     boolean isEnablePayDiscount = vipConfig.isEnableCardPayDiscount();//是否开启卡支付折扣参数
                     boolean isCustomerDiscountType = vipConfig.isCustomerDiscountType();//是否身份等级
                     if (!isEnablePayDiscount) {
                         if (isCustomerDiscountType) {
-                            if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_level_ids())) {
+                            if (TextUtils.isEmpty(policyQuantity.getPromotion_quantity_level_ids())) {
                                 continue;
                             }
 
-                            if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyQuantity.getPromotion_quantity_level_ids())) {
+                            if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyQuantity.getPromotion_quantity_level_ids())) {
                                 continue;
                             }
                         }
@@ -67,33 +73,33 @@ public class PriceQuantityCalUtils {
                             }
 
                             if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
-                                if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                                     continue;
                             }
                         }
 
                     }else {
-                        if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyQuantity.getPromotion_quantity_level_ids())) {
+                        if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyQuantity.getPromotion_quantity_level_ids())) {
                             continue;
                         }
                         if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
                             if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                     "<消费卡类型列表/>").equals(policyQuantity.getPromotion_quantity_card_type())) {
                             } else {
-                                if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                                if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                                     continue;
                             }
                         }
                     }
                 } else {
-                    if (!RetailPosManager.checkCrmLevelInPolicy(LibConfig.activeVipMember, policyQuantity.getPromotion_quantity_level_ids())) {
+                    if (!RetailPosManager.checkCrmLevelInPolicy(vipUserInfo, policyQuantity.getPromotion_quantity_level_ids())) {
                         continue;
                     }
                     if (!TextUtils.isEmpty(policyQuantity.getPromotion_quantity_card_type())) {
                         if (("<?xml version=\"1.0\" encoding=\"GBK\"?>\n" +
                                 "<消费卡类型列表/>").equals(policyQuantity.getPromotion_quantity_card_type())) {
                         } else {
-                            if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + LibConfig.activeVipMember.getCard_user_type_name() + "<"))
+                            if (!policyQuantity.getPromotion_quantity_card_type().contains(">" + vipUserInfo.getCard_user_type_name() + "<"))
                                 continue;
                         }
                     }
