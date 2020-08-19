@@ -564,6 +564,13 @@ public class PosOrderOperationUtil {
                         }
                     }
 
+                    //暂时先存主商品，不算分级商品
+                    if(posItemGrade != null){
+                        posItemGrade = null;
+                    }
+                    //暂时先存主商品，不算分级商品
+
+
                     PosOrderKitDetail posOrderKitDetail = new PosOrderKitDetail();
                     posOrderKitDetail.setOrderNo(posOrderDetail.getOrderNo());
                     posOrderKitDetail.setOrderDetailNum(posOrderDetail.getOrderDetailNum());
