@@ -52,6 +52,7 @@ import com.nhsoft.poslib.call.impl.StoreHouseImpl;
 import com.nhsoft.poslib.call.impl.SystemBookImpl;
 import com.nhsoft.poslib.call.impl.TicketSendImpl;
 import com.nhsoft.poslib.call.impl.VipCrmAmaLevelImpl;
+import com.nhsoft.poslib.call.impl.VipOperationImpl;
 import com.nhsoft.poslib.dao.UserDao;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.AccountBank;
@@ -224,6 +225,9 @@ public class RetailPosManager {
         LibConfig.SYSTEM_BOOK_NAME = LibConfig.activeLoginBean.getSystem_book_name();
         LibConfig.BRANCH_NUM = LibConfig.activeLoginBean.getBranch_num();
         LibConfig.BRANCH_NAME = LibConfig.activeLoginBean.getBranch_name();
+        if(LibConfig.BRANCH_NAME == null){
+            LibConfig.BRANCH_NAME = LibConfig.SYSTEM_BOOK_NAME;
+        }
         LibConfig.SHIFT_TABLE_BIZDAY = getCurrentByzday(LibConfig.SYSTEM_BOOK,LibConfig.BRANCH_NUM);
         LibConfig.POS_MACHINE_TERMINAL_ID = LibConfig.activePosMachine.getPos_machine_terminal_id();
         LibConfig.POS_MACHINE_SEQUENCE = LibConfig.activePosMachine.getPos_machine_sequence();
@@ -2426,7 +2430,21 @@ public class RetailPosManager {
 
     /*********************************VipIcInitImpl*********************************************/
 
-    /*********************************VipSendCardImpl*********************************************/
+
+    /*********************************VipOperationImpl*********************************************/
+
+    /**
+     * 获取挂失卡的json
+     * @param card_user_num 卡主键
+     * @param card_loss_operator 操作人
+     * @return
+     */
+    public String getLossCardJson(String card_user_num,String card_loss_operator){
+        return VipOperationImpl.getInstance().getLossCardJson(card_user_num,card_loss_operator,LibConfig.BRANCH_NAME);
+    }
+
+
+        /*********************************VipSendCardImpl*********************************************/
 
     /*********************************VipSendCardSuccessImpl*********************************************/
 

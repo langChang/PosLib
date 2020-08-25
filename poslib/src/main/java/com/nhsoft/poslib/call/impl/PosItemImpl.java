@@ -562,9 +562,20 @@ public class PosItemImpl {
                 .where(ItemBarDao.Properties.Item_bar_code.eq(itemBarCode));
 
             if(LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived()){
-                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false), PosItemDao.Properties.Branch_sale_cease_flag.eq(false),
+                        PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
             }else {
-                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.notEq(true), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+                List<PosItem> searchList = queryBuilder.where(PosItemDao.Properties.Item_del_tag.notEq(true), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+
+                posItems = new ArrayList<>();
+
+                if(searchList != null){
+                    for (PosItem posItem : searchList){
+                        if(posItem.getItem_sale_cease_flag() == null || !posItem.getItem_sale_cease_flag()){
+                            posItems.add(posItem);
+                        }
+                    }
+                }
 
 //                posItems = new ArrayList<>();
 //                if(getPosItems != null){

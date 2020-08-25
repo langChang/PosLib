@@ -312,6 +312,8 @@ public class LibConfig {
     public static final int CHANGE_DISCOUNT  = 4; //修改折扣
 
 
+    public static final String REFRESH_ACTION = "refreshData";
+
 
     /***************************折扣方式**********************************/
     public static final String S_ORDER_DISCOUNT_BY_MONEY = "order_discount_by_money";
