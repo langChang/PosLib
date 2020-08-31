@@ -2,13 +2,17 @@ package com.nhsoft.poslib.call.impl;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
 import com.nhsoft.poslib.entity.VipLevelPointRule;
+import com.nhsoft.poslib.model.PointCateGoryParam;
 import com.nhsoft.poslib.service.greendao.VipCrmAmaLevelDao;
 import com.nhsoft.poslib.service.greendao.VipLevelPointRuleDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +50,12 @@ public class VipCrmAmaLevelImpl {
             @Override
             public void run() {
                 for (VipCrmAmaLevel vipCrmAmaLevel : vipCrmAmaLevelList) {
+
                     vipCrmAmaLevelDao.insertOrReplaceInTx(vipCrmAmaLevel);
                     VipLevelPointRule point_rule = vipCrmAmaLevel.point_rule;
+                    if(point_rule.getPoint_category_params() != null && point_rule.getPoint_category_params().size() > 0){
+                        point_rule.setPoint_category_params_json(new Gson().toJson(point_rule.getPoint_category_params()));
+                    }
                     if (point_rule!=null){
                         point_rule.setId(vipCrmAmaLevel.getId());
                         VipLevelPointRuleDao.insertOrReplaceInTx(point_rule);
@@ -146,6 +154,13 @@ public class VipCrmAmaLevelImpl {
             VipLevelPointRuleDao vipLevelPointRuleDao = DaoManager.getInstance().getDaoSession().getVipLevelPointRuleDao();
             List<VipLevelPointRule> pointRules = vipLevelPointRuleDao.queryBuilder().where(VipLevelPointRuleDao.Properties.Id.eq(id)).build().list();
             if(pointRules != null && pointRules.size() > 0){
+                if(list.get(0).point_rule != null){
+                    String point_category_params_json = list.get(0).point_rule.getPoint_category_params_json();
+                    if(!TextUtils.isEmpty(point_category_params_json)){
+                        list.get(0).point_rule.setPoint_category_params((List<PointCateGoryParam>) new Gson().fromJson(point_category_params_json, new TypeToken<ArrayList<PointCateGoryParam>>() {
+                        }.getType()));
+                    }
+                }
                 list.get(0).point_rule = pointRules.get(0);
             }
             return list.get(0);

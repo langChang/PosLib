@@ -1,8 +1,13 @@
 package com.nhsoft.poslib.entity;
 
+import com.nhsoft.poslib.model.PointCateGoryParam;
+
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
+import java.util.List;
 
 /**
  * 会员等级对应的积分规则
@@ -26,21 +31,42 @@ public class VipLevelPointRule {
      */
 
     @Id
-    private Long id;//对应会员等级id
-    private long rule_id;
-    private String rule_name;
-    private String rule_creator;
-    private String rule_create_time;
-    private String rule_type;
-    private float rule_money;
-    private int rule_value;
-    private boolean discount_item_no_point;
+    private Long                     id;//对应会员等级id
+    private long                     rule_id;
+    private String                   rule_name;
+    private String                   rule_creator;
+    private String                   rule_create_time;
+    private String                   rule_type;
+    private float                    rule_money;
+    private int                      rule_value;
+    private boolean                  discount_item_no_point;
+
+    public List<PointCateGoryParam> getPoint_category_params() {
+        return point_category_params;
+    }
+
+    public void setPoint_category_params(List<PointCateGoryParam> point_category_params) {
+        this.point_category_params = point_category_params;
+    }
+
+    @Transient
+    private List<PointCateGoryParam> point_category_params;
+
+    private String point_category_params_json;
+    public String getPoint_category_params_json() {
+        return this.point_category_params_json;
+    }
+
+    public void setPoint_category_params_json(String point_category_params_json) {
+        this.point_category_params_json = point_category_params_json;
+    }
 
 
-    @Generated(hash = 707938530)
+    @Generated(hash = 501529225)
     public VipLevelPointRule(Long id, long rule_id, String rule_name,
             String rule_creator, String rule_create_time, String rule_type,
-            float rule_money, int rule_value, boolean discount_item_no_point) {
+            float rule_money, int rule_value, boolean discount_item_no_point,
+            String point_category_params_json) {
         this.id = id;
         this.rule_id = rule_id;
         this.rule_name = rule_name;
@@ -50,6 +76,7 @@ public class VipLevelPointRule {
         this.rule_money = rule_money;
         this.rule_value = rule_value;
         this.discount_item_no_point = discount_item_no_point;
+        this.point_category_params_json = point_category_params_json;
     }
 
     @Generated(hash = 1932268623)
