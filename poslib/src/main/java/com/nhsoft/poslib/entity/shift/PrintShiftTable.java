@@ -1,6 +1,7 @@
 package com.nhsoft.poslib.entity.shift;
 
 import com.nhsoft.poslib.entity.AmountPay;
+import com.nhsoft.poslib.entity.order.Payment;
 
 import java.util.List;
 
@@ -65,4 +66,6 @@ public class PrintShiftTable {
 
     public int othersNum;
     public float othersMoney;
+
+    public List<Payment> payments;
 }

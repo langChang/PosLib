@@ -976,12 +976,17 @@ public class RetailPosManager {
         float sellAllMoney = noDiscountMoney - promotionDiscountMoney - modifyPriceDiscountMoney - strRoundAmount -
                 vipDiscountMoney - strCouponsMoney - strDiscountAmount - feeNum;
 
-        int othersNum = OtherRevenueImpl.getInstance().getNum(shiftTable.getSystemBookCode(),
-                shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
-                shiftTable.getShiftTableBizday());
-        float othersMoney = OtherRevenueImpl.getInstance().getMoney(shiftTable.getSystemBookCode(),
-                shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
-                shiftTable.getShiftTableBizday());
+        List<Payment> shfitOtherPayment = OtherRevenueImpl.getInstance()
+                .getShfitOtherPayment(shiftTable.getSystemBookCode(),
+                        shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),
+                        shiftTable.getShiftTableBizday());
+
+        int othersNum = shfitOtherPayment.size();
+        float othersMoney = 0;
+
+        for (Payment payment : shfitOtherPayment){
+            othersMoney += payment.getPaymentMoney();
+        }
 
         float collectionMoney = OrderImpl.getInstance().getAmountOfCollection(shiftTable.getSystemBookCode(),
                 shiftTable.getBranchNum(), shiftTable.getShiftTableNum(),

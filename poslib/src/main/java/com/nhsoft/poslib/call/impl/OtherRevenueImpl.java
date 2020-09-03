@@ -32,29 +32,22 @@ public class OtherRevenueImpl {
 
     }
 
-    public int getNum(String systemBookCode,int branchNum,int shiftTableNum,String bizDay){
+    public List<Payment> getShfitOtherPayment(String systemBookCode,int branchNum,int shiftTableNum,String bizDay){
         final PaymentDao paymentDao= DaoManager.getInstance().getDaoSession().getPaymentDao();
         return  paymentDao.queryBuilder().where(
                 PaymentDao.Properties.BranchNum.eq(branchNum),
                 PaymentDao.Properties.ShiftTableNum.eq(shiftTableNum),
                 PaymentDao.Properties.SystemBookCode.eq(systemBookCode),
                 PaymentDao.Properties.PaymentNo.like("%"+"OS"+"%"),
-                PaymentDao.Properties.ShiftTableBizday.eq(bizDay)).list().size();
+                PaymentDao.Properties.ShiftTableBizday.eq(bizDay)).list();
     }
 
-    public Float getMoney(String systemBookCode,int branchNum,int shiftTableNum,String bizDay){
-        float money=0;
+    public List<Payment> getBizdayOtherPayment(String systemBookCode,int branchNum,String bizDay){
         final PaymentDao paymentDao= DaoManager.getInstance().getDaoSession().getPaymentDao();
-        List<Payment> list = paymentDao.queryBuilder().where(
+        return  paymentDao.queryBuilder().where(
                 PaymentDao.Properties.BranchNum.eq(branchNum),
-                PaymentDao.Properties.ShiftTableNum.eq(shiftTableNum),
                 PaymentDao.Properties.SystemBookCode.eq(systemBookCode),
                 PaymentDao.Properties.PaymentNo.like("%"+"OS"+"%"),
                 PaymentDao.Properties.ShiftTableBizday.eq(bizDay)).list();
-        for (Payment mPayment:list ) {
-            money=money+mPayment.getPaymentMoney();
-        }
-        return money;
     }
-
 }

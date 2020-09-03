@@ -5,6 +5,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -56,7 +57,7 @@ public class ItemCategory {
 
 
     public List<PosItem> getPosItemList() {
-        return posItemList;
+        return posItemList == null ? new ArrayList<PosItem>() : posItemList;
     }
 
     public void setPosItemList(List<PosItem> posItemList) {
