@@ -1074,6 +1074,17 @@ public class RetailPosManager {
 
     /********************************新添加Api**************************************/
 
+    /**
+     * 是否是IC卡帐套号
+     * @return
+     */
+    public boolean isIcCard(){
+        if (LibConfig.activeIcCardMessage != null && LibConfig.activeIcCardMessage.getBranch_iC()) {
+            return true;
+        }
+        return false;
+    }
+
     /*********************************AccountBankImpl*********************************************/
     /**
      * 保存银行账户
