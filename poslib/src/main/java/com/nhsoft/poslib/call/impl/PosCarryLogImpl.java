@@ -149,6 +149,7 @@ public class PosCarryLogImpl {
         posCarryLog.setBranch_num(shiftTable.getBranch_num());
         posCarryLog.setSystem_book_code(shiftTable.getSystem_book_code());
         posCarryLog.setRetail_pos_log_shift_num(shiftTable.getShift_table_num());
+        posCarryLog.setRetail_pos_log_amount(1);
         String nowDateString = TimeUtil.getInstance().getNowDateString();
         posCarryLog.setRetail_pos_log_time(nowDateString);
         posCarryLog.setRetail_pos_log_operator(shiftTable.getShift_table_user_name());
@@ -157,7 +158,7 @@ public class PosCarryLogImpl {
         posCarryLog.setMerchant_num(shiftTable.getMerchant_num());
         posCarryLog.setStall_num(shiftTable.getStall_num());
         posCarryLog.setRetail_pos_log_order_no(posOrder.getOrderNo());
-        posCarryLog.setRetail_pos_log_money(posOrder.getOrderPaymentMoney());
+        posCarryLog.setRetail_pos_log_money(Math.abs(posOrder.getOrderPaymentMoney()));
         StringBuilder builder = new StringBuilder("");
 
         for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()){
