@@ -186,14 +186,10 @@ public class PayStyleImpl {
             return null;
         }
         List<PosScaleStyleTypeBean> typeBeanList = new ArrayList<>();
-
-        PosScaleStyleTypeBean posScaleStyleTypeBean = new PosScaleStyleTypeBean();
         PosScaleStyleTypeBean posScaleStyleTypeBean_1 = new PosScaleStyleTypeBean();
         posScaleStyleTypeBean_1.setPaymentTypeName("在线支付");
-//        typeBeanList.add(0, posScaleStyleTypeBean);
 
-
-        boolean contoinCash = false;
+        boolean isContainCassh = false;
         for (int i = 0; i < amountPays.size(); i++) {
             if (amountPays.get(i).getName().equals("在线支付")) {
                 typeBeanList.add(0, posScaleStyleTypeBean_1);
@@ -202,20 +198,29 @@ public class PayStyleImpl {
 
             for (PosScaleStyleTypeBean mPosScaleStyleTypeBean : list) {
                 EvtLog.e("PayStyleService:=" + mPosScaleStyleTypeBean.getPaymentTypeName() + "  type:=" + mPosScaleStyleTypeBean.getPosCardPaymentType());
-                if (mPosScaleStyleTypeBean.getPosCardPaymentType().equals("1") &&
+                if (!mPosScaleStyleTypeBean.getPaymentNeedCheck().equals("0") &&
                         amountPays.get(i).getName().equals(mPosScaleStyleTypeBean.getPaymentTypeName())) {
                     if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("现金")) {
+                        isContainCassh  = true;
                         typeBeanList.add(0, mPosScaleStyleTypeBean);
                     } else {
                         typeBeanList.add(mPosScaleStyleTypeBean);
                     }
 
                 }
-
-
             }
         }
 
+        if(!isContainCassh){
+            AmountPay amountPay = new AmountPay();
+            amountPay.setName(LibConfig.C_PAYMENT_TYPE_CASH_NAME);
+            amountPay.setAmountMoney(0);
+            amountPays.add(amountPay);
+
+            PosScaleStyleTypeBean posScaleStyleTypeBean = new PosScaleStyleTypeBean();
+            posScaleStyleTypeBean.setPaymentTypeName("现金");
+            typeBeanList.add(0, posScaleStyleTypeBean);
+        }
         return typeBeanList;
     }
 
