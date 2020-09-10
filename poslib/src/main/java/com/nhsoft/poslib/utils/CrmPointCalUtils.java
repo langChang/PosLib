@@ -235,7 +235,7 @@ public class CrmPointCalUtils {
 
 
                 float point = 0;
-                if(loadPointCateGoryParam != null){
+                if(loadPointCateGoryParam != null && loadPointCateGoryParam.getConsume_money() != 0 && loadPointCateGoryParam.getPoint_value() != 0){
                     point = (posOrderDetail.getResidueMoney() * loadPointCateGoryParam.getPoint_value()/loadPointCateGoryParam.getConsume_money()) * p;
                 }else {
                     point = (posOrderDetail.getResidueMoney() * pointRule.getRule_value()/pointRule.getRule_money()) * p;
@@ -328,8 +328,6 @@ public class CrmPointCalUtils {
      */
     private float getPointPolicyValue(VipUserInfo vipUserInfo, String type, long item_num) {
         float policyBit = 1;
-        if (!LibConfig.saleParamsBean.isPointPolicyActive()) return 1;
-
         List<PointPolicy> allPointPolicyList = LibConfig.allPointPolicyList;
         if (allPointPolicyList == null || allPointPolicyList.size() == 0) return policyBit;
         for (PointPolicy pointPolicy : allPointPolicyList) {
