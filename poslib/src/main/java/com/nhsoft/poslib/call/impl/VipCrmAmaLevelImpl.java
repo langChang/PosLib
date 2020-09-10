@@ -53,7 +53,7 @@ public class VipCrmAmaLevelImpl {
 
                     vipCrmAmaLevelDao.insertOrReplaceInTx(vipCrmAmaLevel);
                     VipLevelPointRule point_rule = vipCrmAmaLevel.point_rule;
-                    if(point_rule.getPoint_category_params() != null && point_rule.getPoint_category_params().size() > 0){
+                    if(point_rule != null && point_rule.getPoint_category_params() != null && point_rule.getPoint_category_params().size() > 0){
                         point_rule.setPoint_category_params_json(new Gson().toJson(point_rule.getPoint_category_params()));
                     }
                     if (point_rule!=null){
