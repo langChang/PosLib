@@ -233,7 +233,6 @@ public class CrmPointCalUtils {
 
 
 
-
                 float point = 0;
                 if(loadPointCateGoryParam != null && loadPointCateGoryParam.getConsume_money() != 0 && loadPointCateGoryParam.getPoint_value() != 0){
                     point = (posOrderDetail.getResidueMoney() * loadPointCateGoryParam.getPoint_value()/loadPointCateGoryParam.getConsume_money()) * p;
