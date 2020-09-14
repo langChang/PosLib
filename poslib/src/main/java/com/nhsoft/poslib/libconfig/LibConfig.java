@@ -264,6 +264,7 @@ public class LibConfig {
     public static final String PERMISSION_CHANGE_CARD                 = "POS换卡";//换卡权限
     public static final String PERMISSION_LOSS_CARD                   = "POS挂失/解挂";//挂失权限
     public static final String PERMISSION_STRANGE_CARD                = "消费卡存款";//存款权限
+    public static final String PERMISSION_REVOKE_CARD               = "会员卡回收";//存款权限
     public static final String PERMISSION_EDIT_CARD                   = "POS修改卡信息";//修改权限
     public static final String PERMISSION_AGAINST_DEPOSIT_CARD        = "消费卡反存款";//消费卡反存款权限
     public static final String PERMISSION_POINT_EXCHANGE              = "积分兑换";//积分兑换权限
@@ -282,6 +283,7 @@ public class LibConfig {
     public static final String PERMISSION_OPEN_DRAW                   = "打开钱箱";
     public static final String PERMISSION_RECEIVE_AND_CHECK           = "收银对帐";
     public static final String PERMISSION_PRINT_ORDER                 = "打印对账单";
+    public static final String PERMISSION_REPLACE_PRINT_ORDER         = "重打交班报表";
     public static final String PERMISSION_CHECH_SHIFT_TABLE_PAYMENT   = "审核收银缴款单";
     public static final String PERMISSION_CHECH_SHIFT_TABLE_PAYMENT_1 = "查看缴款单系统金额";
     public static final String PERMISSION_SHIFT_TABLE_SUMMARY         = "打印交班汇总报表";
@@ -289,6 +291,12 @@ public class LibConfig {
     public static final String PERMISSION_SETTING_GOODS_SHOW          = "终端商品设置";
     public static final String PERMISSION_ADJUST_GOODS                = "商品调价";
     public static final String PERMISSION_PERSON_GOODS               = "赠送";
+    public static final String PERMISSION_QUIT_CARD_CONSUME              = "退卡消费";
+    public static final String PERMISSION_POINT_GET_STRANGE              = "积分转储值";
+    public static final String PERMISSION_SIGN_TO_PAY             = "签单";
+    public static final String PERMISSION_CARD_QUIT_MONEY_BY_ORDER             = "有单反储值";
+    public static final String PERMISSION_INIT_CARD            = "初始化卡";
+    public static final String PERMISSION_CARD_OLD_TO_NEW           = "老会员转卡";
 
     public static final String ACTION_SELECT    = "查询";//查询动作
     public static final String ACTION_EDIT      = "编辑";//编辑动作
