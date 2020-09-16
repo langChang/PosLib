@@ -117,6 +117,7 @@ public class TimeUtil {
         Date date = df.parse(oldDateStr);
         SimpleDateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
         Date date1 = df1.parse(date.toString());
+        date1.setTime(date1.getTime() + 1000*3600*8);
         DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df2.format(date1);
     }
@@ -231,6 +232,17 @@ public class TimeUtil {
      */
     public String getCurrDateSelfType(String format) {
         return dateToString(new Date(), format);
+    }
+
+
+    public static String convertToNewFormat(String dateStr) throws ParseException {
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        sdf.setTimeZone(utc);
+        Date convertedDate = sdf.parse(dateStr);
+        long finalTime = convertedDate.getTime() + 8 * 60 * 60 * 1000;
+        convertedDate.setTime(finalTime);
+        return convertedDate.toString();
     }
 
     /**

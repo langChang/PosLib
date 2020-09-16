@@ -207,10 +207,10 @@ public class LibConfig {
     public static List<String> openDrawPayment = new ArrayList<>();
 
 
-    public static List<Map<String, String>> FoundVipUserInfoList;//挂失 找到的会员主键和对应的验证码
+    public static List<Map<String, String>> FoundVipUserInfoList = new ArrayList<>();//挂失 找到的会员主键和对应的验证码
     public static Map<String, String> findVipUserInfoMap=new HashMap<>();//找到的会员主键和对应的验证码 //移动POS
-    public static List<Map<String, String>> FoundVipUserInfoReplaceCardList;//换卡 找到的会员主键和对应的验证码
-    public static List<Map<String, String>> FoundVipUserInfoModifyList;//修改手机号 找到的会员主键和对应的验证码
+    public static List<Map<String, String>> FoundVipUserInfoReplaceCardList = new ArrayList<>();//换卡 找到的会员主键和对应的验证码
+    public static List<Map<String, String>> FoundVipUserInfoModifyList = new ArrayList<>();//修改手机号 找到的会员主键和对应的验证码
 
 
 

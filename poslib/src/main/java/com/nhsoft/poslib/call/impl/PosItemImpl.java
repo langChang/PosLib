@@ -839,7 +839,7 @@ public class PosItemImpl {
             String category_name = "";
             String category_parent_code = "";
 //                    String strSql = "select max(item_last_edit_time) as ITEM_LAST_EDIT_TIME from pos_item ";
-            String strSql = "select *  from item_category  order by parent_category_code asc";
+            String strSql = "select *  from item_category  order by parent_category_code,pos_item_type_sn asc";
             Cursor c = session.getDatabase().rawQuery(strSql, null);
             while (c.moveToNext()) {
                 itemCategory = new ItemCategory();
