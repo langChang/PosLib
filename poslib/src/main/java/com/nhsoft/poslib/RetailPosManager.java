@@ -48,6 +48,7 @@ import com.nhsoft.poslib.call.impl.PrivilegeResourceNewImpl;
 import com.nhsoft.poslib.call.impl.PromotionOperationImpl;
 import com.nhsoft.poslib.call.impl.RoleImpl;
 import com.nhsoft.poslib.call.impl.ShiftTableImpl;
+import com.nhsoft.poslib.call.impl.ShiftTablePaymentImpl;
 import com.nhsoft.poslib.call.impl.StoreHouseImpl;
 import com.nhsoft.poslib.call.impl.SystemBookImpl;
 import com.nhsoft.poslib.call.impl.TicketSendImpl;
@@ -87,6 +88,7 @@ import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.PrivilegeResourceNew;
+import com.nhsoft.poslib.entity.ShiftTablePayment;
 import com.nhsoft.poslib.entity.StoreHouse;
 import com.nhsoft.poslib.entity.SystemBook;
 import com.nhsoft.poslib.entity.SystemRole;
@@ -2355,6 +2357,10 @@ public class RetailPosManager {
 
     /*********************************ShiftTablePaymentImpl*********************************************/
 
+
+    public ShiftTablePayment getShiftPaymentByName(String shiftTableNum,String typeName,String shiftTableBizday){
+        return ShiftTablePaymentImpl.getInstance().getShiftPaymentByName(shiftTableNum,typeName,shiftTableBizday);
+    }
     /*********************************StoreHouseImpl*********************************************/
 
     /**

@@ -50,4 +50,12 @@ public class ShiftTablePaymentImpl {
                 .list();
     }
 
+
+    public ShiftTablePayment getShiftPaymentByName(String shiftTableNum,String name,String shiftTableBizday){
+        final ShiftTablePaymentDao shiftTablePaymentDao = DaoManager.getInstance().getDaoSession().getShiftTablePaymentDao();
+        return shiftTablePaymentDao.queryBuilder().where
+                (ShiftTablePaymentDao.Properties.Shift_table_num.eq(shiftTableNum),ShiftTablePaymentDao.Properties.Shift_table_payment_type.eq(name),ShiftTablePaymentDao.Properties.Shift_table_bizday.eq(shiftTableBizday))
+                .unique();
+    }
+
 }

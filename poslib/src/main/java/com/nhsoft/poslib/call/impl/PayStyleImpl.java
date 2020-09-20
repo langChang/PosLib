@@ -13,9 +13,8 @@ import com.nhsoft.poslib.entity.PayStyleToCashBank;
 import com.nhsoft.poslib.entity.RelatCard;
 import com.nhsoft.poslib.entity.ReplaceCard;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
-import com.nhsoft.poslib.entity.VipCrmPointRate;
 import com.nhsoft.poslib.entity.VipStrangeGive;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.PosScaleStyleTypeBean;
 import com.nhsoft.poslib.model.VipCardTypeBean;
 import com.nhsoft.poslib.service.greendao.CardDepositDao;
@@ -176,7 +175,7 @@ public class PayStyleImpl {
 
 
         }
-        typeBeanList.add(0,posScaleStyleTypeBean_1);
+        typeBeanList.add(0, posScaleStyleTypeBean_1);
 
         return typeBeanList;
     }
@@ -198,10 +197,40 @@ public class PayStyleImpl {
 
             for (PosScaleStyleTypeBean mPosScaleStyleTypeBean : list) {
                 EvtLog.e("PayStyleService:=" + mPosScaleStyleTypeBean.getPaymentTypeName() + "  type:=" + mPosScaleStyleTypeBean.getPosCardPaymentType());
+                if (amountPays.get(i).getName().equals(LibConfig.C_PAYMENT_TYPE_SIGNBILL_NAME)) {
+                    continue;
+                }
+
+                if (amountPays.get(i).getName().equals(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME)) {
+                    continue;
+                }
+
+                if (amountPays.get(i).getName().equals(LibConfig.C_PAYMENT_TYPE_INTEGRAL_NAME)) {
+                    continue;
+                }
+
+                //在线支付
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("支付宝")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("微信支付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("云闪付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("移动和包支付")) {
+                    continue;
+                }
+                if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("翼支付")) {
+                    continue;
+                }
+
+
                 if (!mPosScaleStyleTypeBean.getPaymentNeedCheck().equals("0") &&
                         amountPays.get(i).getName().equals(mPosScaleStyleTypeBean.getPaymentTypeName())) {
                     if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("现金")) {
-                        isContainCassh  = true;
+                        isContainCassh = true;
                         typeBeanList.add(0, mPosScaleStyleTypeBean);
                     } else {
                         typeBeanList.add(mPosScaleStyleTypeBean);
@@ -211,7 +240,7 @@ public class PayStyleImpl {
             }
         }
 
-        if(!isContainCassh){
+        if (!isContainCassh) {
             AmountPay amountPay = new AmountPay();
             amountPay.setName(LibConfig.C_PAYMENT_TYPE_CASH_NAME);
             amountPay.setAmountMoney(0);
@@ -220,6 +249,49 @@ public class PayStyleImpl {
             PosScaleStyleTypeBean posScaleStyleTypeBean = new PosScaleStyleTypeBean();
             posScaleStyleTypeBean.setPaymentTypeName("现金");
             typeBeanList.add(0, posScaleStyleTypeBean);
+        }
+        return typeBeanList;
+    }
+
+
+    public List<PosScaleStyleTypeBean> getPayTypeSuccessionList(List<PosScaleStyleTypeBean> list) {
+
+        List<PosScaleStyleTypeBean> typeBeanList = new ArrayList<>();
+
+        for (PosScaleStyleTypeBean mPosScaleStyleTypeBean : list) {
+            if(mPosScaleStyleTypeBean.getPaymentNeedCheck().equals("0") && !LibConfig.C_PAYMENT_TYPE_CASH_NAME.equals(mPosScaleStyleTypeBean.getPaymentTypeName())){
+                continue;
+            }
+            EvtLog.e("PayStyleService:=" + mPosScaleStyleTypeBean.getPaymentTypeName() + "  type:=" + mPosScaleStyleTypeBean.getPosCardPaymentType());
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals(LibConfig.C_PAYMENT_TYPE_SIGNBILL_NAME)) {
+                continue;
+            }
+
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME)) {
+                continue;
+            }
+
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals(LibConfig.C_PAYMENT_TYPE_INTEGRAL_NAME)) {
+                continue;
+            }
+
+            //在线支付
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("支付宝")) {
+                continue;
+            }
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("微信支付")) {
+                continue;
+            }
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("云闪付")) {
+                continue;
+            }
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("移动和包支付")) {
+                continue;
+            }
+            if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("翼支付")) {
+                continue;
+            }
+            typeBeanList.add(mPosScaleStyleTypeBean);
         }
         return typeBeanList;
     }
@@ -266,7 +338,7 @@ public class PayStyleImpl {
                 }
 
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("积分消费")) {
-                    if (LibConfig.activeVipMember == null || LibConfig.sVipCardParams.getExchangePoint() == 0 || LibConfig.sVipCardParams.getExchangeMoney() == 0) {
+                    if (LibConfig.activeVipMember == null) {
                         continue;
                     }
                 }
@@ -304,10 +376,8 @@ public class PayStyleImpl {
     }
 
 
-
     /**
-     *
-     *  零售版
+     * 零售版
      * 1、支持卡存款并且支持前台销售，
      * 2、如果 条件一中包括“现金”放在第一位,如果不包含，聚合支付放在第一位
      * 3、支付宝，微信支付，云闪付，移动和包支付，翼支付 合并为聚合支付
@@ -326,12 +396,12 @@ public class PayStyleImpl {
         boolean contoinCash = false;
         boolean isHaveOnlinePay = false;
         VipCrmAmaLevel vipLevel = null;
-        if (RetailPosManager.isOpenCrm() && LibConfig.activeVipMember != null ) {
+        if (RetailPosManager.isOpenCrm() && LibConfig.activeVipMember != null) {
             vipLevel = RetailPosManager.getVipLevel(LibConfig.activeVipMember.getLevel());
             if (vipLevel != null && !TextUtils.isEmpty(vipLevel.getPayment_types()) && vipLevel.getPayment_types().contains("第三方在线支付")) {
                 isHaveOnlinePay = true;
             }
-        }else {
+        } else {
             isHaveOnlinePay = true;
         }
 
@@ -344,60 +414,63 @@ public class PayStyleImpl {
                 }
 
 
-
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("支付宝")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("支付宝支付")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("微信支付")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("云闪付")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("移动和包支付")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("翼支付")) {
-                    if(!isHaveOnlinePay)isHaveOnlinePay=true;
+                    if (!isHaveOnlinePay) isHaveOnlinePay = true;
                     continue;
                 }
 
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("积分消费")) {
-
-                    if(RetailPosManager.isOpenCrm()){
-
-                        if (LibConfig.activeVipMember == null ) {
-                            continue;
-                        }
-
-                        if(TextUtils.isEmpty(LibConfig.activeVipMember.getPoint()) || Float.parseFloat(LibConfig.activeVipMember.getPoint()) <=0 ){
-                            continue;
-                        }
-
-
-                        VipCrmPointRate bean = VipCrmPointRateImpl.getInstance().getBean();
-                        if (bean == null){
-                           continue;
-                        }
-
-                        if(bean.getPoint_value() == 0 || bean.getMoney_value() == 0){
-                            continue;
-                        }
-
-
-                    }else {
-                        if (LibConfig.activeVipMember == null || LibConfig.sVipCardParams.getExchangePoint() == 0 || LibConfig.sVipCardParams.getExchangeMoney() == 0) {
-                            continue;
-                        }
+                    if (LibConfig.activeVipMember == null) {
+                        continue;
                     }
+
+
+//                    if (RetailPosManager.isOpenCrm()) {
+//
+//                        if (LibConfig.activeVipMember == null) {
+//                            continue;
+//                        }
+//
+//                        if (TextUtils.isEmpty(LibConfig.activeVipMember.getPoint()) || Float.parseFloat(LibConfig.activeVipMember.getPoint()) <= 0) {
+//                            continue;
+//                        }
+//
+//
+//                        VipCrmPointRate bean = VipCrmPointRateImpl.getInstance().getBean();
+//                        if (bean == null) {
+//                            continue;
+//                        }
+//
+//                        if (bean.getPoint_value() == 0 || bean.getMoney_value() == 0) {
+//                            continue;
+//                        }
+//
+//
+//                    } else {
+//                        if (LibConfig.activeVipMember == null || LibConfig.sVipCardParams.getExchangePoint() == 0 || LibConfig.sVipCardParams.getExchangeMoney() == 0) {
+//                            continue;
+//                        }
+//                    }
 
                 }
 
@@ -413,16 +486,16 @@ public class PayStyleImpl {
                 }
 
                 if (mPosScaleStyleTypeBean.getPaymentTypeName().equals("零钱包")) {
-                    if (LibConfig.activeVipMember == null ) {
+                    if (LibConfig.activeVipMember == null) {
                         continue;
                     }
                 }
 
-                if(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(mPosScaleStyleTypeBean.getPaymentTypeName())){
+                if (LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(mPosScaleStyleTypeBean.getPaymentTypeName())) {
 
-                    if(LibConfig.activeVipMember != null && !LibConfig.saleParamsBean.isEnableCardPayDiscount()){
+                    if (LibConfig.activeVipMember != null && !LibConfig.saleParamsBean.isEnableCardPayDiscount()) {
                         try {
-                            final PosScaleStyleTypeBean clonePosBean  = (PosScaleStyleTypeBean) mPosScaleStyleTypeBean.clone();
+                            final PosScaleStyleTypeBean clonePosBean = (PosScaleStyleTypeBean) mPosScaleStyleTypeBean.clone();
                             clonePosBean.setGloableVip(true);
                             typeBeanList.add(clonePosBean);
                         } catch (CloneNotSupportedException e) {
@@ -441,12 +514,12 @@ public class PayStyleImpl {
         }
         if (contoinCash) {
             typeBeanList.add(0, posScaleStyleTypeBean);
-            if(isHaveOnlinePay){
+            if (isHaveOnlinePay) {
                 typeBeanList.add(1, posScaleStyleTypeBean_1);
             }
 
         } else {
-            if(isHaveOnlinePay){
+            if (isHaveOnlinePay) {
                 typeBeanList.add(0, posScaleStyleTypeBean_1);
             }
         }
@@ -456,8 +529,7 @@ public class PayStyleImpl {
 
 
     /**
-     *
-     *  零售版
+     * 零售版
      * 1、支持卡存款并且支持前台销售，
      * 2、如果 条件一中包括“现金”放在第一位,如果不包含，聚合支付放在第一位
      * 3、支付宝，微信支付，云闪付，移动和包支付，翼支付 合并为聚合支付
@@ -477,11 +549,11 @@ public class PayStyleImpl {
             EvtLog.e("PayStyleService:=" + mPosScaleStyleTypeBean.getPaymentTypeName() + "  type:=" + mPosScaleStyleTypeBean.getPosCardPaymentType());
             if (mPosScaleStyleTypeBean.getPosOrderPaymentType().equals("1")) {//  支持前台销售
 
-                if(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(mPosScaleStyleTypeBean.getPaymentTypeName())){
+                if (LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(mPosScaleStyleTypeBean.getPaymentTypeName())) {
 
-                    if(LibConfig.activeVipMember != null || LibConfig.discountVipMember != null){
+                    if (LibConfig.activeVipMember != null || LibConfig.discountVipMember != null) {
                         try {
-                            final PosScaleStyleTypeBean clonePosBean  = (PosScaleStyleTypeBean) mPosScaleStyleTypeBean.clone();
+                            final PosScaleStyleTypeBean clonePosBean = (PosScaleStyleTypeBean) mPosScaleStyleTypeBean.clone();
                             clonePosBean.setGloableVip(true);
                             typeBeanList.add(clonePosBean);
                         } catch (CloneNotSupportedException e) {
@@ -642,12 +714,12 @@ public class PayStyleImpl {
     }
 
     public boolean deleteCardDepositFailed(final String fid) {
-        if (TextUtils.isEmpty(fid)){
+        if (TextUtils.isEmpty(fid)) {
             return true;
         }
         final CardDepositFailedDao cardDepositFailedDao = DaoManager.getInstance().getDaoSession().getCardDepositFailedDao();
         final CardDepositFailed cardDepositFailed = cardDepositFailedDao.queryBuilder().where(CardDepositFailedDao.Properties.Deposit_fid.eq(fid)).unique();
-        if (cardDepositFailed == null){
+        if (cardDepositFailed == null) {
             return true;
         }
         return MatterUtils.doMatter(cardDepositFailedDao, new Runnable() {
@@ -740,7 +812,7 @@ public class PayStyleImpl {
             try {
                 jsonObject = new JSONObject(s);
                 JSONObject object = jsonObject.optJSONObject("存款金额赠送列表");
-                if (object==null){
+                if (object == null) {
                     return null;
                 }
                 JSONArray jsonArray;
@@ -972,22 +1044,22 @@ public class PayStyleImpl {
 
     /**
      * 获取支付方式的现金银行
+     *
      * @return
      */
-    public String getPayStyleBankNum(String payby){
-        String account_bank_num="";
-        if (payby.equals("现金")){
-            account_bank_num= RetailPosManager.getInstance().getAccountBank().getAccount_bank_num()+"";
-        }else {
+    public String getPayStyleBankNum(String payby) {
+        String account_bank_num = "";
+        if (payby.equals("现金")) {
+            account_bank_num = RetailPosManager.getInstance().getAccountBank().getAccount_bank_num() + "";
+        } else {
             PayStyleToCashBank beanByName = PayStyleToCashBankImpl.getInstance().getBeanByName(payby);
-            if (beanByName==null){
-            }else {
-                account_bank_num=beanByName.getAccountBankCode() ;
+            if (beanByName == null) {
+            } else {
+                account_bank_num = beanByName.getAccountBankCode();
             }
         }
         return account_bank_num;//现金银行编号
     }
-
 
 
     /**

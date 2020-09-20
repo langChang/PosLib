@@ -9,6 +9,8 @@ public class CheckShiftTablePayment {
     private float jiaoSystem;//系统金额
     private float chayi;//差异
     private String name;//支付方式
+    private int shiftTableNum;
+    private String shiftTableBizday;
 
     public String getName() {
         return name;
@@ -48,5 +50,21 @@ public class CheckShiftTablePayment {
 
     public void setChayi(float chayi) {
         this.chayi = chayi;
+    }
+
+    public int getShiftTableNum() {
+        return shiftTableNum;
+    }
+
+    public void setShiftTableNum(int shiftTableNum) {
+        this.shiftTableNum = shiftTableNum;
+    }
+
+    public String getShiftTableBizday() {
+        return shiftTableBizday;
+    }
+
+    public void setShiftTableBizday(String shiftTableBizday) {
+        this.shiftTableBizday = shiftTableBizday;
     }
 }

@@ -1,8 +1,10 @@
 package com.nhsoft.poslib.call.impl;
 
+import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.PolicyQuantity;
 import com.nhsoft.poslib.entity.PolicyQuantityDetail;
+import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.service.greendao.PolicyQuantityDao;
 import com.nhsoft.poslib.service.greendao.PolicyQuantityDetailDao;
 import com.nhsoft.poslib.utils.MatterUtils;
@@ -49,7 +51,16 @@ public class PolicyQuantityImpl {
                 List<PolicyQuantityDetail> list = policyQuantityDetailDao.queryBuilder().
                         where(PolicyQuantityDetailDao.Properties.Promotion_quantity_no.eq(policyQuantity.getPromotion_quantity_no())).build().list();
                 policyQuantity.setPolicy_quantity_details(list);
+
+                if(policyQuantity.getPromotion_quantity_discount() != null && list != null){
+                    for (PolicyQuantityDetail policyQuantityDetail: list){
+                        PosItem posItem = RetailPosManager.getInstance().getPosItemByItemNum(policyQuantityDetail.getItem_num());
+                        policyQuantityDetail.setPromotion_quantity_detail_special_price(RetailPosManager.getInstance().getItemRegularPrice(posItem,null) * policyQuantity.getPromotion_quantity_discount());
+                    }
+                }
             }
+
+
             return policyQuantities;
         } else {
             return new ArrayList<>();
