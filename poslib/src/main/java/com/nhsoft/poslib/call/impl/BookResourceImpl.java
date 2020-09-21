@@ -146,9 +146,11 @@ public class BookResourceImpl {
             jsonObject = new JSONObject(s);
             JSONObject object = jsonObject.optJSONObject("FeeItemList");
             JSONArray jsonArray = object.optJSONArray("FeeItem");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                OtherPayment mOtherPayment = gson.fromJson(jsonArray.optString(i), OtherPayment.class);
-                list.add(mOtherPayment);
+            if(jsonArray != null){
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    OtherPayment mOtherPayment = gson.fromJson(jsonArray.optString(i), OtherPayment.class);
+                    list.add(mOtherPayment);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

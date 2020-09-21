@@ -360,7 +360,7 @@ public class VipUserInfo implements Cloneable, Serializable {
     }
 
     public String getCard_state_name() {
-        return card_state_name;
+        return card_state_name == null ? "" : card_state_name;
     }
 
     public void setCard_state_name(String card_state_name) {

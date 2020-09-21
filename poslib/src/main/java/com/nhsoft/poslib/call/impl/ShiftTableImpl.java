@@ -375,7 +375,7 @@ public class ShiftTableImpl {
                 ShiftTableDao.Properties.Branch_num.eq(branchNum)//店
                 ,ShiftTableDao.Properties.Shift_table_synchronized.eq(false)//上传
                 ,ShiftTableDao.Properties.Shift_table_need_carry.eq(true)//流水
-                ,ShiftTableDao.Properties.Shift_table_upload_times.lt(3)//上传次数
+                ,ShiftTableDao.Properties.Shift_table_upload_times.lt(10)//上传次数
 
         ).list();
         return shiftTables;

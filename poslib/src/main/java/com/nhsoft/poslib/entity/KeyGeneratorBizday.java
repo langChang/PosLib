@@ -22,6 +22,21 @@ public class KeyGeneratorBizday {
     private int keyValue;
     @Transient
     private String KeyGBString;
+    @Transient
+    private String otherRevenueNo;
+
+
+
+    public String getOtherRevenueNo() {
+        return otherRevenueNo;
+    }
+
+    public void setOtherRevenueNo(String otherRevenueNo) {
+        this.otherRevenueNo = otherRevenueNo;
+    }
+
+
+
 
     public String getKeyGBString() {
         return KeyGBString;
