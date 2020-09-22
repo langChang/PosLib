@@ -136,7 +136,7 @@ public class VipCardTypeBean implements Serializable {
     }
 
     public String getOnlyBranchUse() {
-        return onlyBranchUse;
+        return onlyBranchUse==null?"0":onlyBranchUse;
     }
 
     public void setOnlyBranchUse(String onlyBranchUse) {

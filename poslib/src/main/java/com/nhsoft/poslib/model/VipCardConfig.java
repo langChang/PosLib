@@ -678,7 +678,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public String getBanPrintPhoneQueryCard() {
-        return BanPrintPhoneQueryCard;
+        return BanPrintPhoneQueryCard==null?"0":BanPrintPhoneQueryCard;
     }
 
     public void setBanPrintPhoneQueryCard(String BanPrintPhoneQueryCard) {

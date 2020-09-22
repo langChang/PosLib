@@ -71,7 +71,7 @@ public class VipUserInfo implements Cloneable{
     private String open_id;
     private boolean isQuitCard;
     private String card_user_password;// 会员卡密码
-    private boolean card_user_change_enabled;
+    private boolean card_user_change_enabled;//零钱包是否开启
     private String card_type;
 
 
@@ -80,28 +80,13 @@ public class VipUserInfo implements Cloneable{
 
     private int mPasswordChecked = -1;//是否经过密码验证   如果通过验证重新赋值为1
     private int mMegChecked = -1;//是否经过短信验证码验证  如果通过验证重新赋值为1
+    private boolean isICCard;//是否IC卡录入
+    private String physic_print_num;
 
     public boolean isBindCardInput = false;
 
-    public boolean isGlobalVip() {
-        return isGlobalVip;
-    }
-
-    public void setGlobalVip(boolean globalVip) {
-        isGlobalVip = globalVip;
-    }
-
     private boolean isGlobalVip;//是否全局会员
 
-//    public boolean isPayVip() {
-//        return isPayVip;
-//    }
-//
-//    public void setPayVip(boolean payVip) {
-//        isPayVip = payVip;
-//    }
-//
-//    private boolean isPayVip; //是否是支付折扣的会员
     //全渠道
     private String  default_card;//ama 表面卡号
     private String  customer_id;//crm 卡主建
@@ -117,11 +102,6 @@ public class VipUserInfo implements Cloneable{
     private String  certificate_id;//证件编号
     private String create_time;//注册日期(yyyy-MM-dd HH:MM:SS)
     private String birth;//会员生日(yyyy-MM-dd HH:MM:SS)
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
     /**
      * id : GIFT_CARD
      *
@@ -140,6 +120,35 @@ public class VipUserInfo implements Cloneable{
     private String logo_url;
     private String brand_name;
     private String title;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public String getPhysic_print_num() {
+        return physic_print_num;
+    }
+
+    public void setPhysic_print_num(String physic_print_num) {
+        this.physic_print_num = physic_print_num;
+    }
+
+    public boolean isICCard() {
+        return isICCard;
+    }
+
+    public void setICCard(boolean ICCard) {
+        isICCard = ICCard;
+    }
+
+    public boolean isGlobalVip() {
+        return isGlobalVip;
+    }
+
+    public void setGlobalVip(boolean globalVip) {
+        isGlobalVip = globalVip;
+    }
 
     public String getDefault_card() {
         return default_card;
