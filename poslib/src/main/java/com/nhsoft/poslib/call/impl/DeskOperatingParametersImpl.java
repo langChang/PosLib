@@ -35,7 +35,7 @@ public class DeskOperatingParametersImpl {
         if (deskOperatingParameters!=null&&deskOperatingParameters.size()>0){
             return deskOperatingParameters.get(0);
         }else {
-            return null;
+            return new DeskOperatingParameters();
         }
     }
 }

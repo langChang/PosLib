@@ -151,7 +151,7 @@ public class DeskOperatingParameters {
         this.hide_fame = hide_fame;
     }
     public String getPrefix_of_weight_item() {
-        return this.prefix_of_weight_item;
+        return this.prefix_of_weight_item == null ? "" : prefix_of_weight_item;
     }
     public void setPrefix_of_weight_item(String prefix_of_weight_item) {
         this.prefix_of_weight_item = prefix_of_weight_item;
@@ -181,7 +181,7 @@ public class DeskOperatingParameters {
         this.choose_bar_type = choose_bar_type;
     }
     public String getRound_type() {
-        return this.round_type;
+        return this.round_type == null? "" : round_type;
     }
     public void setRound_type(String round_type) {
         this.round_type = round_type;
@@ -190,6 +190,6 @@ public class DeskOperatingParameters {
         return this.round_to;
     }
     public void setRound_to(String round_to) {
-        this.round_to = round_to;
+        this.round_to = round_to == null ? "" : round_to;
     }
 }
