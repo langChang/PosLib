@@ -380,7 +380,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
                 //看看之前有没有一样商品手改过
                 if (posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG) == null) {
                     //没有就直接设置进去
-                    posOrderDetailMap.put(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG, posOrderDetail);
+                    posOrderDetailMap.put(UUIDUtils.getUUID32(), posOrderDetail);
                 } else {
                     //有先取出
                     PosOrderDetail oldPosOrderDetail = posOrderDetailMap.get(posOrderDetail.getItemNum() + "_" + posOrderDetail.getItemGradeNum() + "_" + LibConfig.GOODS_CHANGE_TAG);
