@@ -55,6 +55,23 @@ public class BranchImpl {
         return branch;
     }
 
+    /**
+     *
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public Branch getBranch(String systemBookCode, int branchNum){
+        BranchDao branchDao = DaoManager.getInstance().getDaoSession().getBranchDao();
+        Branch branch=branchDao.queryBuilder()
+                .where(
+                        BranchDao.Properties.System_book_code.eq(systemBookCode)
+                        ,BranchDao.Properties.Branch_num.eq(branchNum)
+                ).unique();
+
+        return branch;
+    }
+
 
     public Long getBranchTempleteNum(long branchNum){
         final BranchDao branchDao = DaoManager.getInstance().getDaoSession().getBranchDao();
