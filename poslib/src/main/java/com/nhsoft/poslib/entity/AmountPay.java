@@ -1,8 +1,12 @@
 package com.nhsoft.poslib.entity;
 
+import com.nhsoft.poslib.entity.order.Payment;
+
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
+
+import java.util.List;
 
 @Entity
 public class AmountPay {
@@ -12,6 +16,8 @@ public class AmountPay {
     private float amountMoney;
     private String shiftTableBizday;
     private int shiftTableNum;
+
+
 
     @Generated(hash = 1552358736)
     public AmountPay(Long id, String name, float amountMoney,

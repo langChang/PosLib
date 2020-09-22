@@ -53,7 +53,7 @@ public class PointGoodsParseUtil {
 
                     if (isHaveJsonKey("对应商品编号", pointObject, 3)) {
                         pointOrderDetial.setItem_num(Integer.parseInt(pointObject.getString("对应商品编号")));
-                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
+                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByItemNum(pointOrderDetial.getItem_num());
                         if(posItemByKey != null){
                             pointOrderDetial.setPoint_order_detail_item_unit(posItemByKey.getItem_unit());
                         }else {
@@ -80,7 +80,7 @@ public class PointGoodsParseUtil {
 
                     if (isHaveJsonKey("对应商品编号", pointObject, 3)) {
                         pointOrderDetial.setItem_num(Integer.parseInt(pointObject.getString("对应商品编号")));
-                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByKey(pointOrderDetial.getItem_num());
+                        PosItem posItemByKey = PosItemImpl.getInstance().getPosItemByItemNum(pointOrderDetial.getItem_num());
                         pointOrderDetial.setPoint_order_detail_item_unit(posItemByKey.getItem_unit());
                     }else {
                         pointOrderDetial.setPoint_order_detail_item_unit("个");

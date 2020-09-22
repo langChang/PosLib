@@ -205,6 +205,9 @@ public class VipCardConfig implements Serializable {
     private String AliMemberDepositEnrollShop;
     private String UnLossCardNeedSmsCheck;
     private String EnableCardTypeSettlementDiscount;
+    private String EnableCardPayDiscount; //是否启用卡的支付折扣
+    private String CardConsumeDiscountType; //消费折扣类型。
+
     private String BanPrintPhoneQueryCard;
     @SerializedName("不允许修改存款金额")
     private String noEditMoney;
@@ -218,6 +221,16 @@ public class VipCardConfig implements Serializable {
     private float exchangeMoney;// 换取储值
     private String UsePointNeedPsw;//使用积分需要密码验证
     private String FirstDeliverCardNoPay;//第一次发放实体卡不收取换卡费用
+    private String EnableCardSmsCheck;
+
+
+    public boolean isEnableCardSmsCheck() {
+        return TextUtils.isEmpty(EnableCardSmsCheck) ? false : (!"0".equals(EnableCardSmsCheck));
+    }
+
+    public void setEnableCardSmsCheck(String enableCardSmsCheck) {
+        this.EnableCardSmsCheck = enableCardSmsCheck;
+    }
 
     private String PosReadCardHideInfo;//前台读卡不显示卡信息(余额) 0没勾显示 -1勾了不显示
 
@@ -684,4 +697,21 @@ public class VipCardConfig implements Serializable {
     public void setBanPrintPhoneQueryCard(String BanPrintPhoneQueryCard) {
         this.BanPrintPhoneQueryCard = BanPrintPhoneQueryCard;
     }
+
+    public boolean isEnableCardPayDiscount() {
+        return EnableCardPayDiscount == null ? true : !(Integer.parseInt(EnableCardPayDiscount) == 0);
+    }
+
+    public void setEnableCardPayDiscount(String enableCardPayDiscount) {
+        this.EnableCardPayDiscount = enableCardPayDiscount;
+    }
+
+    public boolean isCustomerDiscountType() {
+        return CardConsumeDiscountType == null ? true : "身份等级".equals(CardConsumeDiscountType);
+    }
+
+    public void setCardConsumeDiscountType(String cardConsumeDiscountType) {
+        CardConsumeDiscountType = cardConsumeDiscountType;
+    }
+
 }

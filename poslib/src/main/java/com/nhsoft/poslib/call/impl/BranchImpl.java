@@ -44,7 +44,7 @@ public class BranchImpl {
      * @param branchNum
      * @return
      */
-    public Branch getBranch(String systemBookCode, int branchNum){
+    public Branch getBranchByNum(String systemBookCode, int branchNum){
         BranchDao branchDao = DaoManager.getInstance().getDaoSession().getBranchDao();
         Branch branch=branchDao.queryBuilder()
                 .where(

@@ -6,5 +6,5 @@ package com.nhsoft.poslib.call.callback;
  */
 public interface GlobalDataCallback {
 
-    boolean initSaleParams();
+    boolean initHomeData();
 }

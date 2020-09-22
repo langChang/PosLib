@@ -1,6 +1,8 @@
 package com.nhsoft.poslib.call.impl;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -102,9 +104,9 @@ public class PosMachineImpl {
      * 获取mac地址
      * @return
      */
-    public String getMacAddress(){
+    public String getMacAddress(Context context){
         if(!TextUtils.isEmpty(MacUtil.mMacAddress))return MacUtil.mMacAddress;
-        MacUtil.mMacAddress = MacUtil.getMacAddress();
+        MacUtil.mMacAddress = MacUtil.getMacAddress(context);
         return MacUtil.mMacAddress;
     }
 
@@ -145,5 +147,19 @@ public class PosMachineImpl {
                         .insertOrReplaceInTx(posMachine);
             }
         });
+    }
+
+    public int getMaxPosMachineNum(){
+        PosMachineDao posMachineDao = DaoManager.getInstance().getDaoSession().getPosMachineDao();
+        int pos_machine_sequence = 0;
+        String strSql = "select *  from POS_MACHINE  order by pos_machine_sequence desc limit 1";
+        Cursor c = posMachineDao.getDatabase().rawQuery(strSql, null);
+
+        if (c.moveToFirst()) {
+            pos_machine_sequence = c.getInt(c.getColumnIndex("POS_MACHINE_SEQUENCE"));
+        }
+        c.close();
+
+        return pos_machine_sequence;
     }
 }

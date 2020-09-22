@@ -5,6 +5,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,8 @@ public class ItemCategory {
     private String category_name;
     private String parent_category_code;
     private Boolean can_not_sale_no_store_item;
+    private Integer pos_item_type_sn;//类别排序
+
 
     private Integer hierarchy;//层级
     private String second_category_code;//二级分类的 category_code
@@ -31,14 +34,17 @@ public class ItemCategory {
     private List<PosItem> posItemList;
 
 
-    @Generated(hash = 1415552065)
+
+
+    @Generated(hash = 1829870643)
     public ItemCategory(String category_code, String category_name,
             String parent_category_code, Boolean can_not_sale_no_store_item,
-            Integer hierarchy, String second_category_code) {
+            Integer pos_item_type_sn, Integer hierarchy, String second_category_code) {
         this.category_code = category_code;
         this.category_name = category_name;
         this.parent_category_code = parent_category_code;
         this.can_not_sale_no_store_item = can_not_sale_no_store_item;
+        this.pos_item_type_sn = pos_item_type_sn;
         this.hierarchy = hierarchy;
         this.second_category_code = second_category_code;
     }
@@ -48,8 +54,10 @@ public class ItemCategory {
     }
 
 
+
+
     public List<PosItem> getPosItemList() {
-        return posItemList;
+        return posItemList == null ? new ArrayList<PosItem>() : posItemList;
     }
 
     public void setPosItemList(List<PosItem> posItemList) {
@@ -105,6 +113,14 @@ public class ItemCategory {
 
     public void setCan_not_sale_no_store_item(Boolean can_not_sale_no_store_item) {
         this.can_not_sale_no_store_item = can_not_sale_no_store_item;
+    }
+
+    public Integer getPos_item_type_sn() {
+        return this.pos_item_type_sn;
+    }
+
+    public void setPos_item_type_sn(Integer pos_item_type_sn) {
+        this.pos_item_type_sn = pos_item_type_sn;
     }
 
 

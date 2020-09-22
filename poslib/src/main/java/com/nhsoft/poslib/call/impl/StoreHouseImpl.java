@@ -34,7 +34,7 @@ public class StoreHouseImpl {
         return isSuccess;
     }
 
-    public static List<StoreHouse> getAllStoreHouse(){
+    public List<StoreHouse> getAllStoreHouse(){
         final StoreHouseDao storeHouseDao = DaoManager.getInstance().getDaoSession().getStoreHouseDao();
         return storeHouseDao.loadAll();
     }

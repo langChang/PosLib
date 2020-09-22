@@ -19,6 +19,9 @@ public class GoodsGradeBean {
     public  List<PosItem>      posItems = new ArrayList<>();
     public  List<ItemCategory> itemCategories = new ArrayList<>();
     public  ItemCategory       itemCategory;
+    private int selectPosition = -1;
+
+
     public ItemCategory getItemCategory() {
         return itemCategory;
     }
@@ -26,6 +29,15 @@ public class GoodsGradeBean {
     public void setItemCategory(ItemCategory itemCategory) {
         this.itemCategory = itemCategory;
     }
+
+    public int getSelectPosition() {
+        return selectPosition;
+    }
+
+    public void setSelectPosition(int selectPosition) {
+        this.selectPosition = selectPosition;
+    }
+
 
 
 

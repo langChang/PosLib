@@ -25,7 +25,7 @@ public class AggregationImpl {
         });
     }
 
-    public Aggregation getBean(){
+    public Aggregation getAggreation(){
         final AggregationDao aggregationDao=DaoManager.getInstance().getDaoSession().getAggregationDao();
         return aggregationDao.queryBuilder().unique();
     }

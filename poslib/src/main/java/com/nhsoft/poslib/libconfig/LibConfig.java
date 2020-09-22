@@ -51,7 +51,17 @@ public class LibConfig {
     public static String SHIFT_TABLE_BIZDAY = "";
     public static boolean POLICY_PROMOTION_DISABLE_PAY_DISCOUNT = false;
     public static int POS_MACHINE_SEQUENCE = 0;
+    public static String POS_MACHINE_TERMINAL_ID = "";
+    public static boolean MATRIX_PRICE_ACTIVED;
 
+    public static String APP_PAY_ID       = "";
+    public static String APP_PAY_KEY      = "";
+
+
+    public static int mCardType = -1;
+    public static final int     FIND__BY_PHONE = 1;//手机号
+    public static final int     FIND__BY_CARD  = 2;//付款码
+    public static final int     FIND__BY_PAY   = 3;//卡号
 
 
 
@@ -197,6 +207,13 @@ public class LibConfig {
     public static List<String> openDrawPayment = new ArrayList<>();
 
 
+    public static List<Map<String, String>> FoundVipUserInfoList = new ArrayList<>();//挂失 找到的会员主键和对应的验证码
+    public static Map<String, String> findVipUserInfoMap=new HashMap<>();//找到的会员主键和对应的验证码 //移动POS
+    public static List<Map<String, String>> FoundVipUserInfoReplaceCardList = new ArrayList<>();//换卡 找到的会员主键和对应的验证码
+    public static List<Map<String, String>> FoundVipUserInfoModifyList = new ArrayList<>();//修改手机号 找到的会员主键和对应的验证码
+
+
+
     /***************************商品标记**********************************/
     public static String GOODS_CHANGE_TAG = "手改"; //商品手改标记
     public static String GOODS_VIP_TAG    = "VIP"; //商品手改标记
@@ -247,6 +264,7 @@ public class LibConfig {
     public static final String PERMISSION_CHANGE_CARD                 = "POS换卡";//换卡权限
     public static final String PERMISSION_LOSS_CARD                   = "POS挂失/解挂";//挂失权限
     public static final String PERMISSION_STRANGE_CARD                = "消费卡存款";//存款权限
+    public static final String PERMISSION_REVOKE_CARD               = "会员卡回收";//存款权限
     public static final String PERMISSION_EDIT_CARD                   = "POS修改卡信息";//修改权限
     public static final String PERMISSION_AGAINST_DEPOSIT_CARD        = "消费卡反存款";//消费卡反存款权限
     public static final String PERMISSION_POINT_EXCHANGE              = "积分兑换";//积分兑换权限
@@ -265,6 +283,7 @@ public class LibConfig {
     public static final String PERMISSION_OPEN_DRAW                   = "打开钱箱";
     public static final String PERMISSION_RECEIVE_AND_CHECK           = "收银对帐";
     public static final String PERMISSION_PRINT_ORDER                 = "打印对账单";
+    public static final String PERMISSION_REPLACE_PRINT_ORDER         = "重打交班报表";
     public static final String PERMISSION_CHECH_SHIFT_TABLE_PAYMENT   = "审核收银缴款单";
     public static final String PERMISSION_CHECH_SHIFT_TABLE_PAYMENT_1 = "查看缴款单系统金额";
     public static final String PERMISSION_SHIFT_TABLE_SUMMARY         = "打印交班汇总报表";
@@ -272,6 +291,12 @@ public class LibConfig {
     public static final String PERMISSION_SETTING_GOODS_SHOW          = "终端商品设置";
     public static final String PERMISSION_ADJUST_GOODS                = "商品调价";
     public static final String PERMISSION_PERSON_GOODS               = "赠送";
+    public static final String PERMISSION_QUIT_CARD_CONSUME              = "退卡消费";
+    public static final String PERMISSION_POINT_GET_STRANGE              = "积分转储值";
+    public static final String PERMISSION_SIGN_TO_PAY             = "签单";
+    public static final String PERMISSION_CARD_QUIT_MONEY_BY_ORDER             = "有单反储值";
+    public static final String PERMISSION_INIT_CARD            = "初始化卡";
+    public static final String PERMISSION_CARD_OLD_TO_NEW           = "老会员转卡";
 
     public static final String ACTION_SELECT    = "查询";//查询动作
     public static final String ACTION_EDIT      = "编辑";//编辑动作
@@ -289,4 +314,18 @@ public class LibConfig {
     public static final int S_HOME_SHOW_BY_RETURN       = 2; //退货模式
 
 
+    public static final int CHANGE_ACCOUNT   = 1; //修改数量
+    public static final int CHANGE_PRICE     = 2; //修改单价
+    public static final int CHANGE_SUB_TOTAL = 3; //修改小计
+    public static final int CHANGE_DISCOUNT  = 4; //修改折扣
+
+
+    public static final String REFRESH_ACTION = "refreshData";
+
+
+    /***************************折扣方式**********************************/
+    public static final String S_ORDER_DISCOUNT_BY_MONEY = "order_discount_by_money";
+    public static final String S_ORDER_DISCOUNT_BY_BIT   = "order_discount_by_bit";
+
 }
+

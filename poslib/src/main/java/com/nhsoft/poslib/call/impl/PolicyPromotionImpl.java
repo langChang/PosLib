@@ -53,7 +53,10 @@ public class PolicyPromotionImpl {
         PolicyPromotionDao policyPromotionDao = DaoManager.getInstance().getDaoSession().getPolicyPromotionDao();
         PolicyPromotionDetailDao policyPromotionDetailDao = DaoManager.getInstance().getDaoSession().getPolicyPromotionDetailDao();
         List<PolicyPromotion> policyPromotions = policyPromotionDao.queryBuilder().
+                orderAsc(PolicyPromotionDao.Properties.Policy_promotion_all,
+                        PolicyPromotionDao.Properties.Policy_promotion_item_category).
                 orderDesc(PolicyPromotionDao.Properties.Policy_promotion_audit_time).build().list();
+
         if (policyPromotions != null) {
             LibConfig.allVipOncePolicyPromotionList.clear();
             LibConfig.allVipCardPolicyPromotionList.clear();

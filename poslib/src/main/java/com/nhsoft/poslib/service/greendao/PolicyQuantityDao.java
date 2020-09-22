@@ -50,6 +50,7 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
         public final static Property Promotion_quantity_min_amount = new Property(23, Float.class, "promotion_quantity_min_amount", false, "PROMOTION_QUANTITY_MIN_AMOUNT");
         public final static Property Promotion_quantity_append = new Property(24, Boolean.class, "promotion_quantity_append", false, "PROMOTION_QUANTITY_APPEND");
         public final static Property Promotion_quantity_level_ids = new Property(25, String.class, "promotion_quantity_level_ids", false, "PROMOTION_QUANTITY_LEVEL_IDS");
+        public final static Property Promotion_quantity_discount = new Property(26, Float.class, "promotion_quantity_discount", false, "PROMOTION_QUANTITY_DISCOUNT");
     }
 
     private DaoSession daoSession;
@@ -93,7 +94,8 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
                 "\"PROMOTION_QUANTITY_TYPE\" TEXT," + // 22: promotion_quantity_type
                 "\"PROMOTION_QUANTITY_MIN_AMOUNT\" REAL," + // 23: promotion_quantity_min_amount
                 "\"PROMOTION_QUANTITY_APPEND\" INTEGER," + // 24: promotion_quantity_append
-                "\"PROMOTION_QUANTITY_LEVEL_IDS\" TEXT);"); // 25: promotion_quantity_level_ids
+                "\"PROMOTION_QUANTITY_LEVEL_IDS\" TEXT," + // 25: promotion_quantity_level_ids
+                "\"PROMOTION_QUANTITY_DISCOUNT\" REAL);"); // 26: promotion_quantity_discount
     }
 
     /** Drops the underlying database table. */
@@ -199,6 +201,11 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
         if (promotion_quantity_level_ids != null) {
             stmt.bindString(26, promotion_quantity_level_ids);
         }
+ 
+        Float promotion_quantity_discount = entity.getPromotion_quantity_discount();
+        if (promotion_quantity_discount != null) {
+            stmt.bindDouble(27, promotion_quantity_discount);
+        }
     }
 
     @Override
@@ -298,6 +305,11 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
         if (promotion_quantity_level_ids != null) {
             stmt.bindString(26, promotion_quantity_level_ids);
         }
+ 
+        Float promotion_quantity_discount = entity.getPromotion_quantity_discount();
+        if (promotion_quantity_discount != null) {
+            stmt.bindDouble(27, promotion_quantity_discount);
+        }
     }
 
     @Override
@@ -339,7 +351,8 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
             cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // promotion_quantity_type
             cursor.isNull(offset + 23) ? null : cursor.getFloat(offset + 23), // promotion_quantity_min_amount
             cursor.isNull(offset + 24) ? null : cursor.getShort(offset + 24) != 0, // promotion_quantity_append
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25) // promotion_quantity_level_ids
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // promotion_quantity_level_ids
+            cursor.isNull(offset + 26) ? null : cursor.getFloat(offset + 26) // promotion_quantity_discount
         );
         return entity;
     }
@@ -372,6 +385,7 @@ public class PolicyQuantityDao extends AbstractDao<PolicyQuantity, String> {
         entity.setPromotion_quantity_min_amount(cursor.isNull(offset + 23) ? null : cursor.getFloat(offset + 23));
         entity.setPromotion_quantity_append(cursor.isNull(offset + 24) ? null : cursor.getShort(offset + 24) != 0);
         entity.setPromotion_quantity_level_ids(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setPromotion_quantity_discount(cursor.isNull(offset + 26) ? null : cursor.getFloat(offset + 26));
      }
     
     @Override

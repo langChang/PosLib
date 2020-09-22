@@ -3,9 +3,10 @@ package com.nhsoft.poslib.model;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class VipUserInfo implements Cloneable{
+public class VipUserInfo implements Cloneable, Serializable {
 
     /**
      * card_user_num : String||卡Id
@@ -229,7 +230,7 @@ public class VipUserInfo implements Cloneable{
     }
 
     public String getOpen_id() {
-        return open_id;
+        return open_id == null ? openid : open_id;
     }
 
     public void setOpen_id(String open_id) {
@@ -368,7 +369,7 @@ public class VipUserInfo implements Cloneable{
     }
 
     public String getCard_state_name() {
-        return card_state_name;
+        return card_state_name == null ? "" : card_state_name;
     }
 
     public void setCard_state_name(String card_state_name) {
@@ -592,7 +593,7 @@ public class VipUserInfo implements Cloneable{
     }
 
     public String getOpenid() {
-        return openid;
+        return openid == null ? open_id : openid;
     }
 
     public void setOpenid(String openid) {

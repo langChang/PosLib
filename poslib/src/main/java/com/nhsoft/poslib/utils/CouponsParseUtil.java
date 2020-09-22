@@ -96,6 +96,11 @@ public class CouponsParseUtil {
                     if (isHaveJsonKey("消费券单独使用", couponsObject, 3)) {
                         couponsXmlModel.setCouponsIsAlone(couponsObject.getString("消费券单独使用"));
                     }
+
+                    if (isHaveJsonKey("抵用数量", couponsObject, 3)) {
+                        couponsXmlModel.setCouponsDiscountAmount(couponsObject.getString("抵用数量"));
+                    }
+
                     if (isHaveJsonKey("消费券最低消费金额", couponsObject, 2)) {
                         couponsXmlModel.setCouponsLimitMoney((float) couponsObject.getDouble("消费券最低消费金额"));
                     }
@@ -303,6 +308,12 @@ public class CouponsParseUtil {
                     if (isHaveJsonKey("消费券单独使用", couponsObject, 3)) {
                         couponsXmlModel.setCouponsIsAlone(couponsObject.getString("消费券单独使用"));
                     }
+
+                    if (isHaveJsonKey("抵用数量", couponsObject, 3)) {
+                        couponsXmlModel.setCouponsDiscountAmount(couponsObject.getString("抵用数量"));
+                    }
+
+
                     if (isHaveJsonKey("消费券最低消费金额", couponsObject, 2)) {
                         couponsXmlModel.setCouponsLimitMoney((float) couponsObject.getDouble("消费券最低消费金额"));
                     }

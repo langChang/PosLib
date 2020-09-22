@@ -25,6 +25,19 @@ public class VipUserInfoCrm {
     private String      certificate_type;//证件类型
     private String      certificate_id;//证件编号
     private String      create_time;//注册日期(yyyy-MM-dd HH:MM:SS)
+    private String discount_without_coupon;
+
+
+    public String getDiscount_without_coupon() {
+        return discount_without_coupon;
+    }
+
+    public void setDiscount_without_coupon(String discount_without_coupon) {
+        this.discount_without_coupon = discount_without_coupon;
+    }
+
+
+
     private String birth;//会员生日(yyyy-MM-dd HH:MM:SS)
 
     private List<VipUserInfo> card_users;

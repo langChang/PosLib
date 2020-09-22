@@ -22,25 +22,29 @@ import java.util.ArrayList;
 public class GlobalDataImpl implements GlobalDataCallback {
 
     @Override
-    public boolean initSaleParams(){
+    public boolean initHomeData(){
+
+        initSaleBean();
         //初始化前台参数
-        SaleParamsBean saleParam;
-        BookResource bookPosSale = BookResourceImpl.getInstance().getBookPosSale(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.S_LOCAL_SCALE_STYLE);
-        if (bookPosSale != null) {
-            saleParam = XmlUtil.getPosSaleParams(bookPosSale.getBookResourceParam());
-        } else {
-            saleParam = new SaleParamsBean();
-        }
-        LibConfig.saleParamsBean = saleParam;
+//        SaleParamsBean saleParam;
+////        initSaleBean();
+//        BookResource bookPosSale = BookResourceImpl.getInstance().getBookPosSale(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.S_LOCAL_SCALE_STYLE);
+//        if (bookPosSale != null) {
+//            saleParam = XmlUtil.getPosSaleParams(bookPosSale.getBookResourceParam());
+//        } else {
+//            saleParam = new SaleParamsBean();
+//        }
+//        LibConfig.saleParamsBean = saleParam;
         //前台结算参数
         BookResource bookPosSaleType = BookResourceImpl.getInstance().getBookPosSale(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.S_PAY_SCALE_STYLE);
         if (bookPosSaleType != null) {
             LibConfig.allPosScaleTypeList = XmlUtil.getPosScaleStyle(bookPosSaleType.getBookResourceParam());
         }
+//        initShowGoods();
         LibConfig.BOOK_SCOPE_ID = SystemBookImpl.getBean(LibConfig.activeLoginBean.getSystem_book_code()).getBook_scope_id();
         //当前收银员
-        LibConfig.activeAppUser = AppUserImpl.getInstance().login
-                (LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), LibConfig.activeAppUser.getApp_user_code());
+//        LibConfig.activeAppUser = AppUserImpl.getInstance().login
+//                (LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), LibConfig.activeAppUser.getApp_user_code());
 
         //系统角色列表
         LibConfig.systemRoleList = PrivilegeResourceNewImpl.getInstance().getSystemRoleList();
@@ -82,15 +86,9 @@ public class GlobalDataImpl implements GlobalDataCallback {
             LibConfig.allPolicyPresentList = PolicyPresentImpl.getNewestPolciyPresent();
             LibConfig.allPointPolicyList = RetailPosManager.getInstance().getAllPointPolicy(LibConfig.activeLoginBean.getSystem_book_code());
 
-        LibConfig.activeBranch = BranchImpl.getInstance().getBranch(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
+        LibConfig.activeBranch = BranchImpl.getInstance().getBranchByNum(LibConfig.activeLoginBean.getSystem_book_code(),LibConfig.activeLoginBean.getBranch_num());
         BranchGroupImpl.initMyBranchGroup(LibConfig.activeLoginBean.getBranch_num());
-        return LibConfig.saleParamsBean == null ? false : true;
-    }
 
-    /**
-     * 展示显示商品
-     */
-    public void initShowGoods() {
         //重置商品排列顺序
         String itemSequenceString = BranchResourceImpl.getInstance().getItemSequenceString(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num());
         if (!TextUtils.isEmpty(itemSequenceString)) {
@@ -100,8 +98,27 @@ public class GlobalDataImpl implements GlobalDataCallback {
             }
         }
         ItemCategoryImpl.getInstance().setHierarchyCategory();
-        LibConfig.activityShowGoods = RetailPosManager.getInstance().getRetailGoodsList();
+        LibConfig.activityShowGoods = RetailPosManager.getInstance().getAllShowPosItem();
+
+
+        return LibConfig.saleParamsBean == null ? false : true;
     }
+
+//    /**
+//     * 展示显示商品
+//     */
+//    public void initShowGoods() {
+//        //重置商品排列顺序
+//        String itemSequenceString = BranchResourceImpl.getInstance().getItemSequenceString(LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num());
+//        if (!TextUtils.isEmpty(itemSequenceString)) {
+//            ArrayList<ItemSequenceBean> itemSequence = XmlUtil.getItemSequence(itemSequenceString);
+//            if (itemSequence != null && itemSequence.size() > 0) {
+//                PosItemImpl.resetPosItemSequence(itemSequence);
+//            }
+//        }
+//        ItemCategoryImpl.getInstance().setHierarchyCategory();
+//        LibConfig.activityShowGoods = RetailPosManager.getInstance().getAllShowPosItem();
+//    }
 
     public boolean initSaleBean(){
         SaleParamsBean saleParam;

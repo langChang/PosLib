@@ -28,8 +28,9 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
         public final static Property Category_name = new Property(1, String.class, "category_name", false, "CATEGORY_NAME");
         public final static Property Parent_category_code = new Property(2, String.class, "parent_category_code", false, "PARENT_CATEGORY_CODE");
         public final static Property Can_not_sale_no_store_item = new Property(3, Boolean.class, "can_not_sale_no_store_item", false, "CAN_NOT_SALE_NO_STORE_ITEM");
-        public final static Property Hierarchy = new Property(4, Integer.class, "hierarchy", false, "HIERARCHY");
-        public final static Property Second_category_code = new Property(5, String.class, "second_category_code", false, "SECOND_CATEGORY_CODE");
+        public final static Property Pos_item_type_sn = new Property(4, Integer.class, "pos_item_type_sn", false, "POS_ITEM_TYPE_SN");
+        public final static Property Hierarchy = new Property(5, Integer.class, "hierarchy", false, "HIERARCHY");
+        public final static Property Second_category_code = new Property(6, String.class, "second_category_code", false, "SECOND_CATEGORY_CODE");
     }
 
 
@@ -49,8 +50,9 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
                 "\"CATEGORY_NAME\" TEXT," + // 1: category_name
                 "\"PARENT_CATEGORY_CODE\" TEXT," + // 2: parent_category_code
                 "\"CAN_NOT_SALE_NO_STORE_ITEM\" INTEGER," + // 3: can_not_sale_no_store_item
-                "\"HIERARCHY\" INTEGER," + // 4: hierarchy
-                "\"SECOND_CATEGORY_CODE\" TEXT);"); // 5: second_category_code
+                "\"POS_ITEM_TYPE_SN\" INTEGER," + // 4: pos_item_type_sn
+                "\"HIERARCHY\" INTEGER," + // 5: hierarchy
+                "\"SECOND_CATEGORY_CODE\" TEXT);"); // 6: second_category_code
     }
 
     /** Drops the underlying database table. */
@@ -83,14 +85,19 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
             stmt.bindLong(4, can_not_sale_no_store_item ? 1L: 0L);
         }
  
+        Integer pos_item_type_sn = entity.getPos_item_type_sn();
+        if (pos_item_type_sn != null) {
+            stmt.bindLong(5, pos_item_type_sn);
+        }
+ 
         Integer hierarchy = entity.getHierarchy();
         if (hierarchy != null) {
-            stmt.bindLong(5, hierarchy);
+            stmt.bindLong(6, hierarchy);
         }
  
         String second_category_code = entity.getSecond_category_code();
         if (second_category_code != null) {
-            stmt.bindString(6, second_category_code);
+            stmt.bindString(7, second_category_code);
         }
     }
 
@@ -118,14 +125,19 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
             stmt.bindLong(4, can_not_sale_no_store_item ? 1L: 0L);
         }
  
+        Integer pos_item_type_sn = entity.getPos_item_type_sn();
+        if (pos_item_type_sn != null) {
+            stmt.bindLong(5, pos_item_type_sn);
+        }
+ 
         Integer hierarchy = entity.getHierarchy();
         if (hierarchy != null) {
-            stmt.bindLong(5, hierarchy);
+            stmt.bindLong(6, hierarchy);
         }
  
         String second_category_code = entity.getSecond_category_code();
         if (second_category_code != null) {
-            stmt.bindString(6, second_category_code);
+            stmt.bindString(7, second_category_code);
         }
     }
 
@@ -141,8 +153,9 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // category_name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // parent_category_code
             cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // can_not_sale_no_store_item
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // hierarchy
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // second_category_code
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // pos_item_type_sn
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // hierarchy
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // second_category_code
         );
         return entity;
     }
@@ -153,8 +166,9 @@ public class ItemCategoryDao extends AbstractDao<ItemCategory, String> {
         entity.setCategory_name(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setParent_category_code(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCan_not_sale_no_store_item(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setHierarchy(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setSecond_category_code(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPos_item_type_sn(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setHierarchy(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setSecond_category_code(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

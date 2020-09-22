@@ -3,6 +3,7 @@ package com.nhsoft.poslib.call.impl;
 import android.database.Cursor;
 import android.text.TextUtils;
 
+import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.AmountPay;
 import com.nhsoft.poslib.entity.Branch;
@@ -358,6 +359,87 @@ public class ShiftTableImpl {
             }
         }
 
+    }
+
+    /**
+     * 获取本地没有上传的所有的班次(有流水，未上传，)
+     * @param systemBookCode
+     * @param branchNum
+     * @return
+     */
+    public List<ShiftTable> getNotUploadList(String systemBookCode, int branchNum){
+        List<ShiftTable> shiftTables=null;
+        ShiftTableDao shiftTableDao=DaoManager.getInstance().getDaoSession().getShiftTableDao();
+        shiftTables=shiftTableDao.queryBuilder().where(
+                ShiftTableDao.Properties.System_book_code.eq(systemBookCode),//账套号
+                ShiftTableDao.Properties.Branch_num.eq(branchNum)//店
+                ,ShiftTableDao.Properties.Shift_table_synchronized.eq(false)//上传
+                ,ShiftTableDao.Properties.Shift_table_need_carry.eq(true)//流水
+                ,ShiftTableDao.Properties.Shift_table_upload_times.lt(10)//上传次数
+
+        ).list();
+        return shiftTables;
+    }
+
+
+
+    //初始化shiftTable
+    public void initShiftTable() {
+        List<ShiftTable> list = null;
+        try {
+            list  = getUnClosedShiftTable(LibConfig.activeLoginBean.getSystem_book_code(),
+                        LibConfig.activeLoginBean.getBranch_num());
+
+            if (list == null || list.size() == 0) {
+                //上个营业日没有未交班
+            } else {
+                for (ShiftTable shiftTable : list) {
+                    RetailPosManager.getInstance().closeShiftTable(shiftTable);//强制交班
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ShiftTable shiftTable = RetailPosManager.getInstance().getCurrentShiftTable();
+        if (shiftTable == null) {
+            createShiftTable();
+        } else {
+            LibConfig.activeShiftTable = shiftTable;
+        }
+
+        LibConfig.SYSTEM_BOOK = LibConfig.activeLoginBean.getSystem_book_code();
+        LibConfig.SHIFT_TABLE_BIZDAY = LibConfig.activeShiftTable.getShiftTableBizday();
+        LibConfig.SHIFT_TABLE_NUM = LibConfig.activeShiftTable.getShiftTableNum();
+        LibConfig.SHIFT_OPERATOR = LibConfig.activeAppUser.getApp_user_name();
+
+    }
+
+
+
+    /**
+     * 4、创建新的班次
+     * * （1、开班日期 2、收银员编号 3、收银员代码 4、班次的收银员名称 5、终端标识
+     * * 6、账套号 7、分店编号 8、班次号 9、班次最后修改时间 10、营业日 yyyymmdd）
+     *
+     * @return
+     */
+    public ShiftTable createShiftTable() {
+        ShiftTable  shiftTable = new ShiftTable();
+        shiftTable.setShiftTableStart(TimeUtil.getInstance().getNowDate());
+        shiftTable.setShiftTableUserNum(LibConfig.activeAppUser.getApp_user_num().intValue());
+        shiftTable.setShiftTableUserCode(LibConfig.activeAppUser.getApp_user_code());
+        shiftTable.setShiftTableUserName(LibConfig.activeAppUser.getApp_user_name());
+        shiftTable.setShiftTableTerminalId(LibConfig.activeLocalMac);
+        shiftTable.setSystemBookCode(LibConfig.activeLoginBean.getSystem_book_code());
+//        shiftTable.setMerchant_num(LibConfig.activeLoginBean.getMerchant_num());
+        shiftTable.setBranchNum(LibConfig.activeBranch.getBranch_num().intValue());
+        shiftTable.setShiftTableBizday(ShiftTableImpl.getInstance().getCurrentBizday
+                (LibConfig.activeLoginBean.getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num()));
+        shiftTable.setShiftTableNum(ShiftTableImpl.getInstance().getShiftTableNum(LibConfig.activeLoginBean.
+                getSystem_book_code(), LibConfig.activeLoginBean.getBranch_num(), LibConfig.activePosMachine.getPos_machine_sequence()));
+
+        LibConfig.activeShiftTable = ShiftTableImpl.getInstance().createShiftTable(shiftTable);
+        return shiftTable;
     }
 
 

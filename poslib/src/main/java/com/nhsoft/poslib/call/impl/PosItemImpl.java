@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.nhsoft.poslib.PosTypeEnum;
 import com.nhsoft.poslib.RetailPosManager;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.ItemBar;
@@ -12,7 +13,11 @@ import com.nhsoft.poslib.entity.ManagementTemplateDetail;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosItemKit;
+import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.model.CouponsBean;
+import com.nhsoft.poslib.model.CouponsXmlModel;
+import com.nhsoft.poslib.model.GoodsGradeBean;
 import com.nhsoft.poslib.model.ItemSequenceBean;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.ItemBarDao;
@@ -20,6 +25,7 @@ import com.nhsoft.poslib.service.greendao.ManagementTemplateDetailDao;
 import com.nhsoft.poslib.service.greendao.PosItemDao;
 import com.nhsoft.poslib.service.greendao.PosItemGradeDao;
 import com.nhsoft.poslib.service.greendao.PosItemKitDao;
+import com.nhsoft.poslib.utils.EvtLog;
 import com.nhsoft.poslib.utils.MatterUtils;
 import com.nhsoft.poslib.utils.TimeUtil;
 
@@ -27,6 +33,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -320,12 +327,27 @@ public class PosItemImpl {
                     continue;
             }
 
-            if (posItem.getItem_type() == 10) {
-                List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
-                if (posItemGrades == null || posItemGrades.size() == 0) continue;
-                posItem.setPos_item_grade_list(posItemGrades);
+
+            if(RetailPosManager.sPosType == PosTypeEnum.AMA_POS){
+                if (posItem.getItem_type() == 10) {
+                    List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
+                    if (posItemGrades == null || posItemGrades.size() == 0) continue;
+                    posItem.setPos_item_grade_list(posItemGrades);
+                }
+                newPosItemList.add(posItem);
+            }else if(RetailPosManager.sPosType == PosTypeEnum.MOBILE_POS){
+                if (posItem.getItem_type() == 10) {
+                    List<PosItemGrade> posItemGrades = posItemGradeDao.queryRaw("where item_num=? and item_grade_sale_cease_flag = 0", String.valueOf(posItem.getItem_num()));
+                    if (posItemGrades == null || posItemGrades.size() == 0) continue;
+                    for (PosItemGrade posItemGrade : posItemGrades) {
+                        PosItem clonePosItem = RetailPosManager.getInstance().copyPosItem(posItem);
+                        clonePosItem.setShowPosItemGrade(posItemGrade);
+                        newPosItemList.add(clonePosItem);
+                    }
+                    continue;
+                }
+                newPosItemList.add(posItem);
             }
-            newPosItemList.add(posItem);
         }
         pos_itemDao.detachAll();
         return newPosItemList;
@@ -444,7 +466,7 @@ public class PosItemImpl {
     }
 
 
-    public PosItem getPosItemByKey(long item_num) {
+    public PosItem getPosItemByItemNum(long item_num) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItem posItem = pos_itemDao.load(item_num);
         pos_itemDao.detachAll();
@@ -452,7 +474,7 @@ public class PosItemImpl {
 //        return pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_category_code.eq(categoryCode)).list();
     }
 
-    public PosItemGrade getPosItemGradeByKey(int item_grade_num,long item_num) {
+    public PosItemGrade getPosItemGradeByItemGradeNum(int item_grade_num, long item_num) {
         PosItemGradeDao posItemGradeDao = DaoManager.getInstance().getDaoSession().getPosItemGradeDao();
         PosItemGrade posItemGrade = posItemGradeDao.queryBuilder().where(PosItemGradeDao.Properties.Item_grade_num.eq(item_grade_num),PosItemGradeDao.Properties.Item_num.eq(item_num)).build().unique();
         posItemGradeDao.detachAll();
@@ -460,13 +482,13 @@ public class PosItemImpl {
 
     }
 
-    public PosItem getPosItemByKey(String name) {
+    public PosItem getPosItemByName(String name) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItem posItem = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_name.eq(name)).limit(1).offset(0).unique();
         return posItem;
     }
 
-    public PosItem getPosItemByNmu(String id) {
+    public PosItem getPosItemByNmu(String item_num) {
         //and branch_num=?  and item_del_tag = 0 and item_eliminative_flag = 0 and branch_sale_cease_flag = 0
         // and item_type != 11 and item_type != 9 order by item_sequence
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
@@ -480,7 +502,7 @@ public class PosItemImpl {
 //                PosItemDao.Properties.Item_type.notEq(9)
 //        ).limit(1).offset(0).unique();
 
-        PosItem posItem1 = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_num.eq(id)).limit(1).offset(0).unique();
+        PosItem posItem1 = pos_itemDao.queryBuilder().where(PosItemDao.Properties.Item_num.eq(item_num)).limit(1).offset(0).unique();
         if (posItem1 == null) {
             return null;
         }
@@ -540,9 +562,20 @@ public class PosItemImpl {
                 .where(ItemBarDao.Properties.Item_bar_code.eq(itemBarCode));
 
             if(LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived()){
-                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.eq(false), PosItemDao.Properties.Branch_sale_cease_flag.eq(false),
+                        PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
             }else {
-                posItems = queryBuilder.where(PosItemDao.Properties.Item_del_tag.notEq(true), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+                List<PosItem> searchList = queryBuilder.where(PosItemDao.Properties.Item_del_tag.notEq(true), PosItemDao.Properties.Item_eliminative_flag.eq(false)).list();
+
+                posItems = new ArrayList<>();
+
+                if(searchList != null){
+                    for (PosItem posItem : searchList){
+                        if(posItem.getItem_sale_cease_flag() == null || !posItem.getItem_sale_cease_flag()){
+                            posItems.add(posItem);
+                        }
+                    }
+                }
 
 //                posItems = new ArrayList<>();
 //                if(getPosItems != null){
@@ -580,13 +613,12 @@ public class PosItemImpl {
 
     /**
      * 根据 store_item_pinyin 模糊查询
-     *
      * @param storeItemPinyin
      * @param systemBookCode
      * @param branchNum
      * @return
      */
-    public List<PosItem> getPosItemByItemNum(String systemBookCode, int branchNum, String storeItemPinyin) {
+    public List<PosItem> getPosItemByPinyin(String systemBookCode, int branchNum, String storeItemPinyin) {
         PosItemDao pos_itemDao = DaoManager.getInstance().getDaoSession().getPosItemDao();
         PosItemGradeDao posItemGradeDao = DaoManager.getInstance().getDaoSession().getPosItemGradeDao();
         List<PosItem> posItems ;
@@ -796,5 +828,231 @@ public class PosItemImpl {
         return itemBar;
     }
 
+
+
+    public List<GoodsGradeBean> getAllShowPosItem() {
+        try {
+            DaoSession session = DaoManager.getInstance().getDaoSession();
+            List<ItemCategory> itemCategoryList = new ArrayList<>();
+            ItemCategory itemCategory;
+            String category_code = "";
+            String category_name = "";
+            String category_parent_code = "";
+//                    String strSql = "select max(item_last_edit_time) as ITEM_LAST_EDIT_TIME from pos_item ";
+            String strSql = "select *  from item_category  order by parent_category_code,pos_item_type_sn asc";
+            Cursor c = session.getDatabase().rawQuery(strSql, null);
+            while (c.moveToNext()) {
+                itemCategory = new ItemCategory();
+                itemCategory.setCategory_code(c.getString(c.getColumnIndex("CATEGORY_CODE")));
+                itemCategory.setCategory_name(c.getString(c.getColumnIndex("CATEGORY_NAME")));
+                itemCategory.setParent_category_code(c.getString(c.getColumnIndex("PARENT_CATEGORY_CODE")));
+                EvtLog.e("itemCategoryId", category_code + "----" + category_name + "----" + category_parent_code);
+                itemCategoryList.add(itemCategory);
+            }
+            c.close();
+            if (itemCategoryList.size() > 0) {
+                List<GoodsGradeBean> goodsGradeBeanList = new ArrayList<>();
+                GoodsGradeBean goodsGradeBean;
+                for (ItemCategory category : itemCategoryList) {
+                    if (TextUtils.isEmpty(category.getParent_category_code())) {
+                        goodsGradeBean = new GoodsGradeBean();
+                        goodsGradeBean.setItemCategory(category);
+                        goodsGradeBean.setGrade(1);
+                        goodsGradeBean.setCategory_name(category.getCategory_name());
+                        goodsGradeBean.setCategory_code(category.getCategory_code());
+                        goodsGradeBeanList.add(goodsGradeBean);
+                    } else {
+                        for (GoodsGradeBean saveGoodsBean : goodsGradeBeanList) {
+                            if (category.getParent_category_code().equals(saveGoodsBean.getCategory_code())) {
+                                saveGoodsBean.getItemCategories().add(category);
+                            }
+                        }
+                    }
+                }
+
+                List<GoodsGradeBean> newGradeList = new ArrayList<>();
+                List<PosItem> posItemByCode = null;
+                List<ItemCategory> newItemCategorys = null;
+
+                for (GoodsGradeBean gradeBean : goodsGradeBeanList) {
+
+
+                    newItemCategorys = new ArrayList<>();
+                    if (gradeBean.getItemCategories() == null || gradeBean.getItemCategories().size() == 0) {
+                        posItemByCode = PosItemImpl.getAllShoWPosItemByCode(gradeBean.getCategory_code(), 0);//只有一级类
+                        if (posItemByCode != null && posItemByCode.size() > 0) {
+                            newGradeList.add(gradeBean);
+                            if (null != gradeBean.getItemCategory()) {
+                                gradeBean.getItemCategory().setPosItemList(posItemByCode);
+                            }
+                        }
+
+                    } else {
+                        for (ItemCategory sonItemCategory : gradeBean.getItemCategories()) {
+                            posItemByCode = PosItemImpl.getAllShoWPosItemAndSonPosItemByCode(sonItemCategory.getCategory_code(), 0);//一级类以下
+                            if (posItemByCode != null && posItemByCode.size() > 0) {
+                                sonItemCategory.setPosItemList(posItemByCode);
+                                newItemCategorys.add(sonItemCategory);
+                            }
+                        }
+
+                        // TODO: 2020/2/24 修改8几类支持
+                        posItemByCode = PosItemImpl.getAllShoWPosItemByCode(gradeBean.getCategory_code(), 0);
+                        if (newItemCategorys.size() > 0) {
+                            newGradeList.add(gradeBean);
+                            gradeBean.setItemCategories(newItemCategorys);
+                            if (posItemByCode != null && posItemByCode.size() > 0) {
+                                if (null != gradeBean.getItemCategory()) {
+                                    gradeBean.getItemCategory().setPosItemList(posItemByCode);
+                                }
+                            }
+                        }else {
+                            if (posItemByCode != null && posItemByCode.size() > 0) {
+                                newGradeList.add(gradeBean);
+                                if (null != gradeBean.getItemCategory()) {
+                                    gradeBean.getItemCategory().setPosItemList(posItemByCode);
+                                }
+                            }
+                        }
+                        // TODO: 2020/2/24 修改8几类支持前
+//                        if (newItemCategorys.size() > 0) {
+//                            newGradeList.add(gradeBean);
+//                            gradeBean.setItemCategories(newItemCategorys);
+//                        }
+
+                    }
+                }
+                return newGradeList;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+
+    /**
+     *
+     * @param couponsBean
+     * @param posOrderDetail
+     * @return
+     */
+    public int isInGoodsList(CouponsBean couponsBean, PosOrderDetail posOrderDetail) {
+        if (LibConfig.sCouponsXmlModels != null) {
+            if (!posOrderDetail.getOrderDetailStateName().equals(LibConfig.S_ORDER_DETAIL_SALE_NAME))
+                return 2;
+            boolean isHave = false;
+            for (CouponsXmlModel xmlCouponsBean : LibConfig.sCouponsXmlModels) {
+                if (couponsBean.getTicket_send_detail_type().equals(xmlCouponsBean.getCouponsName())) {
+
+                    if(!TextUtils.isEmpty(xmlCouponsBean.getCouponsDiscountAmount())){
+                        couponsBean.setCoupons_discount_amount(Float.parseFloat(xmlCouponsBean.getCouponsDiscountAmount()));
+                    }
+                    if(xmlCouponsBean.isMoneyExceptPromotionItems() == 1){
+                        if(!TextUtils.isEmpty(posOrderDetail.getOrderDetailPolicyFid() )){
+                            return 2;
+                        }
+                    }
+
+                    if (!TextUtils.isEmpty(xmlCouponsBean.getCouponsSupportPayStyle())) {
+                        String[] split = xmlCouponsBean.getCouponsSupportPayStyle().split(",");
+                        couponsBean.setSupportPaystyleList(new ArrayList<>(Arrays.asList(split)));
+                    }
+                    List<CouponsXmlModel.CatetoryData> catetoryDataList = xmlCouponsBean.getmCatetoryDataList();
+                    if (catetoryDataList != null && catetoryDataList.size() > 0) {
+                        ItemCategory loadItemCategory = ItemCategoryImpl.findTopCode(posOrderDetail.getPosItem().getItem_category_code());
+                        if (loadItemCategory != null) {
+                            for (CouponsXmlModel.CatetoryData catetoryData : catetoryDataList) {
+                                if (catetoryData.getCatetoryName().equals(loadItemCategory.getCategory_name())) {
+                                    if (catetoryData.getGoodsList() == null || catetoryData.getGoodsList().size() == 0) {
+                                        return 1;
+                                    } else {
+                                        int isInGoodsList = 0;
+                                        for (CouponsXmlModel.GoodsData goodsData : catetoryData.getGoodsList()) {
+                                            if (goodsData.getGoodsItemNum() == posOrderDetail.getItemNum()) {
+                                                isInGoodsList = 1;
+                                                break;
+                                            }
+                                        }
+                                        return isInGoodsList;
+                                    }
+                                }
+                            }
+                        }
+                        return 0;
+                    } else {
+                        if(xmlCouponsBean.isAll()){
+                            if(xmlCouponsBean.getGoodsCodeList() != null && xmlCouponsBean.getGoodsCodeList().contains(""+posOrderDetail.getItemNum())){
+                                return 2;
+                            }
+                        }else if(xmlCouponsBean.getCategoryCodeList() != null){
+                            String[] split = xmlCouponsBean.getCategoryCodeList().split(",");
+                            List<String> categoryList = Arrays.asList(split);
+                            if(posOrderDetail.getPosItem() != null){
+                                PosItem posItem = posOrderDetail.getPosItem();
+                                ItemCategory topCode = ItemCategoryImpl.findTopCode(posItem.getItem_category_code());
+                                if(categoryList.size() > 0 &&  !categoryList.contains(topCode.getCategory_code())){
+                                    return 2;
+                                }else {
+                                    if(xmlCouponsBean.getGoodsCodeList() != null && xmlCouponsBean.getGoodsCodeList().contains(""+posOrderDetail.getItemNum())){
+                                        return 2;
+                                    }
+                                }
+
+                            }
+                        }else if(xmlCouponsBean.getGoodsCodeList() != null && !xmlCouponsBean.getGoodsCodeList().contains(""+posOrderDetail.getItemNum())){
+                            return 2;
+                        }
+
+                        return 1;
+                    }
+                }
+            }
+            if (!isHave) return 2;
+        } else {
+            return 0;
+        }
+
+        return 0;
+    }
+
+
+
+    /**
+     * 取分级商品标准价格
+     * @param posItemGrade
+     * @return
+     */
+    private float getItemGradeRegularPrice(PosItemGrade posItemGrade){
+        float truePrice;
+        if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived()) {
+            float branch_grade_regular_price = posItemGrade.getBranch_grade_regular_price();
+            if(branch_grade_regular_price == 0){
+                branch_grade_regular_price = posItemGrade.getItem_grade_regular_price();
+            }
+            truePrice = branch_grade_regular_price;
+        }else {
+            float item_grade_regular_price = posItemGrade.getItem_grade_regular_price() == null ? 0 : posItemGrade.getItem_grade_regular_price().floatValue();
+            truePrice = item_grade_regular_price;
+        }
+        return truePrice;
+    }
+
+
+    public float getItemRegularPrice(PosItem posItem,PosItemGrade posItemGrade){
+        float truePrice;
+        if(posItemGrade != null){
+            float gradeRegularPrice =getItemGradeRegularPrice(posItemGrade);
+            truePrice = gradeRegularPrice;
+        }else {
+            if (LibConfig.activeBranch != null && LibConfig.activeBranch.getBranch_matrix_price_actived() && posItem.getBranch_regular_price() != 0) {
+                truePrice = posItem.getBranch_regular_price() ;//门店标准单价
+            } else {
+                truePrice =  posItem.getItem_regular_price();//中心标准单价
+            }
+        }
+        return truePrice;
+    }
 
 }

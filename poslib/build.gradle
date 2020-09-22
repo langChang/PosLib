@@ -3,7 +3,7 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.langChang'
 greendao {
-    schemaVersion 138
+    schemaVersion 144
     daoPackage 'com.nhsoft.poslib.service.greendao'
     targetGenDir 'src/main/java'
 }

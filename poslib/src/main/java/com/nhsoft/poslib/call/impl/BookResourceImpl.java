@@ -146,9 +146,11 @@ public class BookResourceImpl {
             jsonObject = new JSONObject(s);
             JSONObject object = jsonObject.optJSONObject("FeeItemList");
             JSONArray jsonArray = object.optJSONArray("FeeItem");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                OtherPayment mOtherPayment = gson.fromJson(jsonArray.optString(i), OtherPayment.class);
-                list.add(mOtherPayment);
+            if(jsonArray != null){
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    OtherPayment mOtherPayment = gson.fromJson(jsonArray.optString(i), OtherPayment.class);
+                    list.add(mOtherPayment);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -279,5 +281,47 @@ public class BookResourceImpl {
         }
 
         return vipCardConfigBean;
+    }
+
+
+    /**
+     * 获取消费卡 列表
+     *
+     * @param systemCode
+     * @param payScale
+     * @param branch     发卡门店
+     * @return
+     */
+    public List<String> getVipCardTypeBeanNameList(String systemCode, String payScale, int branch) {
+        BookResource bookPosCardType = getBookPosSale(systemCode, payScale);
+        List<String> list = new ArrayList<>();
+        Gson gson = new Gson();
+        String s = XmlParser.xml2json(bookPosCardType.getBookResourceParam());
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            JSONObject object = jsonObject.optJSONObject("消费卡类型列表");
+            JSONObject jsonObject1 = object.optJSONObject(payScale);
+            if (jsonObject1!=null){
+                VipCardTypeBean vipCardTypeBean123 = gson.fromJson(jsonObject1.toString(), VipCardTypeBean.class);
+                list.add(vipCardTypeBean123.name);
+                return list;
+            }
+            JSONArray jsonArray = object.optJSONArray(payScale);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                VipCardTypeBean vipCardTypeBean = gson.fromJson(jsonArray.optString(i), VipCardTypeBean.class);
+                if (!vipCardTypeBean.getIsEnabled().equals("-1")) continue;//“会员卡类型-启用”参数控制
+                if (vipCardTypeBean.getOnlyBranchUse().equals("-1")) {
+                    if (LibConfig.activeLoginBean.getBranch_num() == branch) {
+                        list.add(vipCardTypeBean.getName());
+                    }
+                } else {
+                    list.add(vipCardTypeBean.getName());
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

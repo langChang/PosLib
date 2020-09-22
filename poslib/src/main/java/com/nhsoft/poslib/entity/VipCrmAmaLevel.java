@@ -1,9 +1,9 @@
 package com.nhsoft.poslib.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * ama对应的会员名称
@@ -45,6 +45,9 @@ public class VipCrmAmaLevel {
     private boolean           upgrade_by_growth;
     private int               growth_value;
     private String payment_types;
+
+
+
 
 
 
@@ -171,11 +174,6 @@ public class VipCrmAmaLevel {
 
     public boolean getUpgrade_by_growth() {
         return this.upgrade_by_growth;
-    }
-
-
-    public VipLevelPointRule getPoint_rule() {
-        return point_rule;
     }
 
     public String getPayment_types() {

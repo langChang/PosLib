@@ -33,6 +33,7 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
         public final static Property Rule_money = new Property(6, float.class, "rule_money", false, "RULE_MONEY");
         public final static Property Rule_value = new Property(7, int.class, "rule_value", false, "RULE_VALUE");
         public final static Property Discount_item_no_point = new Property(8, boolean.class, "discount_item_no_point", false, "DISCOUNT_ITEM_NO_POINT");
+        public final static Property Point_category_params_json = new Property(9, String.class, "point_category_params_json", false, "POINT_CATEGORY_PARAMS_JSON");
     }
 
 
@@ -56,7 +57,8 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
                 "\"RULE_TYPE\" TEXT," + // 5: rule_type
                 "\"RULE_MONEY\" REAL NOT NULL ," + // 6: rule_money
                 "\"RULE_VALUE\" INTEGER NOT NULL ," + // 7: rule_value
-                "\"DISCOUNT_ITEM_NO_POINT\" INTEGER NOT NULL );"); // 8: discount_item_no_point
+                "\"DISCOUNT_ITEM_NO_POINT\" INTEGER NOT NULL ," + // 8: discount_item_no_point
+                "\"POINT_CATEGORY_PARAMS_JSON\" TEXT);"); // 9: point_category_params_json
     }
 
     /** Drops the underlying database table. */
@@ -97,6 +99,11 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
         stmt.bindDouble(7, entity.getRule_money());
         stmt.bindLong(8, entity.getRule_value());
         stmt.bindLong(9, entity.getDiscount_item_no_point() ? 1L: 0L);
+ 
+        String point_category_params_json = entity.getPoint_category_params_json();
+        if (point_category_params_json != null) {
+            stmt.bindString(10, point_category_params_json);
+        }
     }
 
     @Override
@@ -131,6 +138,11 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
         stmt.bindDouble(7, entity.getRule_money());
         stmt.bindLong(8, entity.getRule_value());
         stmt.bindLong(9, entity.getDiscount_item_no_point() ? 1L: 0L);
+ 
+        String point_category_params_json = entity.getPoint_category_params_json();
+        if (point_category_params_json != null) {
+            stmt.bindString(10, point_category_params_json);
+        }
     }
 
     @Override
@@ -149,7 +161,8 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // rule_type
             cursor.getFloat(offset + 6), // rule_money
             cursor.getInt(offset + 7), // rule_value
-            cursor.getShort(offset + 8) != 0 // discount_item_no_point
+            cursor.getShort(offset + 8) != 0, // discount_item_no_point
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // point_category_params_json
         );
         return entity;
     }
@@ -165,6 +178,7 @@ public class VipLevelPointRuleDao extends AbstractDao<VipLevelPointRule, Long> {
         entity.setRule_money(cursor.getFloat(offset + 6));
         entity.setRule_value(cursor.getInt(offset + 7));
         entity.setDiscount_item_no_point(cursor.getShort(offset + 8) != 0);
+        entity.setPoint_category_params_json(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override

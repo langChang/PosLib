@@ -43,4 +43,5 @@ public class PaymentTemporary {
     private int payment_consume_count;
     private int account_bank_num;
     private long payment_cust_num;
+    private String client_fid;
 }

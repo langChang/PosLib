@@ -10,7 +10,6 @@ import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDetailDao;
 import com.nhsoft.poslib.service.greendao.PosOrderKitDetailDao;
-import com.nhsoft.poslib.service.greendao.ShiftTableDao;
 import com.nhsoft.poslib.utils.MatterUtils;
 
 import java.util.List;
@@ -27,29 +26,6 @@ public class DataSynchronousImpl {
         }
         return instance;
     }
-
-
-
-    /**
-     * 获取本地没有上传的所有的班次(有流水，未上传，)
-     * @param systemBookCode
-     * @param branchNum
-     * @return
-     */
-    public List<ShiftTable> getNotUploadList(String systemBookCode, int branchNum){
-        List<ShiftTable> shiftTables=null;
-        ShiftTableDao shiftTableDao=DaoManager.getInstance().getDaoSession().getShiftTableDao();
-        shiftTables=shiftTableDao.queryBuilder().where(
-                ShiftTableDao.Properties.System_book_code.eq(systemBookCode),//账套号
-                ShiftTableDao.Properties.Branch_num.eq(branchNum)//店
-                ,ShiftTableDao.Properties.Shift_table_synchronized.eq(false)//上传
-                ,ShiftTableDao.Properties.Shift_table_need_carry.eq(true)//流水
-                ,ShiftTableDao.Properties.Shift_table_upload_times.lt(3)//上传次数
-
-        ).list();
-        return shiftTables;
-    }
-
 
     /**
      * 上传本班次没有上传过的订单

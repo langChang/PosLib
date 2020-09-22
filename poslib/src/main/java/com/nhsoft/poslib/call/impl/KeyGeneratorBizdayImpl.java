@@ -62,6 +62,31 @@ public class KeyGeneratorBizdayImpl {
         return keyGeneratorBizday;
     }
 
+    public KeyGeneratorBizday createOtherRevenueKG(String systemCode, int branchNum, String shiftTableBizday, String keyItem, int posMachineSequence) {
+        final KeyGeneratorBizdayDao keyGeneratorBizdayDao = DaoManager.getInstance().getDaoSession().getKeyGeneratorBizdayDao();
+        KeyGeneratorBizday keyGeneratorBizday = keyGeneratorBizdayDao.queryBuilder().where(KeyGeneratorBizdayDao.Properties.SystemBookCode.eq(systemCode),
+                KeyGeneratorBizdayDao.Properties.BranchNum.eq(branchNum),
+                KeyGeneratorBizdayDao.Properties.ShiftTableBizday.eq(shiftTableBizday),
+                KeyGeneratorBizdayDao.Properties.KeyItem.eq(keyItem)).unique();
+        int keyValue = 1;
+        if (keyGeneratorBizday != null) {
+            keyValue = keyGeneratorBizday.getKeyValue() + 1;
+            keyGeneratorBizday.setKeyValue(keyValue);
+//            keyGeneratorBizdayDao.save(keyGeneratorBizday);
+        } else {
+            keyGeneratorBizday = new KeyGeneratorBizday();
+            keyGeneratorBizday.setSystemBookCode(systemCode);
+            keyGeneratorBizday.setBranchNum(branchNum);
+            keyGeneratorBizday.setShiftTableBizday(shiftTableBizday);
+            keyGeneratorBizday.setKeyItem(keyItem);
+            keyGeneratorBizday.setKeyValue(keyValue);
+        }
+//        账套+门店+营业日+3位数字终端号+流水号
+        keyGeneratorBizday.setKeyGBString(getSystemCodeChar(systemCode) + getBranchNumChar(String.valueOf(branchNum)) + getYearCurrentDate(shiftTableBizday) + getKeyMechineStr(String.valueOf(posMachineSequence)) + getKeyGeneratorNum(String.valueOf(keyValue)));
+        keyGeneratorBizdayDao.detachAll();
+        return keyGeneratorBizday;
+    }
+
     /**
      * 外部流水号
      * @param branchNum

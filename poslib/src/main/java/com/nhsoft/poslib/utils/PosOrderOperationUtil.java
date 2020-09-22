@@ -564,6 +564,13 @@ public class PosOrderOperationUtil {
                         }
                     }
 
+                    //暂时先存主商品，不算分级商品
+                    if(posItemGrade != null){
+                        posItemGrade = null;
+                    }
+                    //暂时先存主商品，不算分级商品
+
+
                     PosOrderKitDetail posOrderKitDetail = new PosOrderKitDetail();
                     posOrderKitDetail.setOrderNo(posOrderDetail.getOrderNo());
                     posOrderKitDetail.setOrderDetailNum(posOrderDetail.getOrderDetailNum());
@@ -600,7 +607,7 @@ public class PosOrderOperationUtil {
 //                    } else {
 //                        posOrderKitDetail.setOrderKitDetailStdPrice(posItemGrade == null ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price() == 0 ? posItem.getItem_regular_price() : posItemGrade.getBranch_grade_regular_price());//标准单价
 //                    }
-                    float finalRegularPrice = PriceUtil.getItemRegularPrice(posItem, posItemGrade);
+                    float finalRegularPrice = RetailPosManager.getInstance().getItemRegularPrice(posItem, posItemGrade);
                     posOrderKitDetail.setOrderKitDetailStdPrice(finalRegularPrice);
 
                     posOrderDetail.setOrderDetailHasKit(true);

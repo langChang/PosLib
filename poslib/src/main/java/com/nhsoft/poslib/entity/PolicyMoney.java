@@ -1,6 +1,7 @@
 package com.nhsoft.poslib.entity;
 
 import com.nhsoft.poslib.model.BasePolicyBean;
+import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.PolicyMoneyDao;
 import com.nhsoft.poslib.service.greendao.PolicyMoneyDetailDao;
 
@@ -12,7 +13,6 @@ import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.List;
-import com.nhsoft.poslib.service.greendao.DaoSession;
 
 /**
  * Created by Iverson on 2019-05-15 15:28
@@ -84,6 +84,10 @@ public class PolicyMoney  extends BasePolicyBean {
     private boolean promotion_money_append;
     private String  promotion_money_assigned_type;
     private String promotion_money_level_ids;
+    private Integer promotion_money_price_type;
+    private Float promotion_money_discount;
+
+
     @Transient
     private int multiple;
 
@@ -107,9 +111,9 @@ public class PolicyMoney  extends BasePolicyBean {
     @Generated(hash = 2132523669)
     private transient PolicyMoneyDao myDao;
 
-    @Generated(hash = 1966927367)
+    @Generated(hash = 533458529)
     public PolicyMoney(String promotion_money_no, String system_book_code, String promotion_money_date_from, String promotion_money_date_to, String promotion_money_time_from, String promotion_money_time_to, float promotion_money_bill_money, String promotion_money_applied_branch, boolean promotion_money_mon_actived, boolean promotion_money_tues_actived, boolean promotion_money_wed_actived, boolean promotion_money_thurs_actived, boolean promotion_money_friday_actived, boolean promotion_money_sat_actived, boolean promotion_money_sun_actived, String promotion_money_creator, String promotion_money_create_time,
-            String promotion_money_auditor, String promotion_money_audit_time, String promotion_money_items, int branch_num, int promotion_item_count, boolean promotion_money_card_only, String promotion_money_card_type, boolean promotion_money_append, String promotion_money_assigned_type, String promotion_money_level_ids, String promotion_money_assigned_category, String promotion_money_last_edit_time, String promotion_money_last_editor) {
+            String promotion_money_auditor, String promotion_money_audit_time, String promotion_money_items, int branch_num, int promotion_item_count, boolean promotion_money_card_only, String promotion_money_card_type, boolean promotion_money_append, String promotion_money_assigned_type, String promotion_money_level_ids, Integer promotion_money_price_type, Float promotion_money_discount, String promotion_money_assigned_category, String promotion_money_last_edit_time, String promotion_money_last_editor) {
         this.promotion_money_no = promotion_money_no;
         this.system_book_code = system_book_code;
         this.promotion_money_date_from = promotion_money_date_from;
@@ -137,6 +141,8 @@ public class PolicyMoney  extends BasePolicyBean {
         this.promotion_money_append = promotion_money_append;
         this.promotion_money_assigned_type = promotion_money_assigned_type;
         this.promotion_money_level_ids = promotion_money_level_ids;
+        this.promotion_money_price_type = promotion_money_price_type;
+        this.promotion_money_discount = promotion_money_discount;
         this.promotion_money_assigned_category = promotion_money_assigned_category;
         this.promotion_money_last_edit_time = promotion_money_last_edit_time;
         this.promotion_money_last_editor = promotion_money_last_editor;
@@ -512,5 +518,21 @@ public class PolicyMoney  extends BasePolicyBean {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPolicyMoneyDao() : null;
+    }
+
+    public Integer getPromotion_money_price_type() {
+        return this.promotion_money_price_type;
+    }
+
+    public void setPromotion_money_price_type(Integer promotion_money_price_type) {
+        this.promotion_money_price_type = promotion_money_price_type;
+    }
+
+    public Float getPromotion_money_discount() {
+        return this.promotion_money_discount;
+    }
+
+    public void setPromotion_money_discount(Float promotion_money_discount) {
+        this.promotion_money_discount = promotion_money_discount;
     }
 }

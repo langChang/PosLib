@@ -1,5 +1,6 @@
 package com.nhsoft.poslib.entity;
 
+import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.PolicyQuantityDao;
 import com.nhsoft.poslib.service.greendao.PolicyQuantityDetailDao;
 
@@ -11,7 +12,6 @@ import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.List;
-import com.nhsoft.poslib.service.greendao.DaoSession;
 
 /**
  * Created by Iverson on 2018/11/16 2:26 PM
@@ -74,6 +74,7 @@ public class PolicyQuantity {
     private Float promotion_quantity_min_amount; //商品起始量
     private Boolean promotion_quantity_append;
     private String promotion_quantity_level_ids;
+    private Float promotion_quantity_discount;
 
     public Float getPromotion_quantity_min_amount() {
         return promotion_quantity_min_amount;
@@ -89,16 +90,6 @@ public class PolicyQuantity {
     private List<PolicyQuantityDetail>  policy_promotion_quantity_details;
     @Transient
     private PolicyQuantityDetail policyQuantityDetail;
-
-    public PolicyQuantityDetail getPolicyQuantityDetail() {
-        return policyQuantityDetail;
-    }
-
-    public void setPolicyQuantityDetail(PolicyQuantityDetail policyQuantityDetail) {
-        this.policyQuantityDetail = policyQuantityDetail;
-    }
-
-
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -106,9 +97,7 @@ public class PolicyQuantity {
     @Generated(hash = 2093691929)
     private transient PolicyQuantityDao myDao;
 
-
-
-    @Generated(hash = 1787450481)
+    @Generated(hash = 1676829405)
     public PolicyQuantity(String promotion_quantity_no, int branch_num, String promotion_quantity_date_from, String promotion_quantity_date_to,
             String promotion_quantity_time_from, String promotion_quantity_time_to, String promotion_quantity_applied_branch,
             boolean promotion_quantity_mon_actived, boolean promotion_quantity_tues_actived, boolean promotion_quantity_wed_actived,
@@ -116,7 +105,7 @@ public class PolicyQuantity {
             boolean promotion_quantity_sun_actived, String promotion_quantity_create_time, String promotion_quantity_creator, String promotion_quantity_audit_time,
             String promotion_quantity_auditor, boolean promotion_quantity_card_only, String promotion_quantity_card_type, String promotion_quantity_last_edit_time,
             String promotion_quantity_last_editor, String promotion_quantity_type, Float promotion_quantity_min_amount, Boolean promotion_quantity_append,
-            String promotion_quantity_level_ids) {
+            String promotion_quantity_level_ids, Float promotion_quantity_discount) {
         this.promotion_quantity_no = promotion_quantity_no;
         this.branch_num = branch_num;
         this.promotion_quantity_date_from = promotion_quantity_date_from;
@@ -143,11 +132,23 @@ public class PolicyQuantity {
         this.promotion_quantity_min_amount = promotion_quantity_min_amount;
         this.promotion_quantity_append = promotion_quantity_append;
         this.promotion_quantity_level_ids = promotion_quantity_level_ids;
+        this.promotion_quantity_discount = promotion_quantity_discount;
     }
 
     @Generated(hash = 1880178371)
     public PolicyQuantity() {
     }
+
+    public PolicyQuantityDetail getPolicyQuantityDetail() {
+        return policyQuantityDetail;
+    }
+
+    public void setPolicyQuantityDetail(PolicyQuantityDetail policyQuantityDetail) {
+        this.policyQuantityDetail = policyQuantityDetail;
+    }
+
+
+
 
 
     public void setPolicy_quantity_details(List<PolicyQuantityDetail> policyQuantityDetails){
@@ -460,6 +461,14 @@ public class PolicyQuantity {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPolicyQuantityDao() : null;
+    }
+
+    public Float getPromotion_quantity_discount() {
+        return this.promotion_quantity_discount;
+    }
+
+    public void setPromotion_quantity_discount(Float promotion_quantity_discount) {
+        this.promotion_quantity_discount = promotion_quantity_discount;
     }
 
 

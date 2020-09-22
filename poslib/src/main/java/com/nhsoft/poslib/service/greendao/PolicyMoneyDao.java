@@ -51,9 +51,11 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
         public final static Property Promotion_money_append = new Property(24, boolean.class, "promotion_money_append", false, "PROMOTION_MONEY_APPEND");
         public final static Property Promotion_money_assigned_type = new Property(25, String.class, "promotion_money_assigned_type", false, "PROMOTION_MONEY_ASSIGNED_TYPE");
         public final static Property Promotion_money_level_ids = new Property(26, String.class, "promotion_money_level_ids", false, "PROMOTION_MONEY_LEVEL_IDS");
-        public final static Property Promotion_money_assigned_category = new Property(27, String.class, "promotion_money_assigned_category", false, "PROMOTION_MONEY_ASSIGNED_CATEGORY");
-        public final static Property Promotion_money_last_edit_time = new Property(28, String.class, "promotion_money_last_edit_time", false, "PROMOTION_MONEY_LAST_EDIT_TIME");
-        public final static Property Promotion_money_last_editor = new Property(29, String.class, "promotion_money_last_editor", false, "PROMOTION_MONEY_LAST_EDITOR");
+        public final static Property Promotion_money_price_type = new Property(27, Integer.class, "promotion_money_price_type", false, "PROMOTION_MONEY_PRICE_TYPE");
+        public final static Property Promotion_money_discount = new Property(28, Float.class, "promotion_money_discount", false, "PROMOTION_MONEY_DISCOUNT");
+        public final static Property Promotion_money_assigned_category = new Property(29, String.class, "promotion_money_assigned_category", false, "PROMOTION_MONEY_ASSIGNED_CATEGORY");
+        public final static Property Promotion_money_last_edit_time = new Property(30, String.class, "promotion_money_last_edit_time", false, "PROMOTION_MONEY_LAST_EDIT_TIME");
+        public final static Property Promotion_money_last_editor = new Property(31, String.class, "promotion_money_last_editor", false, "PROMOTION_MONEY_LAST_EDITOR");
     }
 
     private DaoSession daoSession;
@@ -99,9 +101,11 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
                 "\"PROMOTION_MONEY_APPEND\" INTEGER NOT NULL ," + // 24: promotion_money_append
                 "\"PROMOTION_MONEY_ASSIGNED_TYPE\" TEXT," + // 25: promotion_money_assigned_type
                 "\"PROMOTION_MONEY_LEVEL_IDS\" TEXT," + // 26: promotion_money_level_ids
-                "\"PROMOTION_MONEY_ASSIGNED_CATEGORY\" TEXT," + // 27: promotion_money_assigned_category
-                "\"PROMOTION_MONEY_LAST_EDIT_TIME\" TEXT," + // 28: promotion_money_last_edit_time
-                "\"PROMOTION_MONEY_LAST_EDITOR\" TEXT);"); // 29: promotion_money_last_editor
+                "\"PROMOTION_MONEY_PRICE_TYPE\" INTEGER," + // 27: promotion_money_price_type
+                "\"PROMOTION_MONEY_DISCOUNT\" REAL," + // 28: promotion_money_discount
+                "\"PROMOTION_MONEY_ASSIGNED_CATEGORY\" TEXT," + // 29: promotion_money_assigned_category
+                "\"PROMOTION_MONEY_LAST_EDIT_TIME\" TEXT," + // 30: promotion_money_last_edit_time
+                "\"PROMOTION_MONEY_LAST_EDITOR\" TEXT);"); // 31: promotion_money_last_editor
     }
 
     /** Drops the underlying database table. */
@@ -201,19 +205,29 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
             stmt.bindString(27, promotion_money_level_ids);
         }
  
+        Integer promotion_money_price_type = entity.getPromotion_money_price_type();
+        if (promotion_money_price_type != null) {
+            stmt.bindLong(28, promotion_money_price_type);
+        }
+ 
+        Float promotion_money_discount = entity.getPromotion_money_discount();
+        if (promotion_money_discount != null) {
+            stmt.bindDouble(29, promotion_money_discount);
+        }
+ 
         String promotion_money_assigned_category = entity.getPromotion_money_assigned_category();
         if (promotion_money_assigned_category != null) {
-            stmt.bindString(28, promotion_money_assigned_category);
+            stmt.bindString(30, promotion_money_assigned_category);
         }
  
         String promotion_money_last_edit_time = entity.getPromotion_money_last_edit_time();
         if (promotion_money_last_edit_time != null) {
-            stmt.bindString(29, promotion_money_last_edit_time);
+            stmt.bindString(31, promotion_money_last_edit_time);
         }
  
         String promotion_money_last_editor = entity.getPromotion_money_last_editor();
         if (promotion_money_last_editor != null) {
-            stmt.bindString(30, promotion_money_last_editor);
+            stmt.bindString(32, promotion_money_last_editor);
         }
     }
 
@@ -308,19 +322,29 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
             stmt.bindString(27, promotion_money_level_ids);
         }
  
+        Integer promotion_money_price_type = entity.getPromotion_money_price_type();
+        if (promotion_money_price_type != null) {
+            stmt.bindLong(28, promotion_money_price_type);
+        }
+ 
+        Float promotion_money_discount = entity.getPromotion_money_discount();
+        if (promotion_money_discount != null) {
+            stmt.bindDouble(29, promotion_money_discount);
+        }
+ 
         String promotion_money_assigned_category = entity.getPromotion_money_assigned_category();
         if (promotion_money_assigned_category != null) {
-            stmt.bindString(28, promotion_money_assigned_category);
+            stmt.bindString(30, promotion_money_assigned_category);
         }
  
         String promotion_money_last_edit_time = entity.getPromotion_money_last_edit_time();
         if (promotion_money_last_edit_time != null) {
-            stmt.bindString(29, promotion_money_last_edit_time);
+            stmt.bindString(31, promotion_money_last_edit_time);
         }
  
         String promotion_money_last_editor = entity.getPromotion_money_last_editor();
         if (promotion_money_last_editor != null) {
-            stmt.bindString(30, promotion_money_last_editor);
+            stmt.bindString(32, promotion_money_last_editor);
         }
     }
 
@@ -365,9 +389,11 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
             cursor.getShort(offset + 24) != 0, // promotion_money_append
             cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // promotion_money_assigned_type
             cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26), // promotion_money_level_ids
-            cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27), // promotion_money_assigned_category
-            cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28), // promotion_money_last_edit_time
-            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29) // promotion_money_last_editor
+            cursor.isNull(offset + 27) ? null : cursor.getInt(offset + 27), // promotion_money_price_type
+            cursor.isNull(offset + 28) ? null : cursor.getFloat(offset + 28), // promotion_money_discount
+            cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29), // promotion_money_assigned_category
+            cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30), // promotion_money_last_edit_time
+            cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31) // promotion_money_last_editor
         );
         return entity;
     }
@@ -401,9 +427,11 @@ public class PolicyMoneyDao extends AbstractDao<PolicyMoney, String> {
         entity.setPromotion_money_append(cursor.getShort(offset + 24) != 0);
         entity.setPromotion_money_assigned_type(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
         entity.setPromotion_money_level_ids(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
-        entity.setPromotion_money_assigned_category(cursor.isNull(offset + 27) ? null : cursor.getString(offset + 27));
-        entity.setPromotion_money_last_edit_time(cursor.isNull(offset + 28) ? null : cursor.getString(offset + 28));
-        entity.setPromotion_money_last_editor(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setPromotion_money_price_type(cursor.isNull(offset + 27) ? null : cursor.getInt(offset + 27));
+        entity.setPromotion_money_discount(cursor.isNull(offset + 28) ? null : cursor.getFloat(offset + 28));
+        entity.setPromotion_money_assigned_category(cursor.isNull(offset + 29) ? null : cursor.getString(offset + 29));
+        entity.setPromotion_money_last_edit_time(cursor.isNull(offset + 30) ? null : cursor.getString(offset + 30));
+        entity.setPromotion_money_last_editor(cursor.isNull(offset + 31) ? null : cursor.getString(offset + 31));
      }
     
     @Override

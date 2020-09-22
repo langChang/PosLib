@@ -2,19 +2,25 @@ package com.nhsoft.poslib.utils;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.nhsoft.poslib.call.impl.ItemCategoryImpl;
+import com.nhsoft.poslib.call.impl.PointPolicyImpl;
 import com.nhsoft.poslib.entity.ClientPoint;
+import com.nhsoft.poslib.entity.ItemCategory;
 import com.nhsoft.poslib.entity.PointPolicy;
 import com.nhsoft.poslib.entity.PosItem;
 import com.nhsoft.poslib.entity.VipCrmAmaLevel;
 import com.nhsoft.poslib.entity.VipLevelPointRule;
-import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
-import com.nhsoft.poslib.call.impl.PointPolicyImpl;
+import com.nhsoft.poslib.model.PointCateGoryParam;
+import com.nhsoft.poslib.model.VipUserInfo;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +51,12 @@ public class CrmPointCalUtils {
 
 
         VipLevelPointRule point_rule = vipCrmAmaLevel.point_rule;
+        if(point_rule != null && !TextUtils.isEmpty(point_rule.getPoint_category_params_json()) && point_rule.getPoint_category_params() == null){
+            if(!TextUtils.isEmpty(point_rule.getPoint_category_params_json())){
+                point_rule.setPoint_category_params((List<PointCateGoryParam>) new Gson().fromJson(point_rule.getPoint_category_params_json(), new TypeToken<ArrayList<PointCateGoryParam>>() {
+                }.getType()));
+            }
+        }
 //        float birthPow = (point_rule.getEnable_birthday_point() && isBirthDay(new Date(), vipUserInfo.getCard_user_birth_date())) ? point_rule.getBirthday_point_value() : 1;
         float birthPow = NumberUtil.getNewFloat(Float.parseFloat(vipUserInfo.getPoint_multiple() == null ? "1" : vipUserInfo.getPoint_multiple()));
 
@@ -81,6 +93,7 @@ public class CrmPointCalUtils {
     }
 
     /**
+     *
      * @param posOrder
      * @param vipUserInfo
      * @param storeMoney
@@ -199,8 +212,43 @@ public class CrmPointCalUtils {
                 if (posItem == null) continue;
                 if (!posItem.getItem_point_actived()) continue;
 
+                PointCateGoryParam loadPointCateGoryParam = null;
+                List<PointCateGoryParam> point_category_params = pointRule.getPoint_category_params();
+                if(point_category_params != null && point_category_params.size() > 0){
+                    String cateGroyName = "";
+                    ItemCategory loadItemCategory = ItemCategoryImpl.findCategoryCode(posOrderDetail.getPosItem().getItem_category_code());
+                    boolean isInCatetory = false;
+
+                    while (loadItemCategory != null){
+                        cateGroyName = loadItemCategory.getCategory_name();
+                        for (PointCateGoryParam pointRuleDetail : point_category_params) {
+                            if (pointRuleDetail.getCategory_name().equals(cateGroyName)) {
+                                if(pointRuleDetail.getConsume_money() != 0 && pointRuleDetail.getPoint_value() != 0){
+                                    loadPointCateGoryParam = pointRuleDetail;
+                                }
+                                isInCatetory = true;
+                                break;
+                            }
+                        }
+
+                        if(isInCatetory){
+                            break;
+                        }
+
+                        loadItemCategory = ItemCategoryImpl.findParentCategoryCode(loadItemCategory.getParent_category_code());
+                    }
+
+                }
+
+
+
                 float point = 0;
-                point = (posOrderDetail.getResidueMoney() * pointRule.getRule_value()/pointRule.getRule_money()) * p;
+                if(loadPointCateGoryParam != null && loadPointCateGoryParam.getConsume_money() != 0 && loadPointCateGoryParam.getPoint_value() != 0){
+                    point = (posOrderDetail.getResidueMoney() * loadPointCateGoryParam.getPoint_value()/loadPointCateGoryParam.getConsume_money()) * p;
+                }else {
+                    point = (posOrderDetail.getResidueMoney() * pointRule.getRule_value()/pointRule.getRule_money()) * p;
+                }
+
                 float policyPow = getPointPolicyValue(vipUserInfo,LibConfig.PRESENT_BY_COUPONS_MONEY, posItem.getItem_num());
                 float totalPow = 0;
                 if (policyPow != 1) {
@@ -288,8 +336,6 @@ public class CrmPointCalUtils {
      */
     private float getPointPolicyValue(VipUserInfo vipUserInfo, String type, long item_num) {
         float policyBit = 1;
-        if (!LibConfig.saleParamsBean.isPointPolicyActive()) return 1;
-
         List<PointPolicy> allPointPolicyList = LibConfig.allPointPolicyList;
         if (allPointPolicyList == null || allPointPolicyList.size() == 0) return policyBit;
         for (PointPolicy pointPolicy : allPointPolicyList) {
