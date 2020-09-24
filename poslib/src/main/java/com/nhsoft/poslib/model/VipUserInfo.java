@@ -75,6 +75,8 @@ public class VipUserInfo implements Cloneable, Serializable {
     private boolean card_user_change_enabled;//零钱包是否开启
     private String card_type;
 
+    private boolean isCrmRegisteSendCard = false;
+
 
     private int ServerCardType = 0; // 0 : 默认为ama卡  1： 为水星礼品卡
     private boolean cardMedium;//卡介质 是否是IC卡（需要读卡写卡）
@@ -121,6 +123,7 @@ public class VipUserInfo implements Cloneable, Serializable {
     private String logo_url;
     private String brand_name;
     private String title;
+
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -662,5 +665,13 @@ public class VipUserInfo implements Cloneable, Serializable {
 
     public void setCard_type(String card_type) {
         this.card_type = card_type;
+    }
+
+    public boolean isCrmRegisteSendCard() {
+        return isCrmRegisteSendCard;
+    }
+
+    public void setCrmRegisteSendCard(boolean crmRegisteSendCard) {
+        isCrmRegisteSendCard = crmRegisteSendCard;
     }
 }
