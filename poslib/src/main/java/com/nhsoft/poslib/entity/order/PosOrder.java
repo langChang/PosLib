@@ -102,6 +102,8 @@ public class PosOrder implements Cloneable {
     @Transient
     private RedisBean couponsRedisBean;
 
+    private String payBarCode;
+
 
     public RedisBean getCouponsRedisBean() {
         return couponsRedisBean;
@@ -227,42 +229,15 @@ public class PosOrder implements Cloneable {
     @Transient
     private List<CouponsBean> mercuryConponsList = new ArrayList<>();
 
-    public List<CouponsBean> getUseConponsList() {
-        return useConponsList;
-    }
 
-    public void setUseConponsList(List<CouponsBean> userConponsList) {
-        this.useConponsList = userConponsList;
-    }
-
-    public List<CouponsBean> getMercuryConponsList() {
-        return mercuryConponsList;
-    }
-
-    public void setMercuryConponsList(List<CouponsBean> mercuryConponsList) {
-        this.mercuryConponsList = mercuryConponsList;
-    }
-
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-
-    @Generated(hash = 1763251636)
-    public PosOrder() {
-    }
-
-
-    @Generated(hash = 376681)
+    @Generated(hash = 978799302)
     public PosOrder(String orderNo, String layawayOrderNo, String clientFid, int storehouseNum, String systemBookCode, int branchNum, int shiftTableNum, String shiftTableBizday, String orderDate, String orderSoldBy, String orderOperator,
             String orderOperateTime, Boolean orderFlag, String orderPrintedNum, String orderCardUser, String orderCardTypeDesc, float orderDiscountMoney, float orderCommission, float orderTotalMoney, float orderPaymentMoney, float orderRound,
             float orderBalance, float orderTotalInvoice, float orderChange, String orderTime, String orderMachine, String orderChangeAuditor, String orderChangeTime, String orderPayee, int orderStateCode, String orderStateName,
             String orderMemo, String orderRefBillno, float orderPoint, float orderGrossProfit, float orderMgrDiscountMoney, float orderCouponTotalMoney, float orderCouponPaymentMoney, int orderCardUserNum, int orderCardType, String orderSource,
             float orderPostFee, float orderPromotionDiscountMoney, String orderExternalNo, int orderDetailItemCount, String orderTimeChar, Boolean orderStockFlag, String orderCardPhone, float orderCardChange, float orderTaxMoney,
             String orderTmallMemo, String orderUserGroup, float orderOnlineDiscount, int merchantNum, int stallNum, float orderCostMoney, String orderPayNo, boolean orderUploadState, boolean orderRemortInsertBean, String openId,
-            String alipayUserId, String customerId) {
+            String alipayUserId, String customerId, String payBarCode) {
         this.orderNo = orderNo;
         this.layawayOrderNo = layawayOrderNo;
         this.clientFid = clientFid;
@@ -325,7 +300,37 @@ public class PosOrder implements Cloneable {
         this.openId = openId;
         this.alipayUserId = alipayUserId;
         this.customerId = customerId;
+        this.payBarCode = payBarCode;
     }
+
+    @Generated(hash = 1763251636)
+    public PosOrder() {
+    }
+
+    public List<CouponsBean> getUseConponsList() {
+        return useConponsList;
+    }
+
+    public void setUseConponsList(List<CouponsBean> userConponsList) {
+        this.useConponsList = userConponsList;
+    }
+
+    public List<CouponsBean> getMercuryConponsList() {
+        return mercuryConponsList;
+    }
+
+    public void setMercuryConponsList(List<CouponsBean> mercuryConponsList) {
+        this.mercuryConponsList = mercuryConponsList;
+    }
+
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+
+
 
     public boolean isOrderUploadState() {
         return orderUploadState;
@@ -919,6 +924,14 @@ public class PosOrder implements Cloneable {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getPosOrderDao() : null;
+    }
+
+    public String getPayBarCode() {
+        return this.payBarCode;
+    }
+
+    public void setPayBarCode(String payBarCode) {
+        this.payBarCode = payBarCode;
     }
 
 

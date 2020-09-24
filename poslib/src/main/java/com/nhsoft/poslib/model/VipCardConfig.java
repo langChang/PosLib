@@ -459,6 +459,11 @@ public class VipCardConfig implements Serializable {
     }
 
     public String getCardReaminMoneyLimit() {
+        if(!TextUtils.isEmpty(cardReaminMoneyLimit)){
+            if(Float.parseFloat(cardReaminMoneyLimit) == 0){
+                return "99999999";
+            }
+        }
         return cardReaminMoneyLimit;
     }
 

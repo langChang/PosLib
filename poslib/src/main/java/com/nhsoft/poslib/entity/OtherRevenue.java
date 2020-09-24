@@ -57,13 +57,10 @@ public class OtherRevenue {
     private int other_inout_shift_table_num;
     private int supplier_num;
     private String system_book_code;
+    private String payBarCode;
 
 
-    @Generated(hash = 1464478784)
-    public OtherRevenue() {
-    }
-
-    @Generated(hash = 1383572266)
+    @Generated(hash = 795196672)
     public OtherRevenue(Long id, int account_bank_num, int branch_num,
             String client_fid, int inner_branch_num, String other_inout_audit_man,
             String other_inout_audit_time, String other_inout_bill_no,
@@ -73,7 +70,7 @@ public class OtherRevenue {
             String other_inout_memo, Float other_inout_money,
             String other_inout_operator, String other_inout_payment_type,
             String other_inout_ref_bill, int other_inout_shift_table_num,
-            int supplier_num, String system_book_code) {
+            int supplier_num, String system_book_code, String payBarCode) {
         this.id = id;
         this.account_bank_num = account_bank_num;
         this.branch_num = branch_num;
@@ -96,7 +93,13 @@ public class OtherRevenue {
         this.other_inout_shift_table_num = other_inout_shift_table_num;
         this.supplier_num = supplier_num;
         this.system_book_code = system_book_code;
+        this.payBarCode = payBarCode;
     }
+
+    @Generated(hash = 1464478784)
+    public OtherRevenue() {
+    }
+
 
     public Long getId() {
         return id;
@@ -273,5 +276,13 @@ public class OtherRevenue {
 
     public void setOther_inout_money(Float other_inout_money) {
         this.other_inout_money = other_inout_money;
+    }
+
+    public String getPayBarCode() {
+        return this.payBarCode;
+    }
+
+    public void setPayBarCode(String payBarCode) {
+        this.payBarCode = payBarCode;
     }
 }

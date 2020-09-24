@@ -1,5 +1,7 @@
 package com.nhsoft.poslib.model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -69,6 +71,11 @@ public class VipCardTypeBean implements Serializable {
 
 
     public String getCardReaminMoneyLimit() {
+        if(!TextUtils.isEmpty(cardReaminMoneyLimit)){
+            if(Float.parseFloat(cardReaminMoneyLimit) == 0){
+                return "99999999";
+            }
+        }
         return cardReaminMoneyLimit;
     }
 

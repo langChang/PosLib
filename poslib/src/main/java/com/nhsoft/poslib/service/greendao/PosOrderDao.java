@@ -86,6 +86,7 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
         public final static Property OpenId = new Property(59, String.class, "openId", false, "OPEN_ID");
         public final static Property AlipayUserId = new Property(60, String.class, "alipayUserId", false, "ALIPAY_USER_ID");
         public final static Property CustomerId = new Property(61, String.class, "customerId", false, "CUSTOMER_ID");
+        public final static Property PayBarCode = new Property(62, String.class, "payBarCode", false, "PAY_BAR_CODE");
     }
 
     private DaoSession daoSession;
@@ -165,7 +166,8 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
                 "\"ORDER_REMORT_INSERT_BEAN\" INTEGER NOT NULL ," + // 58: orderRemortInsertBean
                 "\"OPEN_ID\" TEXT," + // 59: openId
                 "\"ALIPAY_USER_ID\" TEXT," + // 60: alipayUserId
-                "\"CUSTOMER_ID\" TEXT);"); // 61: customerId
+                "\"CUSTOMER_ID\" TEXT," + // 61: customerId
+                "\"PAY_BAR_CODE\" TEXT);"); // 62: payBarCode
     }
 
     /** Drops the underlying database table. */
@@ -367,6 +369,11 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
         if (customerId != null) {
             stmt.bindString(62, customerId);
         }
+ 
+        String payBarCode = entity.getPayBarCode();
+        if (payBarCode != null) {
+            stmt.bindString(63, payBarCode);
+        }
     }
 
     @Override
@@ -562,6 +569,11 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
         if (customerId != null) {
             stmt.bindString(62, customerId);
         }
+ 
+        String payBarCode = entity.getPayBarCode();
+        if (payBarCode != null) {
+            stmt.bindString(63, payBarCode);
+        }
     }
 
     @Override
@@ -639,7 +651,8 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
             cursor.getShort(offset + 58) != 0, // orderRemortInsertBean
             cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59), // openId
             cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60), // alipayUserId
-            cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61) // customerId
+            cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61), // customerId
+            cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62) // payBarCode
         );
         return entity;
     }
@@ -708,6 +721,7 @@ public class PosOrderDao extends AbstractDao<PosOrder, String> {
         entity.setOpenId(cursor.isNull(offset + 59) ? null : cursor.getString(offset + 59));
         entity.setAlipayUserId(cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60));
         entity.setCustomerId(cursor.isNull(offset + 61) ? null : cursor.getString(offset + 61));
+        entity.setPayBarCode(cursor.isNull(offset + 62) ? null : cursor.getString(offset + 62));
      }
     
     @Override

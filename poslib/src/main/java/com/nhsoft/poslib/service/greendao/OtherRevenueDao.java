@@ -46,6 +46,7 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
         public final static Property Other_inout_shift_table_num = new Property(19, int.class, "other_inout_shift_table_num", false, "OTHER_INOUT_SHIFT_TABLE_NUM");
         public final static Property Supplier_num = new Property(20, int.class, "supplier_num", false, "SUPPLIER_NUM");
         public final static Property System_book_code = new Property(21, String.class, "system_book_code", false, "SYSTEM_BOOK_CODE");
+        public final static Property PayBarCode = new Property(22, String.class, "payBarCode", false, "PAY_BAR_CODE");
     }
 
 
@@ -82,7 +83,8 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
                 "\"OTHER_INOUT_REF_BILL\" TEXT," + // 18: other_inout_ref_bill
                 "\"OTHER_INOUT_SHIFT_TABLE_NUM\" INTEGER NOT NULL ," + // 19: other_inout_shift_table_num
                 "\"SUPPLIER_NUM\" INTEGER NOT NULL ," + // 20: supplier_num
-                "\"SYSTEM_BOOK_CODE\" TEXT);"); // 21: system_book_code
+                "\"SYSTEM_BOOK_CODE\" TEXT," + // 21: system_book_code
+                "\"PAY_BAR_CODE\" TEXT);"); // 22: payBarCode
     }
 
     /** Drops the underlying database table. */
@@ -184,6 +186,11 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
         if (system_book_code != null) {
             stmt.bindString(22, system_book_code);
         }
+ 
+        String payBarCode = entity.getPayBarCode();
+        if (payBarCode != null) {
+            stmt.bindString(23, payBarCode);
+        }
     }
 
     @Override
@@ -279,6 +286,11 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
         if (system_book_code != null) {
             stmt.bindString(22, system_book_code);
         }
+ 
+        String payBarCode = entity.getPayBarCode();
+        if (payBarCode != null) {
+            stmt.bindString(23, payBarCode);
+        }
     }
 
     @Override
@@ -310,7 +322,8 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // other_inout_ref_bill
             cursor.getInt(offset + 19), // other_inout_shift_table_num
             cursor.getInt(offset + 20), // supplier_num
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21) // system_book_code
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // system_book_code
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22) // payBarCode
         );
         return entity;
     }
@@ -339,6 +352,7 @@ public class OtherRevenueDao extends AbstractDao<OtherRevenue, Long> {
         entity.setOther_inout_shift_table_num(cursor.getInt(offset + 19));
         entity.setSupplier_num(cursor.getInt(offset + 20));
         entity.setSystem_book_code(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setPayBarCode(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
      }
     
     @Override

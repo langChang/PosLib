@@ -304,13 +304,20 @@ public class PricePromotionCalUtils {
                 replayType = 1;
             } else if (!TextUtils.isEmpty(policyPromotion.getPolicy_promotion_repeat_type()) && "每年".equals(policyPromotion.getPolicy_promotion_repeat_type())) {
                 replayType = 2;
+            }else if (!TextUtils.isEmpty(policyPromotion.getPolicy_promotion_repeat_type()) && "每日".equals(policyPromotion.getPolicy_promotion_repeat_type())) {
+                replayType = 3;
             }
 
-            if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {
+            if(replayType == 1 || replayType == 2){
+                if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else if(replayType == 3){
                 return true;
-            } else {
-                return false;
             }
+
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }

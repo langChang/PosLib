@@ -139,37 +139,46 @@ public class PosCarryLogImpl {
      * 退货
      */
     public static void tryQuitOrder(PosOrder posOrder){
-        ShiftTable shiftTable = LibConfig.activeShiftTable;
-        PosMachine posMachine = LibConfig.activePosMachine;
-        if(shiftTable == null || posMachine == null)return;
-        PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
-        PosCarryLog posCarryLog = new PosCarryLog();
-        posCarryLog.setRetail_pos_log_type(NAME_BY_QUIT_GOODS_TIMES);
-        posCarryLog.setIsUpload(false);
-        posCarryLog.setBranch_num(shiftTable.getBranch_num());
-        posCarryLog.setSystem_book_code(shiftTable.getSystem_book_code());
-        posCarryLog.setRetail_pos_log_shift_num(shiftTable.getShift_table_num());
-        posCarryLog.setRetail_pos_log_amount(1);
-        String nowDateString = TimeUtil.getInstance().getNowDateString();
-        posCarryLog.setRetail_pos_log_time(nowDateString);
-        posCarryLog.setRetail_pos_log_operator(shiftTable.getShift_table_user_name());
-        posCarryLog.setRetail_pos_log_bizday(shiftTable.getShift_table_bizday());
-        posCarryLog.setRetail_pos_log_machine(posMachine.getPos_machine_terminal_id());
-        posCarryLog.setMerchant_num(shiftTable.getMerchant_num());
-        posCarryLog.setStall_num(shiftTable.getStall_num());
-        posCarryLog.setRetail_pos_log_order_no(posOrder.getOrderNo());
-        posCarryLog.setRetail_pos_log_money(Math.abs(posOrder.getOrderPaymentMoney()));
-        StringBuilder builder = new StringBuilder("");
 
-        for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()){
-            if(LibConfig.C_ORDER_DETAIL_TYPE_ITEM.equals(posOrderDetail.getOrderDetailType())){
-                builder.append(posOrderDetail.getOrderDetailItem()+",");
+        if(posOrder != null && posOrder.getPosOrderDetails() != null){
+            for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()){
+                tryQuitGoods(posOrderDetail);
             }
         }
-        String totalItemStr = builder.toString();
-        posCarryLog.setRetail_pos_log_item_name(totalItemStr.length() >= 245 ? totalItemStr.substring(245) :  totalItemStr);
 
-        posCarryLogDao.insertInTx(posCarryLog);
+
+
+//        ShiftTable shiftTable = LibConfig.activeShiftTable;
+//        PosMachine posMachine = LibConfig.activePosMachine;
+//        if(shiftTable == null || posMachine == null)return;
+//        PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
+//        PosCarryLog posCarryLog = new PosCarryLog();
+//        posCarryLog.setRetail_pos_log_type(NAME_BY_QUIT_GOODS_TIMES);
+//        posCarryLog.setIsUpload(false);
+//        posCarryLog.setBranch_num(shiftTable.getBranch_num());
+//        posCarryLog.setSystem_book_code(shiftTable.getSystem_book_code());
+//        posCarryLog.setRetail_pos_log_shift_num(shiftTable.getShift_table_num());
+//        posCarryLog.setRetail_pos_log_amount(1);
+//        String nowDateString = TimeUtil.getInstance().getNowDateString();
+//        posCarryLog.setRetail_pos_log_time(nowDateString);
+//        posCarryLog.setRetail_pos_log_operator(shiftTable.getShift_table_user_name());
+//        posCarryLog.setRetail_pos_log_bizday(shiftTable.getShift_table_bizday());
+//        posCarryLog.setRetail_pos_log_machine(posMachine.getPos_machine_terminal_id());
+//        posCarryLog.setMerchant_num(shiftTable.getMerchant_num());
+//        posCarryLog.setStall_num(shiftTable.getStall_num());
+//        posCarryLog.setRetail_pos_log_order_no(posOrder.getOrderNo());
+//        posCarryLog.setRetail_pos_log_money(Math.abs(posOrder.getOrderPaymentMoney()));
+//        StringBuilder builder = new StringBuilder("");
+//
+//        for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()){
+//            if(LibConfig.C_ORDER_DETAIL_TYPE_ITEM.equals(posOrderDetail.getOrderDetailType())){
+//                builder.append(posOrderDetail.getOrderDetailItem()+",");
+//            }
+//        }
+//        String totalItemStr = builder.toString();
+//        posCarryLog.setRetail_pos_log_item_name(totalItemStr.length() >= 245 ? totalItemStr.substring(245) :  totalItemStr);
+//
+//        posCarryLogDao.insertInTx(posCarryLog);
     }
 
 
@@ -221,6 +230,39 @@ public class PosCarryLogImpl {
         PosCarryLog posCarryLog = new PosCarryLog();
         posCarryLog.setRetail_pos_log_item_num(posOrderDetail.getItemNum());
         posCarryLog.setRetail_pos_log_type(NAME_BY_DELETE_GOODS);
+        posCarryLog.setIsUpload(false);
+        posCarryLog.setBranch_num(shiftTable.getBranch_num());
+        posCarryLog.setSystem_book_code(shiftTable.getSystem_book_code());
+        posCarryLog.setRetail_pos_log_shift_num(shiftTable.getShift_table_num());
+        String nowDateString = TimeUtil.getInstance().getNowDateString();
+        posCarryLog.setRetail_pos_log_time(nowDateString);
+        posCarryLog.setRetail_pos_log_operator(shiftTable.getShift_table_user_name());
+        posCarryLog.setRetail_pos_log_bizday(shiftTable.getShift_table_bizday());
+        posCarryLog.setRetail_pos_log_machine(posMachine.getPos_machine_terminal_id());
+        posCarryLog.setMerchant_num(shiftTable.getMerchant_num());
+        posCarryLog.setStall_num(shiftTable.getStall_num());
+        posCarryLog.setRetail_pos_log_order_no(posOrderDetail.getOrderNo());
+        posCarryLog.setRetail_pos_log_money(posOrderDetail.getOrderDetailPaymentMoney());
+        posCarryLog.setRetail_pos_log_item_name(posOrderDetail.getOrderDetailItem());
+        posCarryLog.setRetail_pos_log_amount(posOrderDetail.getOrderDetailAmount());
+        posCarryLog.setRetail_pos_log_price(posOrderDetail.getOrderDetailPrice());
+        posCarryLog.setRetail_pos_log_std_price(posOrderDetail.getOrderDetailStdPrice());
+
+        posCarryLogDao.insertInTx(posCarryLog);
+    }
+
+
+    /**
+     * 删除商品
+     */
+    public static void tryQuitGoods(PosOrderDetail posOrderDetail){
+        ShiftTable shiftTable = LibConfig.activeShiftTable;
+        PosMachine posMachine = LibConfig.activePosMachine;
+        if(shiftTable == null || posMachine == null)return;
+        PosCarryLogDao posCarryLogDao = DaoManager.getInstance().getDaoSession().getPosCarryLogDao();
+        PosCarryLog posCarryLog = new PosCarryLog();
+        posCarryLog.setRetail_pos_log_item_num(posOrderDetail.getItemNum());
+        posCarryLog.setRetail_pos_log_type(NAME_BY_QUIT_GOODS_TIMES);
         posCarryLog.setIsUpload(false);
         posCarryLog.setBranch_num(shiftTable.getBranch_num());
         posCarryLog.setSystem_book_code(shiftTable.getSystem_book_code());

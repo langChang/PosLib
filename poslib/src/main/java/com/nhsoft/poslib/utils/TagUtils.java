@@ -3,6 +3,7 @@ package com.nhsoft.poslib.utils;
 import android.text.TextUtils;
 
 import com.nhsoft.poslib.RetailPosManager;
+import com.nhsoft.poslib.entity.order.Payment;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.libconfig.LibConfig;
 
@@ -66,5 +67,19 @@ public class TagUtils {
          RetailPosManager.getInstance().tryChangeGoodsPrice(posOrderDetail);
     }
 
+
+    /**
+     * Payment添加备注
+     * @param payment
+     */
+    public static void addPaymentMemo(Payment payment){
+        String paymentMemo = payment.getPaymentMemo();
+        if(!TextUtils.isEmpty(paymentMemo)){
+            payment.setPaymentMemo(new StringBuilder().append(paymentMemo).append("第三方在线支付").toString());
+        }else {
+            if(paymentMemo.contains("第三方在线支付"))return;
+            payment.setPaymentMemo(new StringBuilder().append("第三方在线支付").toString());
+        }
+    }
 
 }
