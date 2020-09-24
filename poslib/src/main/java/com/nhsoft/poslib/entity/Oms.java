@@ -56,6 +56,7 @@ public class Oms {
     private boolean more_refund_less_pay;//是否需要多退少补
     private String more_refund_less_pay_state;//in_progress 已经在多退少补状态下
     private String platform_str;//商城名
+    private String expected_delivery_time;//期望到达时间
 
 
     public String getSeq() {
@@ -272,6 +273,14 @@ public class Oms {
 
     public void setMore_refund_less_pay_state(String more_refund_less_pay_state) {
         this.more_refund_less_pay_state = more_refund_less_pay_state;
+    }
+
+    public String getExpected_delivery_time() {
+        return expected_delivery_time;
+    }
+
+    public void setExpected_delivery_time(String expected_delivery_time) {
+        this.expected_delivery_time = expected_delivery_time;
     }
 
     public String getPlatform_str() {
