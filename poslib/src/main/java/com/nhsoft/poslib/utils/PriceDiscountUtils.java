@@ -247,12 +247,19 @@ public class PriceDiscountUtils {
                 replayType = 1;
             } else if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每年".equals(policyDiscount.getPolicy_discount_repeat_type())) {
                 replayType = 2;
+            } else if (!TextUtils.isEmpty(policyDiscount.getPolicy_discount_repeat_type()) && "每日".equals(policyDiscount.getPolicy_discount_repeat_type())) {
+                replayType = 3;
             }
-            if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {
+            if(replayType != 3){
+                if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else {
                 return true;
-            } else {
-                return false;
             }
+
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }

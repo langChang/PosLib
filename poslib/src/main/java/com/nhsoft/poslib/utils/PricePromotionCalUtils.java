@@ -308,13 +308,13 @@ public class PricePromotionCalUtils {
                 replayType = 3;
             }
 
-            if(replayType == 1 || replayType == 2){
+            if(replayType != 3){
                 if (isEffectiveDate(nowDate, starDate, endDate, replayType)) {
                     return true;
                 } else {
                     return false;
                 }
-            }else if(replayType == 3){
+            }else {
                 return true;
             }
 

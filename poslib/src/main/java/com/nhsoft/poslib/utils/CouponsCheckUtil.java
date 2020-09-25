@@ -190,7 +190,13 @@ public class CouponsCheckUtil {
 //            couponsBean.setResidueMoney(maxdiscountMoney);
 //            couponsBean.setTicket_send_detail_value(maxdiscountMoney);
 
-            if(insertMoney == 0)return checkCouponsStatus;
+            if(insertMoney == 0) {
+                if (isNet) {
+                    checkCouponsStatus.setMsg("当前商品抵扣金额为0元!");
+//                    mContext.toastShort(mContext.getString(R.string.no_coupons_limit_money_by_goods));
+                }
+                return checkCouponsStatus;
+            }
             if (insertMoney > couponsBean.getTicket_max_use_money() && couponsBean.getTicket_max_use_money() > 0) {
                 insertMoney = couponsBean.getTicket_max_use_money();
             }
@@ -200,6 +206,13 @@ public class CouponsCheckUtil {
 
 
         }else if("购物抵用券".equals(couponsBean.getTicket_category())) {
+            if(insertMoney == 0){
+                if (isNet) {
+                    checkCouponsStatus.setMsg("当前商品抵扣金额为0元!");
+//                    mContext.toastShort(mContext.getString(R.string.no_coupons_limit_money_by_goods));
+                }
+                return checkCouponsStatus;
+            }
             if ( couponsBean.getTicket_limit_money() > 0 && couponsBean.getTicket_limit_money() > insertMoney) {
                 if (isNet) {
                     checkCouponsStatus.setMsg("当前劵支持商品消费金额低于消费劵最低使用金额!");
