@@ -339,7 +339,7 @@ public class VipCardConfig implements Serializable {
         this.isCanChangeReplaceCardFee = isCanChangeReplaceCardFee;
     }
     public String getForceBankCardInput() {
-        return forceBankCardInput;
+        return forceBankCardInput == null ? "" : forceBankCardInput;
     }
 
     public void setForceBankCardInput(String forceBankCardInput) {
