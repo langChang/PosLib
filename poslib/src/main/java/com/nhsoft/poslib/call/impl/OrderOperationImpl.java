@@ -338,6 +338,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         payment.setPaymentNo(paymentKG.getKeyGBString());
         payment.setPaymentPayBy(payBy);
         payment.setPaymentReceive(Money);
+        payment.setPaymentBillNo(oldpayment.getPaymentBillNo());
         payment.setPaymentMoney(Money);
         payment.setPaymentPaid(payment.getPaymentMoney());
         payment.setPaymentCustNum(oldpayment.getPaymentCustNum());
