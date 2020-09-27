@@ -34,7 +34,7 @@ public class CouponsCheckUtil {
 
         CheckCouponsStatus checkCouponsStatus = new CheckCouponsStatus();
 
-
+        couponsBean.setTotal_calculate_limit_amount(couponsBean.getTicket_limit_amount());
         List<PosOrderDetail> posOrderDetails = mPosOrder.getPosOrderDetails();
         float insertMoney = 0;
         boolean isUseable = false;
@@ -226,7 +226,7 @@ public class CouponsCheckUtil {
                 if (couponsBean.getTicket_limit_money() != 0) {
                     bit = (int) (insertMoney / couponsBean.getTicket_limit_money());
                 }
-                couponsBean.setTicket_limit_amount(couponsBean.getTicket_limit_amount() * bit);
+                couponsBean.setTotal_calculate_limit_amount(couponsBean.getTicket_limit_amount() * bit);
             }
         }
 
