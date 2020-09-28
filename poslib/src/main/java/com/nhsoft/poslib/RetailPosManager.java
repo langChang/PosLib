@@ -102,6 +102,7 @@ import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.AdjustPriceOrder;
 import com.nhsoft.poslib.model.AdjustTradePriceOrder;
 import com.nhsoft.poslib.model.BasePolicyBean;
+import com.nhsoft.poslib.model.CardBalaceConfig;
 import com.nhsoft.poslib.model.ClientParamsBean;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.GoodsGradeBean;
@@ -1319,6 +1320,15 @@ public class RetailPosManager {
         return BookResourceImpl.getInstance().getVipCardTypeBeanNameList(book_code, pay_scale,branch_num);
     }
 
+
+    /**
+     * 获取门店卡存款配置
+     * @param branch_num
+     * @return
+     */
+    public CardBalaceConfig getCardBalanceConfig(int branch_num){
+        return BranchResourceImpl.getInstance().getCardBalaceConfig(branch_num);
+    }
 
     /*********************************CardChangeImpl*********************************************/
 

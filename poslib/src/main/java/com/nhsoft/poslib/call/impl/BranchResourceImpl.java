@@ -2,10 +2,13 @@ package com.nhsoft.poslib.call.impl;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.BranchResource;
+import com.nhsoft.poslib.model.CardBalaceConfig;
 import com.nhsoft.poslib.service.greendao.BranchResourceDao;
 import com.nhsoft.poslib.utils.MatterUtils;
+import com.nhsoft.poslib.utils.XmlParser;
 
 import java.util.List;
 
@@ -45,5 +48,20 @@ public class BranchResourceImpl {
         }else {
             return "";
         }
+    }
+
+    public CardBalaceConfig getCardBalaceConfig(int branch_num){
+        final BranchResourceDao resourceDao = DaoManager.getInstance().getDaoSession().getBranchResourceDao();
+        BranchResource branchResource = resourceDao.queryBuilder().where(BranchResourceDao.Properties.BranchResourceName.eq("分店消费卡参数"),
+                BranchResourceDao.Properties.BranchNum.eq(branch_num)).unique();
+        if(branchResource != null){
+           try {
+               String xml2json = XmlParser.xml2json(branchResource.getBranchResourceParam());
+               return new Gson().fromJson(xml2json, CardBalaceConfig.class);
+           }catch (Exception e){
+
+           }
+        }
+        return null;
     }
 }
