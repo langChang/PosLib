@@ -80,10 +80,18 @@ public class AdjustPriceImpl implements AdjustPriceCallback {
         adjustDetailsBean.setAdjustment_detail_ori_level4_price(posItemGrade == null ?  posItem.getBranch_level4_price(): posItemGrade.getBranch_grade_level4_price());
 
 
-        adjustDetailsBean.setAdjustment_detail_regular_price(posItemGrade == null ? posItem.getBranch_regular_price(): posItemGrade.getBranch_grade_regular_price());
-        adjustDetailsBean.setAdjustment_detail_level2_price(posItemGrade == null ? posItem.getBranch_level2_price(): posItemGrade.getBranch_grade_level2_price());
-        adjustDetailsBean.setAdjustment_detail_level3_price(posItemGrade == null ? posItem.getBranch_level3_price(): posItemGrade.getBranch_grade_level3_price());
-        adjustDetailsBean.setAdjustment_detail_level4_price(posItemGrade == null ?  posItem.getBranch_level4_price(): posItemGrade.getBranch_grade_level4_price());
+        adjustDetailsBean.setAdjustment_detail_regular_price(posItemGrade == null ?
+                (posItem.getBranch_regular_price()==0?posItem.getItem_regular_price():posItem.getBranch_regular_price()):
+                (posItemGrade.getBranch_grade_regular_price()==0?posItemGrade.getItem_grade_regular_price():posItemGrade.getBranch_grade_regular_price()));
+        adjustDetailsBean.setAdjustment_detail_level2_price(posItemGrade == null ?
+                (posItem.getBranch_level2_price()==0?posItem.getItem_level2_price():posItem.getBranch_level2_price()):
+                (posItemGrade.getBranch_grade_level2_price()==0?posItemGrade.getItem_grade_level2_price():posItemGrade.getBranch_grade_level2_price()));
+        adjustDetailsBean.setAdjustment_detail_level3_price(posItemGrade == null ?
+                (posItem.getBranch_level3_price()==0?posItem.getItem_level3_price():posItem.getBranch_level3_price()):
+                (posItemGrade.getBranch_grade_level3_price()==0?posItemGrade.getItem_grade_level3_price():posItemGrade.getBranch_grade_level3_price()));
+        adjustDetailsBean.setAdjustment_detail_level4_price(posItemGrade == null ?
+                (posItem.getBranch_level4_price()==0?posItem.getItem_level4_price():posItem.getBranch_level4_price()):
+                (posItemGrade.getBranch_grade_level4_price()==0?posItemGrade.getItem_grade_level4_price():posItemGrade.getBranch_grade_level4_price()));
 
 
         adjustDetailsBean.setAdjustment_detail_max_price(posItem.getBranch_max_price());
