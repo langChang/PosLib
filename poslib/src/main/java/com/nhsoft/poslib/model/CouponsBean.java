@@ -50,6 +50,7 @@ public class CouponsBean implements Cloneable {
     private boolean isDestruction = false;
     private float ticket_max_use_money;
     private float coupons_discount_amount; //抵扣数量
+    private int total_calculate_limit_amount; //计算出来的最大抵扣张数
 
 
     public float getCoupons_discount_amount() {
@@ -269,4 +270,11 @@ public class CouponsBean implements Cloneable {
     }
 
 
+    public int getTotal_calculate_limit_amount() {
+        return total_calculate_limit_amount;
+    }
+
+    public void setTotal_calculate_limit_amount(int total_calculate_limit_amount) {
+        this.total_calculate_limit_amount = total_calculate_limit_amount;
+    }
 }

@@ -1,5 +1,7 @@
 package com.nhsoft.poslib.entity;
 
+import android.text.TextUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -146,7 +148,7 @@ public class CustomerRegister {
     }
 
     public String getVip_card_user_level() {
-        return vip_card_user_level;
+        return TextUtils.isEmpty(vip_card_user_level)? "0" : vip_card_user_level;
     }
 
     public void setVip_card_user_level(String vip_card_user_level) {
