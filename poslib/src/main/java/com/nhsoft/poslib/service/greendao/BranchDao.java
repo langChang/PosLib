@@ -45,7 +45,8 @@ public class BranchDao extends AbstractDao<Branch, Long> {
         public final static Property Management_template_num = new Property(18, Long.class, "management_template_num", false, "MANAGEMENT_TEMPLATE_NUM");
         public final static Property Branch_close_time = new Property(19, String.class, "branch_close_time", false, "BRANCH_CLOSE_TIME");
         public final static Property Branch_status = new Property(20, int.class, "branch_status", false, "BRANCH_STATUS");
-        public final static Property Branch_memo = new Property(21, String.class, "branch_memo", false, "BRANCH_MEMO");
+        public final static Property Branch_account_valid = new Property(21, Boolean.class, "branch_account_valid", false, "BRANCH_ACCOUNT_VALID");
+        public final static Property Branch_memo = new Property(22, String.class, "branch_memo", false, "BRANCH_MEMO");
     }
 
 
@@ -82,7 +83,8 @@ public class BranchDao extends AbstractDao<Branch, Long> {
                 "\"MANAGEMENT_TEMPLATE_NUM\" INTEGER," + // 18: management_template_num
                 "\"BRANCH_CLOSE_TIME\" TEXT," + // 19: branch_close_time
                 "\"BRANCH_STATUS\" INTEGER NOT NULL ," + // 20: branch_status
-                "\"BRANCH_MEMO\" TEXT);"); // 21: branch_memo
+                "\"BRANCH_ACCOUNT_VALID\" INTEGER," + // 21: branch_account_valid
+                "\"BRANCH_MEMO\" TEXT);"); // 22: branch_memo
     }
 
     /** Drops the underlying database table. */
@@ -164,9 +166,14 @@ public class BranchDao extends AbstractDao<Branch, Long> {
         }
         stmt.bindLong(21, entity.getBranch_status());
  
+        Boolean branch_account_valid = entity.getBranch_account_valid();
+        if (branch_account_valid != null) {
+            stmt.bindLong(22, branch_account_valid ? 1L: 0L);
+        }
+ 
         String branch_memo = entity.getBranch_memo();
         if (branch_memo != null) {
-            stmt.bindString(22, branch_memo);
+            stmt.bindString(23, branch_memo);
         }
     }
 
@@ -243,9 +250,14 @@ public class BranchDao extends AbstractDao<Branch, Long> {
         }
         stmt.bindLong(21, entity.getBranch_status());
  
+        Boolean branch_account_valid = entity.getBranch_account_valid();
+        if (branch_account_valid != null) {
+            stmt.bindLong(22, branch_account_valid ? 1L: 0L);
+        }
+ 
         String branch_memo = entity.getBranch_memo();
         if (branch_memo != null) {
-            stmt.bindString(22, branch_memo);
+            stmt.bindString(23, branch_memo);
         }
     }
 
@@ -278,7 +290,8 @@ public class BranchDao extends AbstractDao<Branch, Long> {
             cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18), // management_template_num
             cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // branch_close_time
             cursor.getInt(offset + 20), // branch_status
-            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21) // branch_memo
+            cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0, // branch_account_valid
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22) // branch_memo
         );
         return entity;
     }
@@ -306,7 +319,8 @@ public class BranchDao extends AbstractDao<Branch, Long> {
         entity.setManagement_template_num(cursor.isNull(offset + 18) ? null : cursor.getLong(offset + 18));
         entity.setBranch_close_time(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
         entity.setBranch_status(cursor.getInt(offset + 20));
-        entity.setBranch_memo(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setBranch_account_valid(cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0);
+        entity.setBranch_memo(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
      }
     
     @Override

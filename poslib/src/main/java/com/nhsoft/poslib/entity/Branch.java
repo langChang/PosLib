@@ -1,9 +1,9 @@
 package com.nhsoft.poslib.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by Iverson on 2018/11/12 2:06 PM
@@ -59,10 +59,10 @@ public class Branch {
     private Long management_template_num;
     private String branch_close_time;
     private int branch_status;
+    private Boolean branch_account_valid;//是否启用门店会员卡账户余额
     private String branch_memo;//商户自定义文案
 
-
-    @Generated(hash = 841082453)
+    @Generated(hash = 188612533)
     public Branch(Long branch_num, String system_book_code, int branch_region_num,
             String branch_code, String branch_name, Boolean branch_actived,
             String branch_addr, String branch_phone, boolean branch_rdc,
@@ -71,7 +71,8 @@ public class Branch {
             String branch_expiration, boolean branch_support_ic,
             boolean branch_support_id, String branch_product,
             boolean branch_kit_enabled, Long management_template_num,
-            String branch_close_time, int branch_status, String branch_memo) {
+            String branch_close_time, int branch_status,
+            Boolean branch_account_valid, String branch_memo) {
         this.branch_num = branch_num;
         this.system_book_code = system_book_code;
         this.branch_region_num = branch_region_num;
@@ -93,13 +94,13 @@ public class Branch {
         this.management_template_num = management_template_num;
         this.branch_close_time = branch_close_time;
         this.branch_status = branch_status;
+        this.branch_account_valid = branch_account_valid;
         this.branch_memo = branch_memo;
     }
 
     @Generated(hash = 956821948)
     public Branch() {
     }
-
 
     public int getBranch_status() {
         return branch_status;
@@ -237,6 +238,14 @@ public class Branch {
 
     public void setBranch_memo(String branch_memo) {
         this.branch_memo = branch_memo;
+    }
+
+    public Boolean getBranch_account_valid() {
+        return this.branch_account_valid;
+    }
+
+    public void setBranch_account_valid(Boolean branch_account_valid) {
+        this.branch_account_valid = branch_account_valid;
     }
 
 
