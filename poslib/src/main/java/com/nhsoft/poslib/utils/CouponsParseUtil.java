@@ -81,6 +81,12 @@ public class CouponsParseUtil {
                         couponsXmlModel.setCouponsAddPage(couponsObject.getInt("消费券超额张数累加"));
                     }
 
+
+                    if(isHaveJsonKey("消费券备注",couponsObject,3)){
+                        couponsXmlModel.setCouponsMemo(couponsObject.getString("消费券备注"));
+                    }
+
+
                     if(isHaveJsonKey("促销特价商品不支持抵扣",couponsObject,3)){
                         couponsXmlModel.setCouponsSupportPromotion(couponsObject.getString("促销特价商品不支持抵扣"));
                     }
@@ -295,6 +301,10 @@ public class CouponsParseUtil {
 
                     couponsXmlModel.setCouponsType(couponsObject.getString("消费券应用分类"));
                     couponsXmlModel.setCouponsAddPage(couponsObject.getInt("消费券超额张数累加"));
+
+                    if(isHaveJsonKey("消费券备注",couponsObject,3)){
+                        couponsXmlModel.setCouponsMemo(couponsObject.getString("消费券备注"));
+                    }
 
                     couponsXmlModel.setCouponsSupportPromotion(couponsObject.getString("促销特价商品不支持抵扣"));
 

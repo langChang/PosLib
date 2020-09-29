@@ -55,7 +55,6 @@ public class MarketActionImpl {
 
     /**
      * 保存营销活动
-     * @param marketActionList 营销集合
      * @return 是否保存成功
      */
     public boolean saveMarketAction(final List<MarketAction> result) {
@@ -684,7 +683,6 @@ public class MarketActionImpl {
             ticketSendDetail.setTicket_send_detail_type(marketActionDetail.getMarket_action_detail_type_name());
             ticketSendDetail.setTicket_send_detail_state_code(1);
             ticketSendDetail.setTicket_send_detail_state_name("启用");
-            ticketSendDetail.setTicket_send_detail_memo("");
             ticketSendDetail.setTicket_send_detail_sync_flag(false);
             ticketSendDetail.setTicket_send_detail_uuid(UUIDUtils.getUUID32());
             ticketSendDetail.setTicket_send_bar_code(couponsKG.getKeyGBString());
@@ -754,6 +752,7 @@ public class MarketActionImpl {
             for (CouponsXmlModel couponsXmlModel : LibConfig.sCouponsXmlModels) {
                 if (couponsXmlModel.getCouponsName().equals(ticketSendDetail.getTicket_send_detail_type())) {
                     ticketSendDetail.setTicket_send_detail_type_code(couponsXmlModel.getTicketCode());
+                    ticketSendDetail.setTicket_send_detail_memo(couponsXmlModel.getCouponsMemo());
                     isAlready = true;
                     break;
                 }

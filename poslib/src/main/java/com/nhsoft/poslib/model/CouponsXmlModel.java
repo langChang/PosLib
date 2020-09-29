@@ -32,6 +32,8 @@ public class CouponsXmlModel implements Serializable {
     private String couponsDiscountAmount;
     @SerializedName("消费券超额张数累加")
     private int    couponsAddPage;
+    @SerializedName("消费券备注")
+    private String couponsMemo;
     @SerializedName("消费券单独使用")
     private String couponsIsAlone;
     @SerializedName("促销特价商品不支持抵扣")
@@ -48,6 +50,14 @@ public class CouponsXmlModel implements Serializable {
 
     public void setCouponActionDetailId(Long couponActionDetailId) {
         this.couponActionDetailId = couponActionDetailId;
+    }
+
+    public String getCouponsMemo() {
+        return couponsMemo;
+    }
+
+    public void setCouponsMemo(String couponsMemo) {
+        this.couponsMemo = couponsMemo;
     }
 
     public boolean isOnline() {
