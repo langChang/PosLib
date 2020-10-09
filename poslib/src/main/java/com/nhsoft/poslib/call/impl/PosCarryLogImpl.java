@@ -2,12 +2,15 @@ package com.nhsoft.poslib.call.impl;
 
 import com.nhsoft.poslib.db.DaoManager;
 import com.nhsoft.poslib.entity.PosCarryLog;
+import com.nhsoft.poslib.entity.PosItem;
+import com.nhsoft.poslib.entity.PosItemGrade;
 import com.nhsoft.poslib.entity.PosMachine;
 import com.nhsoft.poslib.entity.order.PosOrder;
 import com.nhsoft.poslib.entity.order.PosOrderDetail;
 import com.nhsoft.poslib.entity.shift.ShiftTable;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.service.greendao.PosCarryLogDao;
+import com.nhsoft.poslib.utils.NumberUtil;
 import com.nhsoft.poslib.utils.TimeUtil;
 
 import java.util.ArrayList;
@@ -307,11 +310,23 @@ public class PosCarryLogImpl {
         posCarryLog.setMerchant_num(shiftTable.getMerchant_num());
         posCarryLog.setStall_num(shiftTable.getStall_num());
         posCarryLog.setRetail_pos_log_order_no(posOrderDetail.getOrderNo());
-        posCarryLog.setRetail_pos_log_money(posOrderDetail.getOrderDetailPaymentMoney());
+
+        float goodsStdPrice = 0;
+
+        PosItem posItemByItemNum = PosItemImpl.getInstance().getPosItemByItemNum(posOrderDetail.getItemNum());
+        if(posOrderDetail.getItemGradeNum() != 0){
+            PosItemGrade posItemGradeByItemGradeNum = PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(posOrderDetail.getItemGradeNum(), posOrderDetail.getItemNum());
+            goodsStdPrice = PosItemImpl.getInstance().getItemRegularPrice(posItemByItemNum,posItemGradeByItemGradeNum);
+        }else {
+            goodsStdPrice = PosItemImpl.getInstance().getItemRegularPrice(posItemByItemNum,null);
+        }
+
+
+        posCarryLog.setRetail_pos_log_money(NumberUtil.getNewFloat((goodsStdPrice - posOrderDetail.getOrderDetailPrice()) * posOrderDetail.getOrderDetailAmount()));
         posCarryLog.setRetail_pos_log_item_name(posOrderDetail.getOrderDetailItem());
         posCarryLog.setRetail_pos_log_amount(posOrderDetail.getOrderDetailAmount());
         posCarryLog.setRetail_pos_log_price(posOrderDetail.getOrderDetailPrice());
-        posCarryLog.setRetail_pos_log_std_price(posOrderDetail.getOrderDetailStdPrice());
+        posCarryLog.setRetail_pos_log_std_price(goodsStdPrice);
 
         posCarryLogDao.insertInTx(posCarryLog);
     }
