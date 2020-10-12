@@ -109,6 +109,13 @@ public class PosItemImpl {
     }
 
 
+    public List<PosItemKit> getAllPosItemKit(long item_num){
+        PosItemKitDao targetDao = DaoManager.getInstance().getDaoSession().getPosItemKitDao();
+        List<PosItemKit> posItemKits = targetDao._queryPosItem_Pos_item_kit_list(item_num);
+        targetDao.detachAll();
+        return posItemKits;
+    }
+
     public String getPosItemLastEditTime() {
         String item_last_edit_time = null;
         try {
