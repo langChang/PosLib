@@ -443,10 +443,11 @@ public class OrderOperationImpl implements OrderOperationCallback {
             copyPosItem.setPosItemGrade(copyPosItemGrade(posItem.getPosItemGrade()));
         }
 
-        if(posItem.getPos_item_kit_list() != null && posItem.getPos_item_kit_list().size() > 0){
+        List<PosItemKit> allPosItemKit = PosItemImpl.getInstance().getAllPosItemKit(posItem.getItem_num());
+        if(allPosItemKit != null && allPosItemKit.size() > 0){
             List<PosItemKit> posItemKits = new ArrayList<>();
 
-            for (PosItemKit posItemKit : posItem.getPos_item_kit_list()){
+            for (PosItemKit posItemKit : allPosItemKit){
                 posItemKits.add(copyPosItemKit(posItemKit));
             }
 
