@@ -94,7 +94,7 @@ public class WeightOutBarUtil {
                         posOrderDetail.setOrderDetailPolicyDiscountFlag(false); //超额折扣标记
 
                         posOrderDetail.setOrderDetailPrice(NumberUtil.getNewFloat(detailMoney*weightBit/moneyBit/goodsWeight));
-                        TagUtils.addChangeTag(posOrderDetail);
+                        TagUtils.addChangeTag(posOrderDetail,posOrderDetail.getOrderDetailPrice());
                         if(chazhi < 0){
                             posOrderDetail.setOrderDetailStdPrice(posOrderDetail.getOrderDetailPrice());
                         }

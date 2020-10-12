@@ -531,7 +531,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public String getEnableCardChange() {
-        return EnableCardChange;
+        return EnableCardChange == null ? "0" : EnableCardChange;
     }
 
     public void setEnableCardChange(String EnableCardChange) {

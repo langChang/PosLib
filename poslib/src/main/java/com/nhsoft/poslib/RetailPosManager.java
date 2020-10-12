@@ -2033,8 +2033,8 @@ public class RetailPosManager {
      *
      * @param posOrderDetail 商品信息
      */
-    public void tryChangeGoodsPrice(PosOrderDetail posOrderDetail) {
-        PosCarryLogImpl.getInstance().tryChangeGoodsPrice(posOrderDetail);
+    public void tryChangeGoodsPrice(PosOrderDetail posOrderDetail,float detailPrice) {
+        PosCarryLogImpl.getInstance().tryChangeGoodsPrice(posOrderDetail,detailPrice);
     }
 
     /**

@@ -209,7 +209,7 @@ public class PricePromotionCalUtils {
                 String[] splitCategory = policyPromotion.getPolicy_promotion_item_category().split(",");
                 boolean inUsable = false;
                 for (String string : splitCategory) {
-                    if (item_category_code.equals(string)) {
+                    if (item_category_code != null && item_category_code.equals(string)) {
                         inUsable = true;
                         break;
                     }

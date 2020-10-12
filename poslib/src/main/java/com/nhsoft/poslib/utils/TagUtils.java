@@ -56,6 +56,21 @@ public class TagUtils {
      * 添加手改标记
      * @param posOrderDetail
      */
+    public static void addChangeTag(PosOrderDetail posOrderDetail,float detailPrice){
+        String orderDetailMemo = posOrderDetail.getOrderDetailMemo();
+        if(!TextUtils.isEmpty(orderDetailMemo)){
+            posOrderDetail.setOrderDetailMemo(new StringBuilder().append(orderDetailMemo).append(LibConfig.GOODS_CHANGE_TAG).toString());
+        }else {
+            if(orderDetailMemo.contains(LibConfig.GOODS_CHANGE_TAG))return;
+            posOrderDetail.setOrderDetailMemo(new StringBuilder().append(LibConfig.GOODS_CHANGE_TAG).toString());
+        }
+         RetailPosManager.getInstance().tryChangeGoodsPrice(posOrderDetail,detailPrice);
+    }
+
+    /**
+     * 添加手改标记
+     * @param posOrderDetail
+     */
     public static void addChangeTag(PosOrderDetail posOrderDetail){
         String orderDetailMemo = posOrderDetail.getOrderDetailMemo();
         if(!TextUtils.isEmpty(orderDetailMemo)){
@@ -64,7 +79,7 @@ public class TagUtils {
             if(orderDetailMemo.contains(LibConfig.GOODS_CHANGE_TAG))return;
             posOrderDetail.setOrderDetailMemo(new StringBuilder().append(LibConfig.GOODS_CHANGE_TAG).toString());
         }
-         RetailPosManager.getInstance().tryChangeGoodsPrice(posOrderDetail);
+        RetailPosManager.getInstance().tryChangeGoodsPrice(posOrderDetail,posOrderDetail.getOrderDetailPrice());
     }
 
 
