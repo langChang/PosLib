@@ -3,14 +3,13 @@ package com.nhsoft.poslib.entity.order;
 
 import android.text.TextUtils;
 
+import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
 import com.nhsoft.poslib.entity.ClientPoint;
-import com.nhsoft.poslib.entity.KeyGeneratorBizday;
 import com.nhsoft.poslib.entity.TicketSendDetail;
-import com.nhsoft.poslib.model.VipUserInfo;
-import com.nhsoft.poslib.libconfig.LibConfig ;
+import com.nhsoft.poslib.libconfig.LibConfig;
 import com.nhsoft.poslib.model.CouponsBean;
 import com.nhsoft.poslib.model.RedisBean;
-import com.nhsoft.poslib.call.impl.KeyGeneratorBizdayImpl;
+import com.nhsoft.poslib.model.VipUserInfo;
 import com.nhsoft.poslib.service.greendao.DaoSession;
 import com.nhsoft.poslib.service.greendao.PaymentDao;
 import com.nhsoft.poslib.service.greendao.PosOrderDao;
@@ -205,8 +204,6 @@ public class PosOrder implements Cloneable {
         isRoundPayment = roundPayment;
     }
 
-    @Transient
-    private KeyGeneratorBizday keyGeneratorBizday;
 
     @ToMany(referencedJoinProperty = "orderNo")
     private           List<PosOrderDetail> posOrderDetails = new ArrayList<PosOrderDetail>(0);

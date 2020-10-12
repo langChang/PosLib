@@ -291,7 +291,7 @@ public class PosCarryLogImpl {
     /**
      * 修改商品单价
      */
-    public void tryChangeGoodsPrice(PosOrderDetail posOrderDetail){
+    public void tryChangeGoodsPrice(PosOrderDetail posOrderDetail,float detailPrice){
         ShiftTable shiftTable = LibConfig.activeShiftTable;
         PosMachine posMachine = LibConfig.activePosMachine;
         if(shiftTable == null || posMachine == null)return;
@@ -322,11 +322,12 @@ public class PosCarryLogImpl {
         }
 
 
-        posCarryLog.setRetail_pos_log_money(NumberUtil.getNewFloat((goodsStdPrice - posOrderDetail.getOrderDetailPrice()) * posOrderDetail.getOrderDetailAmount()));
+        posCarryLog.setRetail_pos_log_money(NumberUtil.getNewFloat((goodsStdPrice - detailPrice) * posOrderDetail.getOrderDetailAmount()));
         posCarryLog.setRetail_pos_log_item_name(posOrderDetail.getOrderDetailItem());
         posCarryLog.setRetail_pos_log_amount(posOrderDetail.getOrderDetailAmount());
-        posCarryLog.setRetail_pos_log_price(posOrderDetail.getOrderDetailPrice());
+        posCarryLog.setRetail_pos_log_price(detailPrice);
         posCarryLog.setRetail_pos_log_std_price(goodsStdPrice);
+        posCarryLog.setRetail_pos_log_item_num(posOrderDetail.getItemNum());
 
         posCarryLogDao.insertInTx(posCarryLog);
     }

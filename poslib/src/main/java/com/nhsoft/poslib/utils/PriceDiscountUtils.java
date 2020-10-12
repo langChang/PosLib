@@ -139,7 +139,7 @@ public class PriceDiscountUtils {
                     String[] splitCategory = policyDiscount.getPolicy_discount_assigned_category().split(",");
                     boolean inUsable = false;
                     for (String string : splitCategory) {
-                        if (item_category_code.equals(string)) {
+                        if (item_category_code != null && item_category_code.equals(string)) {
                             inUsable = true;
                             break;
                         }
