@@ -141,7 +141,10 @@ public class NumberUtil {
 
         switch (roundType) {
             case LibConfig.S_ROUND_UP:
-                finalValue = NumberUtil.getNewLongFloat(nagate.multiply(b.setScale(newScale, BigDecimal.ROUND_UP)).floatValue());
+                b = new BigDecimal(value - 0.0001);;
+                BigDecimal multiply = nagate.multiply(b.setScale(newScale, BigDecimal.ROUND_UP));
+                float floatValue = multiply.floatValue();
+                finalValue = NumberUtil.getNewLongFloat(floatValue);
                 break;
             case LibConfig.S_ROUND_DOWN:
 //                finalValue = NumberUtil.getNewLongFloat(nagate.multiply(b.setScale(newScale, BigDecimal.ROUND_DOWN)).floatValue());

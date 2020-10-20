@@ -590,6 +590,11 @@ public class RetailPosManager {
                     callBack.searchNoUseGoods("当前没有搜索到结果!");
                     return false;
                 } else {
+                    if(posOrderDetail.getPosItem() == null){
+                        callBack.resetText();
+                        callBack.hideSoftInput();
+                        return false;
+                    }
                     callBack.searchOutBarGoods(posOrderDetail);
                     callBack.resetText();
                     callBack.hideSoftInput();

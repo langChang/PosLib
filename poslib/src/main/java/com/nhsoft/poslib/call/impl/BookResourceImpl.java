@@ -60,6 +60,7 @@ public class BookResourceImpl {
 
     public BookResource getBookPosSale(String systemCode, String payScale) {
         if (!LibConfig.S_LOCAL_COUPONS_STYLE.equals(payScale)) {
+
             final BookResourceDao mBookResourceDao = DaoManager.getInstance().getDaoSession().getBookResourceDao();
             List<BookResource> list = mBookResourceDao.queryBuilder().where(BookResourceDao.Properties.BookResourceName.eq(payScale), BookResourceDao.Properties.SystemBookCode.eq(systemCode)).list();
             if (list.size() > 0) {

@@ -290,12 +290,12 @@ public class ConversionUtil {
             return newPosOrderDetail;
         }
 
-
-        if (newPosOrderDetail.getOrderDetailStateCode() == LibConfig.S_ORDER_DETAIL_RETURN) {
-            posOrderDetails.addLast(newPosOrderDetail);
-            PosOrderCalcUtil.calcPosOrderDetail(newPosOrderDetail);
-            return newPosOrderDetail;
-        }
+//        退货模式不享用会员价和超量特价
+//        if (newPosOrderDetail.getOrderDetailStateCode() == LibConfig.S_ORDER_DETAIL_RETURN) {
+//            posOrderDetails.addLast(newPosOrderDetail);
+//            PosOrderCalcUtil.calcPosOrderDetail(newPosOrderDetail);
+//            return newPosOrderDetail;
+//        }
 
 
         float vipMemberPrice = Float.MAX_VALUE;

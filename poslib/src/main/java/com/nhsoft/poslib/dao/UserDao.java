@@ -50,6 +50,7 @@ public class UserDao {
     public static final String LINE_MARGIN       = "line_margin";//列间距
     public static final String OMS_TURN          = "OMS_TURN";//消息提醒开关 0关  1开
     public static final String OMS_MESSAGE_TIMES = "OMS_MESSAGE_TIMES";//消息提醒次数 int
+    public static final String ORDER_COMPLETE_SHOW_TIME = "order_complete_show_time";//订单完成显示时间
     public static final String EFFECT_DATA       = "effect_data";
 
 
@@ -191,6 +192,16 @@ public class UserDao {
 
     public static String getOmsMessageTimes() {
         return SharedPreferenceUtil.getStringValueByKey(USER_SP, OMS_MESSAGE_TIMES);
+    }
+
+
+    //结算框体显示时长
+    public static void setOrderCompleteShowTime(String showTime) {
+        SharedPreferenceUtil.saveValue(USER_SP, ORDER_COMPLETE_SHOW_TIME, showTime);
+    }
+
+    public static String getOrderCompleteShowTime() {
+        return SharedPreferenceUtil.getStringValueByKey(USER_SP, ORDER_COMPLETE_SHOW_TIME);
     }
 
     //保存使用的单位 1:代表公斤  2： 市斤

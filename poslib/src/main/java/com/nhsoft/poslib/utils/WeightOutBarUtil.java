@@ -83,6 +83,19 @@ public class WeightOutBarUtil {
                     float detailMoney = Float.parseFloat(barcode.substring(barcode.length() - weightLength - montyLength -1,barcode.length() - weightLength -1));
                     float chazhi = stdPrice * goodsWeight / weightBit - detailMoney / moneyBit;
                     if(Math.abs(chazhi) > 0.1){
+                        float detailPrice = NumberUtil.getNewFloat(detailMoney * weightBit / moneyBit / goodsWeight);
+                        float itemMaxPrice = ItemPriceCheck.getItemMaxPrice(posOrderDetail.getPosItem(), detailPrice);
+                        if(itemMaxPrice < detailPrice){
+                            CustomToast.toastShort("超过商品最高售价");
+                            return new PosOrderDetail();
+                        }
+
+                        float itemMinPrice = ItemPriceCheck.getItemMinPrice(posOrderDetail.getPosItem(), detailPrice);
+                        if(itemMinPrice > detailPrice){
+                            CustomToast.toastShort("超过商品最低售价");
+                            return new PosOrderDetail();
+                        }
+
                         posOrderDetail = ConversionUtil.getPosOrderDetail(LibConfig.activeVipMember,null, posItem, null, goodsWeight/weightBit,posOrderDetails,"",false,false);
                         TagUtils.removeVipTag(posOrderDetail);
                         posOrderDetail.setOrderDetailPolicyFid(null);
@@ -94,6 +107,9 @@ public class WeightOutBarUtil {
                         posOrderDetail.setOrderDetailPolicyDiscountFlag(false); //超额折扣标记
 
                         posOrderDetail.setOrderDetailPrice(NumberUtil.getNewFloat(detailMoney*weightBit/moneyBit/goodsWeight));
+
+
+
                         TagUtils.addChangeTag(posOrderDetail,posOrderDetail.getOrderDetailPrice());
                         if(chazhi < 0){
                             posOrderDetail.setOrderDetailStdPrice(posOrderDetail.getOrderDetailPrice());
