@@ -18,7 +18,7 @@ public class VipUserInfoCrm {
     private String      point_multiple;//积分倍数
     private String      point;//积分
     private String      phone;//手机号
-    private String      open_id;//手机号
+    private String      openid;//微信openid
     private String      name;//会员名
     private String      level_deadline;//等级有效期(yyyy-MM-dd HH:MM:SS)
     private String      level;//等级
@@ -123,11 +123,11 @@ public class VipUserInfoCrm {
     }
 
     public String getOpenid() {
-        return open_id;
+        return openid;
     }
 
     public void setOpenid(String openid) {
-        this.open_id = openid;
+        this.openid = openid;
     }
 
     public String getName() {

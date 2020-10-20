@@ -417,4 +417,34 @@ public class StringUtil {
         }
         return text;
     }
+
+    /**
+     * 截取前几个字符+“..”
+     * @param text
+     * @return
+     */
+    public static String getText(int textLength,String text,String addText){
+        StringBuffer s=new StringBuffer();
+        try {
+            if (text.getBytes("GBK").length>textLength){
+                int length=text.length();
+                int index=0;
+                for (int i=0;i<length;i++){
+                    if((text.charAt(i) >= 0x4e00)&&(text.charAt(i) <= 0x9fbb)) {
+                        index+=2;
+                    }else {
+                        index+=1;
+                    }
+                    if (index>textLength){
+                        return s.toString()+addText;
+                    }else {
+                        s.append(text.charAt(i));
+                    }
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
 }

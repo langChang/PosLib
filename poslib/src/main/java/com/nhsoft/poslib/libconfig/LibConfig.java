@@ -29,6 +29,7 @@ import com.nhsoft.poslib.model.VipCardConfig;
 import com.nhsoft.poslib.model.VipCardTypeBean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -326,6 +327,25 @@ public class LibConfig {
     /***************************折扣方式**********************************/
     public static final String S_ORDER_DISCOUNT_BY_MONEY = "order_discount_by_money";
     public static final String S_ORDER_DISCOUNT_BY_BIT   = "order_discount_by_bit";
+
+    /***********************在线订单名称*********************************/
+    public static final List<String> ONLINE_ORDER_NAMES= Arrays.asList(
+            "有赞",
+            "京东到家",
+            "饿了么外卖",
+            "美团外卖",
+            "饿百零售",
+            "京东到家品牌二",
+            "京东到家品牌三",
+            "美团外卖闪购",
+            "蜂巢拼团",
+            "蜂巢微商城",
+            "OMS",
+            "喜临门",
+            "其他平台",
+            "第三方商城",
+            "社区团购"
+    );
 
 }
 

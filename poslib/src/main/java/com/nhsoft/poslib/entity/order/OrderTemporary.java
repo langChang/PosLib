@@ -95,6 +95,7 @@ public class OrderTemporary {
     private int order_card_user_num;
     private int order_card_type;
     private String  order_pay_no;
+    private String order_source;
 
 
     private List<OrderDetailTemporary> pos_order_details;

@@ -66,7 +66,7 @@ public class PosOrder implements Cloneable {
     private int     orderStateCode;//5
     private String  orderStateName;
     private String  orderMemo = "";
-    private String  orderRefBillno;
+    private String  orderRefBillno;//单据外部单据号
     private float   orderPoint;
     private float   orderGrossProfit;
     private float   orderMgrDiscountMoney;
