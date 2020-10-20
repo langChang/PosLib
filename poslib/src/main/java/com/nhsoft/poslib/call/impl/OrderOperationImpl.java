@@ -455,9 +455,8 @@ public class OrderOperationImpl implements OrderOperationCallback {
         }
 
         if(posItem.getItemBar() != null){
-            copyPosItem.setItemBar(copyItemBar(posItem.getItemBar()));
+            copyPosItem.setItemBar(copyItemBar(posItem.getItemBar(),copyPosItem));
         }
-
 
         return copyPosItem;
     }
@@ -504,7 +503,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         return copyPosItemKit;
     }
 
-    private ItemBar copyItemBar(ItemBar itemBar){
+    private ItemBar copyItemBar(ItemBar itemBar,PosItem posItem){
         ItemBar copyItemBar = new ItemBar();
         copyItemBar.setId(itemBar.getId());
         copyItemBar.setItem_num(itemBar.getItem_num());
@@ -513,7 +512,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         copyItemBar.setItem_bar_rate(itemBar.getItem_bar_rate());
         copyItemBar.setItem_valid_period(itemBar.getItem_valid_period());
         if(itemBar.getPosItem() != null){
-            copyItemBar.setPosItem(copyPosItem(itemBar.getPosItem()));
+            copyItemBar.setPosItem(posItem);
         }
         return copyItemBar;
     }
