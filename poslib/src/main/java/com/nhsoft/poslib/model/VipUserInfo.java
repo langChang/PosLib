@@ -3,10 +3,14 @@ package com.nhsoft.poslib.model;
 
 import android.text.TextUtils;
 
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class VipUserInfo implements Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * card_user_num : String||卡Id
@@ -123,6 +127,17 @@ public class VipUserInfo implements Cloneable, Serializable {
     private String logo_url;
     private String brand_name;
     private String title;
+    @Transient
+    private RedisBean couponsRedisBean;
+    public RedisBean getCouponsRedisBean() {
+        return couponsRedisBean;
+    }
+
+    public void setCouponsRedisBean(RedisBean couponsRedisBean) {
+        this.couponsRedisBean = couponsRedisBean;
+    }
+
+
 
 
     @Override
@@ -674,4 +689,5 @@ public class VipUserInfo implements Cloneable, Serializable {
     public void setCrmRegisteSendCard(boolean crmRegisteSendCard) {
         isCrmRegisteSendCard = crmRegisteSendCard;
     }
+
 }

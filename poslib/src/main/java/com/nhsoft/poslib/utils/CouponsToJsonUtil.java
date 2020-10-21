@@ -62,7 +62,7 @@ public class CouponsToJsonUtil {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("branch_num",branchNum);
-            jsonObject.put("coupon_user", LibConfig.activeShiftTable.getShiftTableUserName());
+            jsonObject.put("coupon_user", LibConfig.SHIFT_OPERATOR == null ? "每天第一次同步" : LibConfig.SHIFT_OPERATOR);
             jsonObject.put("order_no",orderNo);
             jsonObject.put("order_payment_money",orderPaymentMoney);
             JSONArray jsonArray = new JSONArray();

@@ -39,7 +39,15 @@ public class MarketActionScopeBean {
     private List<Integer> other_item_nums;
     private List<String>  card_user_type_codes;
     private List<VipLevelOffline> vip_level_offlines;
+    private boolean only_join_in_once;
 
+    public boolean isOnly_join_in_once() {
+        return only_join_in_once;
+    }
+
+    public void setOnly_join_in_once(boolean only_join_in_once) {
+        this.only_join_in_once = only_join_in_once;
+    }
 
     public List<VipLevelOffline> getVip_level_offlines() {
         return vip_level_offlines;

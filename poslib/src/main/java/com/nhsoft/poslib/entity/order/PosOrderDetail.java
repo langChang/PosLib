@@ -161,6 +161,20 @@ public class PosOrderDetail implements Cloneable{
     @Transient
     private boolean isQuitCoupons; //退货是否退优惠劵
 
+    @Transient
+    private boolean isCheckCoupon; //检查券是否能反核销
+
+    public boolean isCheckCoupon() {
+        return isCheckCoupon;
+    }
+
+    public void setCheckCoupon(boolean checkCoupon) {
+        isCheckCoupon = checkCoupon;
+    }
+
+
+
+
 
     @Generated(hash = 1226884628)
     public PosOrderDetail(Long id, String orderNo, int orderDetailNum, int itemNum, String orderDetailType,

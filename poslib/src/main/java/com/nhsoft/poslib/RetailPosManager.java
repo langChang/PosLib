@@ -317,6 +317,16 @@ public class RetailPosManager {
     /********************订单相关***********************/
 
     /**
+     * 检查订单是否还是异常单
+     * @param order_no
+     *
+     * return result : true 订单已正常  false 还是异常单
+     */
+    public boolean checkPosOrderIsNormal(String order_no){
+        return OrderOperationImpl.getInstance().isNormalOrder(order_no);
+    }
+
+    /**
      * 挂单
      *
      * @return

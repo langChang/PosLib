@@ -456,6 +456,7 @@ public class PosItemImpl {
                 }
             }
         }
+        posItemKitDao.detachAll();
         return posItems;
     }
 
@@ -469,6 +470,7 @@ public class PosItemImpl {
 
         PosItemKitDao posItemKitDao = DaoManager.getInstance().getDaoSession().getPosItemKitDao();
         List<PosItemKit> kitlist = posItemKitDao.queryBuilder().where(PosItemKitDao.Properties.Item_num.eq(itemNum)).build().list();
+        posItemKitDao.detachAll();
         return kitlist;
     }
 

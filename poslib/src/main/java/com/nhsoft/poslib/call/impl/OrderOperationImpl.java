@@ -68,7 +68,6 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-
     @Override
     public boolean collectOrder(PosOrder posOrder) {
 
@@ -86,7 +85,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         }
         boolean result = PosOrderOperationUtil.startInsertOrder(posOrder, keyGeneratorBizday, LibConfig.S_ORDER_INIT);
         RetailPosManager.getInstance().savePosOrder(posOrder);
-         RetailPosManager.getInstance().tryCollectionOrder(posOrder);
+        RetailPosManager.getInstance().tryCollectionOrder(posOrder);
         return result;
     }
 
@@ -160,21 +159,21 @@ public class OrderOperationImpl implements OrderOperationCallback {
             clonePosOrder.setRoundPayment(posOrder.isRoundPayment());
             clonePosOrder.setQuickZeroMoney(posOrder.getQuickZeroMoney());
 
-            if(posOrder.getRedisBean() != null){
+            if (posOrder.getRedisBean() != null) {
                 LogToFileUtils.write("clonePosOrder: getRedisBean");
                 String json = new Gson().toJson(posOrder.getRedisBean());
                 final RedisBean redisBean = new Gson().fromJson(json, RedisBean.class);
                 clonePosOrder.setRedisBean(redisBean);
             }
 
-            if(posOrder.getCouponsRedisBean() != null){
+            if (posOrder.getCouponsRedisBean() != null) {
                 LogToFileUtils.write("clonePosOrder: getCouponsRedisBean");
                 String json = new Gson().toJson(posOrder.getCouponsRedisBean());
                 final RedisBean couponsRedisBean = new Gson().fromJson(json, RedisBean.class);
                 clonePosOrder.setCouponsRedisBean(couponsRedisBean);
             }
 
-            if(posOrder.getVipUserInfo() != null){
+            if (posOrder.getVipUserInfo() != null) {
                 LogToFileUtils.write("clonePosOrder: getVipUserInfo");
                 String json = new Gson().toJson(posOrder.getVipUserInfo());
                 final VipUserInfo vipUserInfo = new Gson().fromJson(json, VipUserInfo.class);
@@ -182,17 +181,17 @@ public class OrderOperationImpl implements OrderOperationCallback {
             }
 
 
-            if(posOrder.getClientPoint() != null){
+            if (posOrder.getClientPoint() != null) {
                 LogToFileUtils.write("clonePosOrder: getClientPoint");
                 String json = new Gson().toJson(posOrder.getClientPoint());
                 final ClientPoint clientPoint = new Gson().fromJson(json, ClientPoint.class);
                 clonePosOrder.setClientPoint(clientPoint);
             }
 
-            if(posOrder.getTicketSendDetails() != null && posOrder.getTicketSendDetails().size() > 0){
+            if (posOrder.getTicketSendDetails() != null && posOrder.getTicketSendDetails().size() > 0) {
                 LogToFileUtils.write("clonePosOrder: getTicketSendDetails");
                 List<TicketSendDetail> ticketSendDetails = new ArrayList<>();
-                for (TicketSendDetail ticketSendDetail : posOrder.getTicketSendDetails()){
+                for (TicketSendDetail ticketSendDetail : posOrder.getTicketSendDetails()) {
                     String json = new Gson().toJson(ticketSendDetail);
                     final TicketSendDetail sendDetail = new Gson().fromJson(json, TicketSendDetail.class);
                     ticketSendDetails.add(sendDetail);
@@ -201,10 +200,10 @@ public class OrderOperationImpl implements OrderOperationCallback {
             }
 
 
-            if(posOrder.getUseConponsList() != null && posOrder.getUseConponsList().size() > 0){
+            if (posOrder.getUseConponsList() != null && posOrder.getUseConponsList().size() > 0) {
                 LogToFileUtils.write("clonePosOrder: getUseConponsList");
                 List<CouponsBean> couponsBeans = new ArrayList<>();
-                for (CouponsBean couponsBean : posOrder.getUseConponsList()){
+                for (CouponsBean couponsBean : posOrder.getUseConponsList()) {
                     String json = new Gson().toJson(couponsBean);
                     final CouponsBean couponsBean1 = new Gson().fromJson(json, CouponsBean.class);
                     couponsBeans.add(couponsBean1);
@@ -212,10 +211,10 @@ public class OrderOperationImpl implements OrderOperationCallback {
                 clonePosOrder.setUseConponsList(couponsBeans);
             }
 
-            if(posOrder.getMercuryConponsList() != null && posOrder.getMercuryConponsList().size() > 0){
+            if (posOrder.getMercuryConponsList() != null && posOrder.getMercuryConponsList().size() > 0) {
                 LogToFileUtils.write("clonePosOrder: getMercuryConponsList");
                 List<CouponsBean> couponsBeans = new ArrayList<>();
-                for (CouponsBean couponsBean : posOrder.getMercuryConponsList()){
+                for (CouponsBean couponsBean : posOrder.getMercuryConponsList()) {
                     String json = new Gson().toJson(couponsBean);
                     final CouponsBean couponsBean1 = new Gson().fromJson(json, CouponsBean.class);
                     couponsBeans.add(couponsBean1);
@@ -224,10 +223,10 @@ public class OrderOperationImpl implements OrderOperationCallback {
             }
 
 
-            if(posOrder.getPosOrderDetails() != null && posOrder.getPosOrderDetails().size() > 0){
+            if (posOrder.getPosOrderDetails() != null && posOrder.getPosOrderDetails().size() > 0) {
                 LogToFileUtils.write("clonePosOrder: getPosOrderDetails");
                 List<PosOrderDetail> posOrderDetails = new ArrayList<>();
-                for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()){
+                for (PosOrderDetail posOrderDetail : posOrder.getPosOrderDetails()) {
                     final PosOrderDetail posOrderDetail1 = copayPosOrderDetail(posOrderDetail);
                     posOrderDetails.add(posOrderDetail1);
                 }
@@ -235,10 +234,10 @@ public class OrderOperationImpl implements OrderOperationCallback {
             }
 
 
-            if(posOrder.getPayments() != null && posOrder.getPayments().size() > 0){
+            if (posOrder.getPayments() != null && posOrder.getPayments().size() > 0) {
                 LogToFileUtils.write("clonePosOrder: getPayments");
                 List<Payment> payments = new ArrayList<>();
-                for (Payment payment : posOrder.getPayments()){
+                for (Payment payment : posOrder.getPayments()) {
                     final Payment payment1 = copyPayment(payment);
                     payments.add(payment1);
                 }
@@ -323,47 +322,45 @@ public class OrderOperationImpl implements OrderOperationCallback {
             clonePosOrderDetail.setOrderChangeAmount(posOrderDetail.getOrderChangeAmount());
             clonePosOrderDetail.setQuitCoupons(posOrderDetail.isQuitCoupons());
 
-            if(posOrderDetail.getPosOrderKitDetails() != null && posOrderDetail.getPosOrderKitDetails().size() > 0){
+            if (posOrderDetail.getPosOrderKitDetails() != null && posOrderDetail.getPosOrderKitDetails().size() > 0) {
                 List<PosOrderKitDetail> orderKitDetails = new ArrayList<>();
-                for (PosOrderKitDetail posOrderKitDetail : posOrderDetail.getPosOrderKitDetails()){
+                for (PosOrderKitDetail posOrderKitDetail : posOrderDetail.getPosOrderKitDetails()) {
                     PosOrderKitDetail copyPosOrderKitDetail = copyPosOrderKitDetail(posOrderKitDetail);
                     orderKitDetails.add(copyPosOrderKitDetail);
                 }
                 clonePosOrderDetail.setPosOrderKitDetails(orderKitDetails);
             }
-            if(posOrderDetail.getPolicyDiscounts() != null && posOrderDetail.getPolicyDiscounts().size() > 0){
+            if (posOrderDetail.getPolicyDiscounts() != null && posOrderDetail.getPolicyDiscounts().size() > 0) {
                 List<PolicyDiscount> policyDiscounts = new ArrayList<>();
-                for (PolicyDiscount policyDiscount : posOrderDetail.getPolicyDiscounts()){
+                for (PolicyDiscount policyDiscount : posOrderDetail.getPolicyDiscounts()) {
                     PolicyDiscount copyPolicyDiscount = copyPolicyDiscount(policyDiscount);
                     policyDiscounts.add(copyPolicyDiscount);
                 }
                 clonePosOrderDetail.setPolicyDiscounts(policyDiscounts);
             }
 
-            if(posOrderDetail.getPolicyPromotionDetail() != null){
+            if (posOrderDetail.getPolicyPromotionDetail() != null) {
                 PolicyPromotionDetail policyPromotionDetail = copyPolicyPromotionDetail(posOrderDetail.getPolicyPromotionDetail());
                 clonePosOrderDetail.setPolicyPromotionDetail(policyPromotionDetail);
             }
 
-            if(posOrderDetail.getPolicyQuantityDetail() != null){
+            if (posOrderDetail.getPolicyQuantityDetail() != null) {
                 PolicyQuantityDetail policyQuantityDetail = copyPolicyQuantityDetail(posOrderDetail.getPolicyQuantityDetail());
                 clonePosOrderDetail.setPolicyQuantityDetail(policyQuantityDetail);
             }
 
-            if(posOrderDetail.getPosItem() != null){
+            if (posOrderDetail.getPosItem() != null) {
                 PosItem copyPosItem = copyPosItem(posOrderDetail.getPosItem());
                 clonePosOrderDetail.setPosItem(copyPosItem);
             }
 
-            if(posOrderDetail.getPosItemGrade() != null){
+            if (posOrderDetail.getPosItemGrade() != null) {
                 PosItemGrade copyPosItemGrade = copyPosItemGrade(posOrderDetail.getPosItemGrade());
                 clonePosOrderDetail.setPosItemGrade(copyPosItemGrade);
             }
 
 
             return clonePosOrderDetail;
-
-
 
 
 //            String json = new Gson().toJson(posOrderDetail);
@@ -383,8 +380,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-
-    private PosItem copyPosItem(PosItem posItem){
+    private PosItem copyPosItem(PosItem posItem) {
         PosItem copyPosItem = new PosItem();
 
         copyPosItem.setItem_num(posItem.getItem_num());
@@ -434,35 +430,35 @@ public class OrderOperationImpl implements OrderOperationCallback {
         copyPosItem.setSelectCount(posItem.getSelectCount());
         copyPosItem.setItem_barcode(posItem.getItem_barcode());
 
-        if(posItem.getShowPosItemGrade() != null){
+        if (posItem.getShowPosItemGrade() != null) {
             PosItemGrade copyPosItemGrade = copyPosItemGrade(posItem.getShowPosItemGrade());
             copyPosItem.setShowPosItemGrade(copyPosItemGrade);
         }
 
-        if(posItem.getPosItemGrade() != null){
+        if (posItem.getPosItemGrade() != null) {
             copyPosItem.setPosItemGrade(copyPosItemGrade(posItem.getPosItemGrade()));
         }
 
         List<PosItemKit> allPosItemKit = PosItemImpl.getInstance().getAllPosItemKit(posItem.getItem_num());
-        if(allPosItemKit != null && allPosItemKit.size() > 0){
+        if (allPosItemKit != null && allPosItemKit.size() > 0) {
             List<PosItemKit> posItemKits = new ArrayList<>();
 
-            for (PosItemKit posItemKit : allPosItemKit){
+            for (PosItemKit posItemKit : allPosItemKit) {
                 posItemKits.add(copyPosItemKit(posItemKit));
             }
 
             posItem.setPosItemKits(posItemKits);
         }
 
-        if(posItem.getItemBar() != null){
-            copyPosItem.setItemBar(copyItemBar(posItem.getItemBar(),copyPosItem));
+        if (posItem.getItemBar() != null) {
+            copyPosItem.setItemBar(copyItemBar(posItem.getItemBar(), copyPosItem));
         }
 
         return copyPosItem;
     }
 
 
-    private PosItemGrade copyPosItemGrade(PosItemGrade posItemGrade){
+    private PosItemGrade copyPosItemGrade(PosItemGrade posItemGrade) {
         PosItemGrade copyPosItemGrade = new PosItemGrade();
 
         copyPosItemGrade.setId(posItemGrade.getId());
@@ -489,7 +485,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    private PosItemKit copyPosItemKit(PosItemKit posItemKit){
+    private PosItemKit copyPosItemKit(PosItemKit posItemKit) {
         PosItemKit copyPosItemKit = new PosItemKit();
 
         copyPosItemKit.setId(posItemKit.getId());
@@ -503,7 +499,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         return copyPosItemKit;
     }
 
-    private ItemBar copyItemBar(ItemBar itemBar,PosItem posItem){
+    private ItemBar copyItemBar(ItemBar itemBar, PosItem posItem) {
         ItemBar copyItemBar = new ItemBar();
         copyItemBar.setId(itemBar.getId());
         copyItemBar.setItem_num(itemBar.getItem_num());
@@ -511,13 +507,13 @@ public class OrderOperationImpl implements OrderOperationCallback {
         copyItemBar.setItem_bar_code(itemBar.getItem_bar_code());
         copyItemBar.setItem_bar_rate(itemBar.getItem_bar_rate());
         copyItemBar.setItem_valid_period(itemBar.getItem_valid_period());
-        if(itemBar.getPosItem() != null){
+        if (itemBar.getPosItem() != null) {
             copyItemBar.setPosItem(posItem);
         }
         return copyItemBar;
     }
 
-    private PolicyQuantityDetail copyPolicyQuantityDetail(PolicyQuantityDetail policyQuantityDetail){
+    private PolicyQuantityDetail copyPolicyQuantityDetail(PolicyQuantityDetail policyQuantityDetail) {
         PolicyQuantityDetail copyPolicyQuantityDetail = new PolicyQuantityDetail();
 
         copyPolicyQuantityDetail.setId(policyQuantityDetail.getId());
@@ -531,7 +527,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         return copyPolicyQuantityDetail;
     }
 
-    private PolicyPromotionDetail copyPolicyPromotionDetail(PolicyPromotionDetail policyPromotionDetail){
+    private PolicyPromotionDetail copyPolicyPromotionDetail(PolicyPromotionDetail policyPromotionDetail) {
 
         PolicyPromotionDetail copyPolicyPromotionDetail = new PolicyPromotionDetail();
 
@@ -552,12 +548,11 @@ public class OrderOperationImpl implements OrderOperationCallback {
         copyPolicyPromotionDetail.setPolicy_promotion_detail_policy_cost(policyPromotionDetail.getPolicy_promotion_detail_policy_cost());
 
 
-
         return copyPolicyPromotionDetail;
     }
 
 
-    private PolicyDiscount copyPolicyDiscount(PolicyDiscount policyDiscount){
+    private PolicyDiscount copyPolicyDiscount(PolicyDiscount policyDiscount) {
         PolicyDiscount clonePolicyDiscount = new PolicyDiscount();
 
         clonePolicyDiscount.setPolicy_discount_no(policyDiscount.getPolicy_discount_no());
@@ -601,9 +596,9 @@ public class OrderOperationImpl implements OrderOperationCallback {
         clonePolicyDiscount.setPolicy_discount_type(policyDiscount.getPolicy_discount_type());
         clonePolicyDiscount.setPolicy_discount_level_ids(policyDiscount.getPolicy_discount_level_ids());
 
-        if(policyDiscount.getPolicy_discount_details() != null && policyDiscount.getPolicy_discount_details().size() > 0){
+        if (policyDiscount.getPolicy_discount_details() != null && policyDiscount.getPolicy_discount_details().size() > 0) {
             List<PolicyDiscountDetail> policyDiscountDetails = new ArrayList<>();
-            for (PolicyDiscountDetail policyDiscountDetail : policyDiscount.getPolicy_discount_details()){
+            for (PolicyDiscountDetail policyDiscountDetail : policyDiscount.getPolicy_discount_details()) {
                 PolicyDiscountDetail copyPolicyDiscountDetail = copyPolicyDiscountDetail(policyDiscountDetail);
                 policyDiscountDetails.add(copyPolicyDiscountDetail);
             }
@@ -614,7 +609,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    private PolicyDiscountDetail copyPolicyDiscountDetail(PolicyDiscountDetail policyDiscountDetail){
+    private PolicyDiscountDetail copyPolicyDiscountDetail(PolicyDiscountDetail policyDiscountDetail) {
         PolicyDiscountDetail clonePolicyDiscountDetail = new PolicyDiscountDetail();
         clonePolicyDiscountDetail.setId(policyDiscountDetail.getId());
         clonePolicyDiscountDetail.setPolicy_discount_no(policyDiscountDetail.getPolicy_discount_no());
@@ -627,7 +622,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    private PosOrderKitDetail copyPosOrderKitDetail(PosOrderKitDetail posOrderKitDetail){
+    private PosOrderKitDetail copyPosOrderKitDetail(PosOrderKitDetail posOrderKitDetail) {
         PosOrderKitDetail copyPosOrderKitDetail = new PosOrderKitDetail();
 
         copyPosOrderKitDetail.setId(posOrderKitDetail.getId());
@@ -669,7 +664,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    private Payment copyPayment(Payment payment){
+    private Payment copyPayment(Payment payment) {
         Payment clonePayment = new Payment();
 
         clonePayment.setPaymentNo(payment.getPaymentNo());
@@ -731,7 +726,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
     @Override
-    public Payment updatePayment(Payment payment,float receiveMoney) {
+    public Payment updatePayment(Payment payment, float receiveMoney) {
         return null;
     }
 
@@ -741,9 +736,9 @@ public class OrderOperationImpl implements OrderOperationCallback {
         List<PosScaleStyleTypeBean> posSaleParam = new ArrayList<>();
         if (bookPosSale != null) {
             posSaleParam = XmlUtil.getPosScaleStyle(bookPosSale.getBookResourceParam());
-            if(LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(paymentName)){
+            if (LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(paymentName)) {
                 posSaleParam = PayStyleImpl.getInstance().getSettleCardPayList(posSaleParam);
-            }else {
+            } else {
                 posSaleParam = PayStyleImpl.getInstance().getSettlePaySaleList(posSaleParam);
             }
         }
@@ -754,7 +749,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     public PosScaleStyleTypeBean containCashPayment(List<PosScaleStyleTypeBean> posSaleParam) {
         for (final PosScaleStyleTypeBean styleTypeBean : posSaleParam) {
             if (LibConfig.C_PAYMENT_TYPE_CASH_NAME.equals(styleTypeBean.getPaymentTypeName())) {
-               return styleTypeBean;
+                return styleTypeBean;
             }
         }
         return null;
@@ -786,7 +781,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
                 return "";
             }
         } else {
-           return "";
+            return "";
         }
     }
 
@@ -822,24 +817,24 @@ public class OrderOperationImpl implements OrderOperationCallback {
 
 
     /**
-     *
      * @param posOrder
      */
-    public void createQuitPosOrderByAll(PosOrder posOrder){
+    public void createQuitPosOrderByAll(PosOrder posOrder) {
 
     }
 
 
     /**
      * 开启消费券分摊
+     *
      * @param posOrder
      */
-    public PosOrder createQuitPosOrder2ByAll(PosOrder posOrder,PosOrder oldPosOrder,KeyGeneratorBizday mCurrentPosOrderKGB ){
+    public PosOrder createQuitPosOrder2ByAll(PosOrder posOrder, PosOrder oldPosOrder, KeyGeneratorBizday mCurrentPosOrderKGB) {
         PosOrder mCurrentPosorder = RetailPosManager.getInstance().copyPosOrder(posOrder);
         mCurrentPosorder.setOrderExternalNo("");
         mCurrentPosorder.setPayments(new ArrayList<Payment>());
         String mCurrentPaymentKGBKeyGBString = mCurrentPosOrderKGB.getKeyGBString();
-        EvtLog.d("http:="+mCurrentPaymentKGBKeyGBString);
+        EvtLog.d("http:=" + mCurrentPaymentKGBKeyGBString);
         mCurrentPosorder.setOrderNo(mCurrentPaymentKGBKeyGBString);
         List<PosOrderDetail> posOrderDetails1 = new ArrayList<>();
         List<PosOrderDetail> dataList = oldPosOrder.getPosOrderDetails();
@@ -856,7 +851,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
             posOrderDetailold.setOrderDetailPolicyPromotionQuantityFlag(false);
             posOrderDetailold.setOrderDetailPolicyPromotionMoneyFlag(false);
 
-            PosOrderDetail posOrderDetail =  RetailPosManager.getInstance().copyPosOrderDetail(posOrderDetailold);
+            PosOrderDetail posOrderDetail = RetailPosManager.getInstance().copyPosOrderDetail(posOrderDetailold);
             posOrderDetail.setId(null);
             posOrderDetail.setOrderNo(mCurrentPosorder.getOrderNo());
             if (posOrderDetail.getItemNum() != 0) {
@@ -872,7 +867,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
 
                 PosItem posItem = PosItemImpl.getInstance().getPosItemByItemNum(posOrderDetail.getItemNum());
                 if (posOrderDetail.getItemGradeNum() != 0) {
-                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(posOrderDetail.getItemGradeNum(),posItem.getItem_num());
+                    PosItemGrade posItemGrade = PosItemImpl.getInstance().getPosItemGradeByItemGradeNum(posOrderDetail.getItemGradeNum(), posItem.getItem_num());
                     if (posItemGrade != null) {
                         posOrderDetail.setItemGradeNum(posItemGrade.getItem_grade_num());
                         posOrderDetail.setPosItemGrade(posItemGrade);
@@ -881,8 +876,8 @@ public class OrderOperationImpl implements OrderOperationCallback {
                 posOrderDetail.setPosItem(posItem);
                 float orderDetailAmount = posOrderDetail.getOrderDetailAmount();
                 posOrderDetail.setOrderChangeAmount(NumberUtil.getNewLongFloat(orderDetailAmount));
-                posOrderDetail.setOrderDetailPrice(NumberUtil.getNewFloat((posOrderDetailold.getOrderDetailPaymentMoney() - posOrderDetailold.getOrderDetailShareDiscount())/orderDetailAmount));
-                posOrderDetail.setOrderDetailStdPrice(NumberUtil.getNewFloat((posOrderDetailold.getOrderDetailPaymentMoney() - posOrderDetailold.getOrderDetailShareDiscount())/orderDetailAmount));
+                posOrderDetail.setOrderDetailPrice(NumberUtil.getNewFloat((posOrderDetailold.getOrderDetailPaymentMoney() - posOrderDetailold.getOrderDetailShareDiscount()) / orderDetailAmount));
+                posOrderDetail.setOrderDetailStdPrice(NumberUtil.getNewFloat((posOrderDetailold.getOrderDetailPaymentMoney() - posOrderDetailold.getOrderDetailShareDiscount()) / orderDetailAmount));
                 posOrderDetail.setOrderDetailPaymentMoney(NumberUtil.getNewFloat(posOrderDetailold.getOrderDetailPaymentMoney() - posOrderDetailold.getOrderDetailShareDiscount()));
                 posOrderDetail.setResidueMoney(posOrderDetail.getOrderDetailPaymentMoney());
                 posOrderDetail.setOrderDetailMoney(posOrderDetail.getOrderDetailPaymentMoney());
@@ -910,11 +905,11 @@ public class OrderOperationImpl implements OrderOperationCallback {
         mCurrentPosorder.setOrderPayee("" + LibConfig.activeAppUser.getApp_user_name());
         mCurrentPosorder.setOrderDate(TimeUtil.getInstance().stampToDate(System.currentTimeMillis()));
         Payment newPayment;
-        List<Payment> payments = OrderImpl.getInstance().getPaymentList(LibConfig.SYSTEM_BOOK,LibConfig.BRANCH_NUM,oldPosOrder.getOrderNo());
+        List<Payment> payments = OrderImpl.getInstance().getPaymentList(LibConfig.SYSTEM_BOOK, LibConfig.BRANCH_NUM, oldPosOrder.getOrderNo());
 
         List<Payment> mReturnPayment = new ArrayList<>();
         for (Payment payment : payments) {
-            newPayment = createPaymentByOld(payment.getPaymentMoney(), payment.getPaymentPayBy(), payment,mCurrentPosorder);
+            newPayment = createPaymentByOld(payment.getPaymentMoney(), payment.getPaymentPayBy(), payment, mCurrentPosorder);
             mReturnPayment.add(newPayment);
         }
         mCurrentPosorder.setOrderRound(0);
@@ -929,7 +924,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
     }
 
 
-    private Payment createPaymentByOld(float Money, String payBy, Payment oldpayment,PosOrder mCurrentPosorder) {
+    private Payment createPaymentByOld(float Money, String payBy, Payment oldpayment, PosOrder mCurrentPosorder) {
         if (Money > 0) Money = Money * -1;
         Payment payment = new Payment();
         payment.setOrderNo(mCurrentPosorder.getOrderNo());
@@ -946,7 +941,7 @@ public class OrderOperationImpl implements OrderOperationCallback {
         payment.setPaymentChange(payment.getPaymentReceive() - payment.getPaymentMoney());
         payment.setPaymentCardPrintNum(oldpayment.getPaymentCardPrintNum());
         payment.setClientFid(oldpayment.getClientFid());
-        if(LibConfig.C_PAYMENT_TYPE_SIGNBILL_NAME.equals(payBy)){
+        if (LibConfig.C_PAYMENT_TYPE_SIGNBILL_NAME.equals(payBy)) {
             payment.setPaymentBalance(Money);
         }
         payment.setWechatOpenId(oldpayment.getWechatOpenId());
@@ -958,8 +953,6 @@ public class OrderOperationImpl implements OrderOperationCallback {
         payment.setPaymentMemo(oldpayment.getPaymentMemo());
         return payment;
     }
-
-
 
 
     /**
@@ -1020,6 +1013,50 @@ public class OrderOperationImpl implements OrderOperationCallback {
         return posOrder;
     }
 
+
+    public boolean isNormalOrder(String order_no) {
+
+        PosOrder mSelectPosOrder = OrderImpl.getInstance().getOrderByNum(order_no);
+        if (mSelectPosOrder == null) return false;
+
+        boolean isHaveVip = false;
+        boolean isHaveCoupons = false;
+        boolean isHaveOnlinePay = false;
+        boolean isHaveMercuryVip = false;
+        boolean isHaveMercuryCoupons = false;
+        List<PosOrderDetail> couponsDetailList = OrderImpl.getInstance().getCouponsDetailList(order_no);
+        if (couponsDetailList.size() > 0) {
+            for (PosOrderDetail posOrderDetail : couponsDetailList) {
+                if (posOrderDetail.getOrderDetailMemo() != null && posOrderDetail.getOrderDetailMemo().length() == 20) {
+                    isHaveMercuryCoupons = true;
+                } else {
+                    isHaveCoupons = true;
+                }
+            }
+        }
+        List<Payment> paymentList = OrderImpl.getInstance().getPaymentList(LibConfig.SYSTEM_BOOK, LibConfig.BRANCH_NUM, mSelectPosOrder.getOrderNo());
+        mSelectPosOrder.setPayments(paymentList);
+        for (Payment payment : mSelectPosOrder.getPayments()) {
+            if (LibConfig.C_PAYMENT_TYPE_PETCARD_NAME.equals(payment.getPaymentPayBy()) && payment.getPaymentBalance() != 0) {
+                if (payment.getPaymentCustNum() == 0) {
+                    isHaveMercuryVip = true;
+                } else {
+                    isHaveVip = true;
+                }
+
+            } else if (LibConfig.C_PAYMENT_TYPE_ONLINE.equals(payment.getPaymentPayBy())) {
+                isHaveOnlinePay = true;
+            }
+        }
+
+
+        if (isHaveCoupons || isHaveVip || isHaveOnlinePay || isHaveMercuryVip || isHaveMercuryCoupons) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 
 
 }

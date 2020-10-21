@@ -115,15 +115,19 @@ public class MarketActionImpl {
         List<MarketAction> loadMarketActions = marketActionDao.queryBuilder().orderDesc(MarketActionDao.Properties.Action_audit_time).build().list();
 //        List<MarketAction> loadMarketActions = marketActionDao.loadAll();
         if (loadMarketActions != null && loadMarketActions.size() > 0) {
+            LibConfig.allOnceMarketAction.clear();
+            LibConfig.allOnceCardStrangeMarketAction.clear();
             for (MarketAction marketAction : loadMarketActions) {
-                LibConfig.allOnceMarketAction.clear();
                 if(marketAction.getOnly_use_once()!= null && marketAction.getOnly_use_once()){
-
                     LibConfig.allOnceMarketAction.add(marketAction);
                 }
                 if(!TextUtils.isEmpty(marketAction.getAction_param())){
                     MarketActionScopeBean marketActionScopeBean = new Gson().fromJson(marketAction.getAction_param(), MarketActionScopeBean.class);
                     marketAction.setActionMoney(marketActionScopeBean.getAction_money());
+
+                    if(marketActionScopeBean != null && marketActionScopeBean.isOnly_join_in_once()){
+                        LibConfig.allOnceCardStrangeMarketAction.add(marketAction);
+                    }
                 }
                 List<MarketActionDetail> marketActionDetails = marketActionDetailDao.queryBuilder().where(MarketActionDetailDao.Properties.Action_id.eq(marketAction.getAction_id())).build().list();
                 for (MarketActionDetail marketActionDetail : marketActionDetails) {
@@ -283,6 +287,24 @@ public class MarketActionImpl {
 
                 MarketActionScopeBean marketActionScopeBean = marketAction.getPos_action_param();
                 if (marketActionScopeBean == null) continue; //活动条件不能为空
+                if (marketActionScopeBean.isOnly_join_in_once() && vipUserInfo != null) {
+                    if (LibConfig.sVipEnjoyMarketAction.size() > 0) {
+//                        String actionId = LibConfig.sVipEnjoyMarketAction.get(vipUserInfo.getCard_user_num());
+//                        if (actionId != null && actionId.equals(marketAction.getAction_id())) {
+//                            continue;
+//                        }
+                        String promotionId = "";
+                        if (!TextUtils.isEmpty(vipUserInfo.getCustomer_id())) {
+                            promotionId = LibConfig.sVipEnjoyMarketAction.get(vipUserInfo.getCustomer_id());
+                        } else {
+                            promotionId = LibConfig.sVipEnjoyMarketAction.get(vipUserInfo.getCard_user_num());
+                        }
+                        if (promotionId != null && promotionId.equals(marketAction.getAction_id())) {
+                            continue;
+                        }
+                    }
+
+                }
                 //判断卡类型
                 if (marketActionScopeBean.getCard_user_type_codes() != null && marketActionScopeBean.getCard_user_type_codes().size() > 0) {
                     if (vipUserInfo == null || !marketActionScopeBean.getCard_user_type_codes().contains(vipUserInfo.getCard_user_type_code())) {
@@ -410,7 +432,16 @@ public class MarketActionImpl {
                     }
 //                    }
                 }
-                if (ticketSendModels.size() > 0) return ticketSendModels;
+                if (ticketSendModels.size() > 0){
+                    if (vipUserInfo != null && marketActionScopeBean != null && marketActionScopeBean.isOnly_join_in_once() ) {
+                        if (vipUserInfo != null) {
+                            RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(vipUserInfo, marketAction.getAction_id());
+                            vipUserInfo.setCouponsRedisBean(redisBean);
+                            LibConfig.sVipEnjoyMarketAction.put(redisBean.getVip_id(), marketAction.getAction_id());
+                        }
+                    }
+                    return ticketSendModels;
+                }
             }
             return ticketSendModels;
         } catch (Exception e) {

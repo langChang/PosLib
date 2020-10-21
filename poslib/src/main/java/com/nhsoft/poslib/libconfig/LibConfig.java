@@ -224,6 +224,7 @@ public class LibConfig {
 
 
     public static List<MarketAction>  allOnceMarketAction     = new ArrayList<>(); //所有的增劵活动
+    public static List<MarketAction>  allOnceCardStrangeMarketAction     = new ArrayList<>(); //所有的增劵活动
     public static List<MarketAction>  allMarketAction;
     public static Map<String, String> sVipEnjoyPromotion      = new HashMap<>();
     public static Map<String, String> sVipEnjoyStallPromotion = new HashMap<>();

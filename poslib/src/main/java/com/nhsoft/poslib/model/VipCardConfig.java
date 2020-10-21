@@ -223,6 +223,11 @@ public class VipCardConfig implements Serializable {
     private String FirstDeliverCardNoPay;//第一次发放实体卡不收取换卡费用
     private String EnableCardSmsCheck;
 
+    private String CardInputUsePrint;
+    private String CardInputUsePhone;
+    private String CardSettleUsePrint;
+    private String CardSettleUsePhone;
+
 
     public boolean isEnableCardSmsCheck() {
         return TextUtils.isEmpty(EnableCardSmsCheck) ? false : (!"0".equals(EnableCardSmsCheck));
@@ -722,4 +727,35 @@ public class VipCardConfig implements Serializable {
         CardConsumeDiscountType = cardConsumeDiscountType;
     }
 
+    public String getCardInputUsePrint() {
+        return CardInputUsePrint;
+    }
+
+    public void setCardInputUsePrint(String cardInputUsePrint) {
+        CardInputUsePrint = cardInputUsePrint;
+    }
+
+    public String getCardInputUsePhone() {
+        return CardInputUsePhone;
+    }
+
+    public void setCardInputUsePhone(String cardInputUsePhone) {
+        CardInputUsePhone = cardInputUsePhone;
+    }
+
+    public String getCardSettleUsePrint() {
+        return CardSettleUsePrint;
+    }
+
+    public void setCardSettleUsePrint(String cardSettleUsePrint) {
+        CardSettleUsePrint = cardSettleUsePrint;
+    }
+
+    public String getCardSettleUsePhone() {
+        return CardSettleUsePhone;
+    }
+
+    public void setCardSettleUsePhone(String cardSettleUsePhone) {
+        CardSettleUsePhone = cardSettleUsePhone;
+    }
 }
