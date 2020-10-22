@@ -77,7 +77,11 @@ public class OrderImpl {
         final PaymentDao paymentDao = DaoManager.getInstance().getDaoSession().getPaymentDao();
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
         final PosOrderKitDetailDao posOrderKitDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderKitDetailDao();
-
+        if(posOrder.getOrderPaymentMoney() < 0){
+            if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
+                posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+            }
+        }
         return MatterUtils.doMatter(posOrderDao, new Runnable() {
             @Override
             public void run() {
@@ -104,19 +108,19 @@ public class OrderImpl {
         });
     }
 
-    public void updateOrderMemo(PosOrder posOrder) {
-        PosOrderDao mPosOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
-        PosOrder loadOrder = mPosOrderDao.load(posOrder.getOrderNo());
-        if (loadOrder != null) {
-            String orderMemo = loadOrder.getOrderMemo();
-            if (orderMemo == null) {
-                orderMemo = "";
-            }
-            loadOrder.setOrderMemo(orderMemo + "由收银员重新确认为支付成功");
-            mPosOrderDao.insertOrReplace(loadOrder);
-        }
-
-    }
+//    public void updateOrderMemo(PosOrder posOrder) {
+//        PosOrderDao mPosOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
+//        PosOrder loadOrder = mPosOrderDao.load(posOrder.getOrderNo());
+//        if (loadOrder != null) {
+//            String orderMemo = loadOrder.getOrderMemo();
+//            if (orderMemo == null) {
+//                orderMemo = "";
+//            }
+//            loadOrder.setOrderMemo(orderMemo + "由收银员重新确认为支付成功");
+//            mPosOrderDao.insertOrReplace(loadOrder);
+//        }
+//
+//    }
 
     public boolean insertPosOrderDetail(final List<PosOrderDetail> posOrderDetails) {
         final PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
@@ -369,9 +373,15 @@ public class OrderImpl {
     public void updatePosOrderStatus(PosOrder posOrder) {
         PosOrderDao posOrderDao = DaoManager.getInstance().getDaoSession().getPosOrderDao();
         PosOrder load = posOrderDao.load(posOrder.getOrderNo());
+        String orderMemo = posOrder.getOrderMemo();
+        if (orderMemo == null) {
+            orderMemo = "";
+        }
+        posOrder.setOrderMemo(orderMemo + "由收银员重新确认为支付成功");
         if (load != null) {
             PosOrderStateUtil.setPosOrderByComplete(posOrder);
             PosOrderStateUtil.setPosOrderByComplete(load);
+            load.setOrderMemo(posOrder.getOrderMemo());
             posOrderDao.update(load);
         }
     }
@@ -3707,7 +3717,14 @@ public class OrderImpl {
             posOrderObject.put("order_state_code", posOrder.getOrderStateCode());
             posOrderObject.put("order_state_name", posOrder.getOrderStateName());
 
+
             posOrderObject.put("order_memo", posOrder.getOrderMemo());
+            if(posOrder.getOrderPaymentMoney() < 0){
+                if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
+                    posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+                }
+            }
+
             posOrderObject.put("order_ref_billno", posOrder.getOrderRefBillno());
             posOrderObject.put("order_point", posOrder.getOrderPoint());
             posOrderObject.put("order_gross_profit", posOrder.getOrderGrossProfit());
@@ -3971,6 +3988,11 @@ public class OrderImpl {
                 posOrderObject.put("order_state_name", posOrder.getOrderStateName());
 
                 posOrderObject.put("order_memo", posOrder.getOrderMemo());
+                if(posOrder.getOrderPaymentMoney() < 0){
+                    if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
+                        posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+                    }
+                }
                 posOrderObject.put("order_ref_billno", posOrder.getOrderRefBillno());
                 posOrderObject.put("order_point", posOrder.getOrderPoint());
                 posOrderObject.put("order_gross_profit", posOrder.getOrderGrossProfit());

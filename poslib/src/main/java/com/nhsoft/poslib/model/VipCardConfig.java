@@ -360,7 +360,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public String getCannotInputCardNumberByHand() {
-        return cannotInputCardNumberByHand;
+        return cannotInputCardNumberByHand == null ? "-1" : cannotInputCardNumberByHand;
     }
 
     public void setCannotInputCardNumberByHand(String cannotInputCardNumberByHand) {
@@ -664,7 +664,7 @@ public class VipCardConfig implements Serializable {
     }
 
     public String getConsumeNotAllowPhone() {
-        return ConsumeNotAllowPhone;
+        return ConsumeNotAllowPhone == null ? "-1" : ConsumeNotAllowPhone;
     }
 
     public void setConsumeNotAllowPhone(String ConsumeNotAllowPhone) {
