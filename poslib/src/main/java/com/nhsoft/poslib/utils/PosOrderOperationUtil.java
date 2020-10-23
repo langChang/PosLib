@@ -149,13 +149,13 @@ public class PosOrderOperationUtil {
                             if (policyPromotion.getPolicy_promotion_no().equals(posOrderDetail.getOrderDetailPolicyFid())) {
 
                                 if (LibConfig.activeVipMember != null) {
-                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.activeVipMember, posOrderDetail.getOrderDetailPolicyFid());
+                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.activeVipMember, posOrderDetail.getOrderDetailPolicyFid(),"PolicyPromotion");
                                     posOrder.setRedisBean(redisBean);
                                     LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
                                 }
 
                                 if (LibConfig.discountVipMember != null) {
-                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.discountVipMember, posOrderDetail.getOrderDetailPolicyFid());
+                                    RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(LibConfig.discountVipMember, posOrderDetail.getOrderDetailPolicyFid(),"PolicyPromotion");
                                     posOrder.setRedisBean(redisBean);
                                     LibConfig.sVipEnjoyPromotion.put(redisBean.getVip_id(), policyPromotion.getPolicy_promotion_no());
                                 }

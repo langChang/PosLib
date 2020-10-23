@@ -435,7 +435,7 @@ public class MarketActionImpl {
                 if (ticketSendModels.size() > 0){
                     if (vipUserInfo != null && marketActionScopeBean != null && marketActionScopeBean.isOnly_join_in_once() ) {
                         if (vipUserInfo != null) {
-                            RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(vipUserInfo, marketAction.getAction_id());
+                            RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(vipUserInfo, marketAction.getAction_id(),"MarketAction");
                             vipUserInfo.setCouponsRedisBean(redisBean);
                             LibConfig.sVipEnjoyMarketAction.put(redisBean.getVip_id(), marketAction.getAction_id());
                         }
@@ -665,7 +665,7 @@ public class MarketActionImpl {
                     if (marketAction.getOnly_use_once() != null && marketAction.getOnly_use_once() && vipUserInfo != null) {
 
                         if (LibConfig.activeVipMember != null) {
-                            RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(vipUserInfo, marketAction.getAction_id());
+                            RedisBean redisBean = RetailPosManager.getInstance().createPolicyRedisBean(vipUserInfo, marketAction.getAction_id(),"PolicyPromotion");
                             posOrder.setRedisBean(redisBean);
                             posOrder.setCouponsRedisBean(redisBean);
                             LibConfig.sVipEnjoyMarketAction.put(redisBean.getVip_id(), marketAction.getAction_id());

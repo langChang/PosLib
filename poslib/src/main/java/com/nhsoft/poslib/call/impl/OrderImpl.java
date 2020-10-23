@@ -79,7 +79,7 @@ public class OrderImpl {
         final PosOrderKitDetailDao posOrderKitDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderKitDetailDao();
         if(posOrder.getOrderPaymentMoney() < 0){
             if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
-                posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+                posOrder.setOrderMemo(posOrder.getOrderMemo().replace("由收银员重新确认为支付成功",""));
             }
         }
         return MatterUtils.doMatter(posOrderDao, new Runnable() {
@@ -99,11 +99,11 @@ public class OrderImpl {
                 for (PosOrderDetail posOrderDetail : posOrderDetails) {
                     if (posOrderDetail.getPosOrderKitDetails() != null && posOrderDetail.getPosOrderKitDetails().size() > 0) {
                         posOrderKitDetailDao.insertOrReplaceInTx(posOrderDetail.getPosOrderKitDetails());
-                        posOrderKitDetailDao.detachAll();
                     }
                     posOrderDetailDao.insertOrReplaceInTx(posOrderDetail);
-                    posOrderDetailDao.detachAll();
                 }
+                posOrderKitDetailDao.detachAll();
+                posOrderDetailDao.detachAll();
             }
         });
     }
@@ -419,7 +419,7 @@ public class OrderImpl {
 
     public void updatePosOrderDetailStatus(PosOrderDetail posOrderDetail) {
         PosOrderDetailDao posOrderDetailDao = DaoManager.getInstance().getDaoSession().getPosOrderDetailDao();
-        PosOrderDetail load = posOrderDetailDao.queryBuilder().where(PosOrderDetailDao.Properties.OrderDetailTicketUuid.eq(posOrderDetail.getOrderDetailTicketUuid())).build().unique();
+        PosOrderDetail load = posOrderDetailDao.queryBuilder().where(PosOrderDetailDao.Properties.OrderDetailTicketUuid.eq(posOrderDetail.getOrderDetailTicketUuid()),PosOrderDetailDao.Properties.OrderNo.eq(posOrderDetail.getOrderNo())).build().unique();
         if (load != null) {
             load.setPaymentBalance(0);
             posOrderDetailDao.update(load);
@@ -3721,7 +3721,7 @@ public class OrderImpl {
             posOrderObject.put("order_memo", posOrder.getOrderMemo());
             if(posOrder.getOrderPaymentMoney() < 0){
                 if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
-                    posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+                    posOrder.setOrderMemo(posOrder.getOrderMemo().replace("由收银员重新确认为支付成功",""));
                 }
             }
 
@@ -3990,7 +3990,7 @@ public class OrderImpl {
                 posOrderObject.put("order_memo", posOrder.getOrderMemo());
                 if(posOrder.getOrderPaymentMoney() < 0){
                     if(!TextUtils.isEmpty(posOrder.getOrderMemo())){
-                        posOrder.getOrderMemo().replace("由收银员重新确认为支付成功","");
+                        posOrder.setOrderMemo(posOrder.getOrderMemo().replace("由收银员重新确认为支付成功",""));
                     }
                 }
                 posOrderObject.put("order_ref_billno", posOrder.getOrderRefBillno());
